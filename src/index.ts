@@ -1,4 +1,5 @@
-import CodeMirror from 'codemirror';
-require('codemirror/mode/gfm/gfm.js');
+import { MarkdownEditor } from './markdown-editor';
 
-const codeMirror = CodeMirror(document.body, { mode: 'gfm' });
+const mde = new MarkdownEditor(document.body);
+
+document.getElementById('testButton')?.addEventListener('click', () => mde.toggleBold());
