@@ -11,7 +11,7 @@
   - Toggle Bold (for **selection**)
   - Toggle Italic (for **selection**)
   - Toggle Strikethrough (for **selection**)
-  - Dropdown for Heading level (whole line)
+  - Set Heading level (whole line)
   - Toggle List (order **or** unordered)
   - Toggle Quote (always **before list symbol**)
   - Insert link template
@@ -48,9 +48,9 @@
   - Renderer + options
   - Auto-formatting options
   - Autofocus
-  - Block styles (e.g. * or _ for italic)
+  - Block styles (e.g. \* or \_ for italic)
   - Force sync with original textarea
-  - Custom templates for templated functions like *Insert link*
+  - Custom templates for templated functions like _Insert link_
   - line wrapping
   - min/max height/width
   - callbacks for all actions
@@ -75,5 +75,3 @@
 - emit change
 - emit focus
 - emit blur
-
-

@@ -61,12 +61,12 @@ export class MarkdownEditor {
       if (hasPrefixToken) {
         this.cm.replaceRange('', prefixStart, from, '+toggleBlock');
         selection.anchor.ch -= op.length;
-        selection.head.ch -= op.length;
+        if (!selection.empty()) selection.head.ch -= op.length;
         currentShift--;
       } else {
         this.cm.replaceRange(op, from, undefined, '+toggleBlock');
         selection.anchor.ch += op.length;
-        selection.head.ch += op.length;
+        if (!selection.empty()) selection.head.ch += op.length;
         currentShift++;
       }
 
@@ -74,6 +74,74 @@ export class MarkdownEditor {
     }
 
     this.cm.setSelections(newSelections, undefined, { origin: '+toggleBlock' });
+    this.cm.focus();
+  }
+
+  public setHeadingLevel(level: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
+    const headingToken = '#'.repeat(level) + (level === 0 ? '' : ' ');
+    this.replaceTokenAtLineStart((oldLineContent) => oldLineContent.replace(/^((#)*( )?)/, headingToken));
+  }
+
+  public toggleQuote() {
+    this.replaceTokenAtLineStart((oldLineContent) => {
+      if (oldLineContent.search(/^>(\t| )*/) === -1) {
+        return '> ' + oldLineContent;
+      } else {
+        return oldLineContent.replace(/^>(\t| )*/, '');
+      }
+    });
+  }
+
+  public toggleUnorderedList() {
+    const orderedListPattern = /^(\d)+\.(\t| )+/;
+    const unorderedListPattern = /^(\*|-)(\t| )+/;
+    this.replaceTokenAtLineStart((oldLineContent) => {
+      if (oldLineContent.search(unorderedListPattern) === -1) {
+        if (oldLineContent.search(orderedListPattern) === -1) {
+          return '- ' + oldLineContent;
+        } else {
+          return oldLineContent.replace(orderedListPattern, '- ');
+        }
+      } else {
+        return oldLineContent.replace(unorderedListPattern, '');
+      }
+    });
+  }
+
+  private replaceTokenAtLineStart(replaceFn: (oldLineContent: string) => string) {
+    const newSelections: CodeMirror.Range[] = [];
+    for (const sel of this.cm.listSelections()) {
+      const selection = _.cloneDeep(sel);
+      let shiftFrom = 0;
+      let shiftTo = 0;
+      for (let lineNumber = selection.from().line; lineNumber <= selection.to().line; lineNumber++) {
+        const oldLineContent = this.cm.getLine(lineNumber);
+        const newLineContent = replaceFn(oldLineContent);
+        this.cm.replaceRange(
+          newLineContent,
+          { line: lineNumber, ch: 0 },
+          { line: lineNumber, ch: oldLineContent.length },
+          '+setHeadingLevel'
+        );
+
+        if (lineNumber === selection.from().line) {
+          shiftFrom = newLineContent.length - oldLineContent.length;
+        }
+        if (lineNumber === selection.to().line) {
+          shiftTo = newLineContent.length - oldLineContent.length;
+        }
+      }
+      if (_.isEqual(selection.anchor, selection.from())) {
+        selection.anchor.ch += shiftFrom;
+        if (!selection.empty()) selection.head.ch += shiftTo;
+      } else {
+        selection.anchor.ch += shiftTo;
+        if (!selection.empty()) selection.head.ch += shiftFrom;
+      }
+      newSelections.push(selection);
+    }
+
+    this.cm.setSelections(newSelections);
     this.cm.focus();
   }
 }
