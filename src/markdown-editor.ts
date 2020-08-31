@@ -195,37 +195,47 @@ export class MarkdownEditor {
 
   public insertCodeBlock() {
     const newSelections: CodeMirror.Range[] = [];
-    let lineShift = 0;
-    for (const sel of this.cm.listSelections()) {
-      const selection = _.cloneDeep(sel);
+    const selections = _.cloneDeep(this.cm.listSelections());
+    for (let i = 0; i < selections.length; i++) {
+      const oldSelection = selections[i];
+      const newSelection = _.cloneDeep(oldSelection);
 
-      // Shift selection back to correct position in respect to previously inserted/deleted operators
-      selection.anchor.line += lineShift;
-      selection.head.line += lineShift;
-
+      // Wrap selection with code block tokens
       let currentShift = 3;
       let startToken = '```\n';
-      if (selection.from().ch > 0) {
+      if (newSelection.from().ch > 0) {
         startToken = '\n' + startToken;
         currentShift++;
       }
-      this.cm.replaceRange('\n```\n', selection.to(), undefined, '+insertCodeBlock');
-      this.cm.replaceRange(startToken, selection.from(), undefined, '+insertCodeBlock');
-      lineShift += currentShift;
+      this.cm.replaceRange('\n```\n', newSelection.to(), undefined, '+insertCodeBlock');
+      this.cm.replaceRange(startToken, newSelection.from(), undefined, '+insertCodeBlock');
 
-      const offset = selection.from().ch;
-      console.log(JSON.stringify(selection));
-      if (!selection.empty()) {
-        selection.to().line += currentShift - 2;
-        selection.to().ch -= offset;
+      // Adjust selections to originally selected characters
+      const offset = newSelection.from().line === newSelection.to().line ? newSelection.from().ch : 0;
+      if (!newSelection.empty()) {
+        newSelection.to().line += currentShift - 2;
+        newSelection.to().ch -= offset;
       } else {
         // fix for edge case bug of empty selection with not synchronous anchor and head
-        selection.anchor = selection.head;
+        newSelection.anchor = newSelection.head;
       }
-      selection.from().line += currentShift - 2;
-      selection.from().ch = 0;
-      console.log(JSON.stringify(selection));
-      newSelections.push(selection);
+      newSelection.from().line += currentShift - 2;
+      newSelection.from().ch = 0;
+      newSelections.push(newSelection);
+
+      // Adjust all following selections to originally selected characters
+      for (let j = i + 1; j < selections.length; j++) {
+        const s = selections[j];
+        const remainderIndex = oldSelection.to().ch;
+        if (s.from().line === oldSelection.to().line) {
+          s.from().ch -= remainderIndex;
+        }
+        if (s.to().line === oldSelection.to().line) {
+          s.to().ch -= remainderIndex;
+        }
+        if (!s.empty()) s.to().line += currentShift;
+        s.from().line += currentShift;
+      }
     }
 
     this.cm.setSelections(newSelections, undefined, { origin: '+insertCodeBlock' });
