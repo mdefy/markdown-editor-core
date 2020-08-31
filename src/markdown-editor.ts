@@ -189,7 +189,46 @@ export class MarkdownEditor {
       newSelections.push(selection);
     }
 
-    this.cm.setSelections(newSelections);
+    this.cm.setSelections(newSelections, undefined, { origin: 'replaceTokenAtLineStart' });
+    this.cm.focus();
+  }
+
+  public insertCodeBlock() {
+    const newSelections: CodeMirror.Range[] = [];
+    let lineShift = 0;
+    for (const sel of this.cm.listSelections()) {
+      const selection = _.cloneDeep(sel);
+
+      // Shift selection back to correct position in respect to previously inserted/deleted operators
+      selection.anchor.line += lineShift;
+      selection.head.line += lineShift;
+
+      let currentShift = 3;
+      let startToken = '```\n';
+      if (selection.from().ch > 0) {
+        startToken = '\n' + startToken;
+        currentShift++;
+      }
+      this.cm.replaceRange('\n```\n', selection.to(), undefined, '+insertCodeBlock');
+      this.cm.replaceRange(startToken, selection.from(), undefined, '+insertCodeBlock');
+      lineShift += currentShift;
+
+      const offset = selection.from().ch;
+      console.log(JSON.stringify(selection));
+      if (!selection.empty()) {
+        selection.to().line += currentShift - 2;
+        selection.to().ch -= offset;
+      } else {
+        // fix for edge case bug of empty selection with not synchronous anchor and head
+        selection.anchor = selection.head;
+      }
+      selection.from().line += currentShift - 2;
+      selection.from().ch = 0;
+      console.log(JSON.stringify(selection));
+      newSelections.push(selection);
+    }
+
+    this.cm.setSelections(newSelections, undefined, { origin: '+insertCodeBlock' });
     this.cm.focus();
   }
 }
