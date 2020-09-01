@@ -51,54 +51,69 @@ export class MarkdownEditor {
   /**
    * Toggles inline formatting for each selection by wrapping and unwrapping each selection
    * with specified operator.
-   * @param op the operator
+   * @param token the operator
    */
-  private toggleInlineFormatting(op: string) {
+  private toggleInlineFormatting(token: string) {
     const newSelections: CodeMirror.Range[] = [];
-    let currentShift = 0; // indicates how many operators have been inserted and deleted
-    for (const sel of this.cm.listSelections()) {
-      const selection: CodeMirror.Range = _.cloneDeep(sel);
+    const selections = _.cloneDeep(this.cm.listSelections());
+    for (let i = 0; i < selections.length; i++) {
+      const oldSelection = selections[i];
+      const newSelection = _.cloneDeep(oldSelection);
 
-      // Shift selection back to correct position in respect to previously inserted/deleted operators
-      selection.anchor.ch += currentShift * op.length;
-      selection.head.ch += currentShift * op.length;
-
-      const from = selection.from();
-      const to = selection.to();
+      const from = oldSelection.from();
+      const to = oldSelection.to();
       const endLineLength = this.cm.getLine(to.line).length;
-      const prefixStart = { line: from.line, ch: from.ch >= op.length ? from.ch - op.length : 0 };
-      const suffixEnd = { line: to.line, ch: to.ch <= endLineLength - op.length ? to.ch + op.length : endLineLength };
+      const prefixStart = { line: from.line, ch: from.ch >= token.length ? from.ch - token.length : 0 };
+      const suffixEnd = {
+        line: to.line,
+        ch: to.ch <= endLineLength - token.length ? to.ch + token.length : endLineLength,
+      };
 
       // Insert or delete tokens depending whether they exist
 
-      const hasPrefixToken = this.cm.getRange(prefixStart, from) === op;
-      const hasSuffixToken = this.cm.getRange(to, suffixEnd) === op;
+      const hasPrefixToken = this.cm.getRange(prefixStart, from) === token;
+      const hasSuffixToken = this.cm.getRange(to, suffixEnd) === token;
+
+      // indicate whether the tokens before/after the selection have been inserted or deleted
+      let beforeShift = 0;
+      let afterShift = 0;
 
       if (hasSuffixToken) {
         this.cm.replaceRange('', to, suffixEnd, '+toggleBlock');
-        currentShift--;
+        afterShift = -1;
       } else {
-        this.cm.replaceRange(op, to, undefined, '+toggleBlock');
-        currentShift++;
+        this.cm.replaceRange(token, to, undefined, '+toggleBlock');
+        afterShift = 1;
       }
 
       if (hasPrefixToken) {
         this.cm.replaceRange('', prefixStart, from, '+toggleBlock');
-        currentShift--;
-
-        // Adjust selections to originally selected characters
-        selection.anchor.ch -= op.length;
-        if (!selection.empty()) selection.head.ch -= op.length;
+        beforeShift = -1;
       } else {
-        this.cm.replaceRange(op, from, undefined, '+toggleBlock');
-        currentShift++;
-
-        // Adjust selections to originally selected characters
-        selection.anchor.ch += op.length;
-        if (!selection.empty()) selection.head.ch += op.length;
+        this.cm.replaceRange(token, from, undefined, '+toggleBlock');
+        beforeShift = 1;
       }
 
-      newSelections.push(selection);
+        // Adjust selections to originally selected characters
+      if (oldSelection.empty()) newSelection.head = newSelection.anchor;
+      else if (from.line === to.line) newSelection.to().ch += beforeShift * token.length;
+      newSelection.from().ch += beforeShift * token.length;
+
+      newSelections.push(newSelection);
+
+      // Adjust all following selections to originally selected characters
+      for (let j = i + 1; j < selections.length; j++) {
+        const s = selections[j];
+        if (s.empty()) {
+          s.head = s.anchor;
+        } else {
+          if (s.head.line === from.line) s.head.ch += beforeShift * token.length;
+          if (s.head.line === to.line) s.head.ch += afterShift * token.length;
+        }
+        if (s.anchor.line === from.line) s.anchor.ch += beforeShift * token.length;
+        if (s.anchor.line === to.line) s.anchor.ch += afterShift * token.length;
+        else break;
+      }
     }
 
     this.cm.setSelections(newSelections, undefined, { origin: '+toggleBlock' });
