@@ -59,6 +59,10 @@
   - spellchecker (default/custom)
   - tab size
   - theme name (results in `.cm-s-[name]`)
+  - markdown guide per language
+  - Possibility to adjust enumeration of all lines of ordered list while typing
+    (enter "1.", next line automatically changes to "2.", if it had an enumeration before)
+  - Possibility to adjust enumeration depending on tab depth
 
 ## Frameworks
 
