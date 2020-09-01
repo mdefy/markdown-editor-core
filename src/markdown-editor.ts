@@ -50,8 +50,8 @@ export class MarkdownEditor {
 
   /**
    * Toggles inline formatting for each selection by wrapping and unwrapping each selection
-   * with specified operator.
-   * @param token the operator
+   * with specified token.
+   * @param token the token
    */
   private toggleInlineFormatting(token: string) {
     const newSelections: CodeMirror.Range[] = [];
@@ -327,20 +327,14 @@ export class MarkdownEditor {
 
   private insertInlineTemplate(before: string, after: string) {
     const newSelections: CodeMirror.Range[] = [];
-    let currentShift = 0; // indicates how many operators have been inserted and deleted
     const selections = this.cm.listSelections();
     for (let i = 0; i < selections.length; i++) {
       const oldSelection = selections[i];
       const newSelection = _.cloneDeep(oldSelection);
 
-      // Shift selection back to correct position in respect to previously inserted/deleted operators
-      // selection.from().ch += currentShift * (before.length + after.length);
-      // selection.to().ch += currentShift * (before.length + after.length);
-
       // Insert template parts before and after the selection
       this.cm.replaceRange(after, newSelection.to(), undefined, '+toggleBlock');
       this.cm.replaceRange(before, newSelection.from(), undefined, '+toggleBlock');
-      currentShift++;
 
       // Adjust selections to originally selected characters
       if (!newSelection.empty()) newSelection.to().ch += before.length;
@@ -364,6 +358,58 @@ export class MarkdownEditor {
     }
 
     this.cm.setSelections(newSelections, undefined, { origin: '+toggleBlock' });
+    this.cm.focus();
+  }
+
+  public insertHorizontalLine() {
+    this.insertBlockTemplateBelow('\n-----\n\n');
+  }
+
+  public insertTable(rows = 1, columns = 2) {
+    let template = '\n';
+    for (let c = 1; c <= columns; c++) {
+      template += `| Column ${c} `;
+    }
+    template += '|\n';
+    for (let c = 1; c <= columns; c++) {
+      template += '| -------- ';
+    }
+    template += '|\n';
+    for (let r = 1; r <= rows; r++) {
+      for (let c = 1; c <= columns; c++) {
+        template += '| Content  ';
+      }
+      template += '|\n';
+    }
+    template += '\n';
+    this.insertBlockTemplateBelow(template);
+  }
+
+  private insertBlockTemplateBelow(template: string) {
+    let currentShift = 0; // indicates how many lines have been inserted
+    const selections = this.cm.listSelections();
+    for (let i = 0; i < selections.length; i++) {
+      const oldSelection = selections[i];
+      const newSelection = _.cloneDeep(oldSelection);
+
+      // Shift selection back to correct position in respect to previously inserted lines
+      if (newSelection.empty()) newSelection.head = newSelection.anchor;
+      else newSelection.to().line += currentShift;
+      newSelection.from().line += currentShift;
+
+      const toLineNumber = newSelection.to().line;
+      const toLineLength = this.cm.getLine(toLineNumber).length;
+      const toLineEnd: CodeMirror.Position = { line: toLineNumber, ch: toLineLength };
+
+      if (toLineLength > 0) {
+        template = '\n' + template;
+      }
+      currentShift += template.match(/\n/g)?.length || 0;
+
+      // Insert template in the subsequent line of the selection
+      this.cm.replaceRange(template, toLineEnd, undefined, '+insertHorizontalLine');
+    }
+
     this.cm.focus();
   }
 }
