@@ -94,7 +94,7 @@ export class MarkdownEditor {
         beforeShift = 1;
       }
 
-        // Adjust selections to originally selected characters
+      // Adjust selections to originally selected characters
       if (oldSelection.empty()) newSelection.head = newSelection.anchor;
       else if (from.line === to.line) newSelection.to().ch += beforeShift * token.length;
       newSelection.from().ch += beforeShift * token.length;
@@ -314,6 +314,56 @@ export class MarkdownEditor {
     }
 
     this.cm.setSelections(newSelections, undefined, { origin: '+insertCodeBlock' });
+    this.cm.focus();
+  }
+
+  public insertLink() {
+    this.insertInlineTemplate('[', '](https://)');
+  }
+
+  public insertImageLink() {
+    this.insertInlineTemplate('![', '](https://)');
+  }
+
+  private insertInlineTemplate(before: string, after: string) {
+    const newSelections: CodeMirror.Range[] = [];
+    let currentShift = 0; // indicates how many operators have been inserted and deleted
+    const selections = this.cm.listSelections();
+    for (let i = 0; i < selections.length; i++) {
+      const oldSelection = selections[i];
+      const newSelection = _.cloneDeep(oldSelection);
+
+      // Shift selection back to correct position in respect to previously inserted/deleted operators
+      // selection.from().ch += currentShift * (before.length + after.length);
+      // selection.to().ch += currentShift * (before.length + after.length);
+
+      // Insert template parts before and after the selection
+      this.cm.replaceRange(after, newSelection.to(), undefined, '+toggleBlock');
+      this.cm.replaceRange(before, newSelection.from(), undefined, '+toggleBlock');
+      currentShift++;
+
+      // Adjust selections to originally selected characters
+      if (!newSelection.empty()) newSelection.to().ch += before.length;
+      newSelection.from().ch += before.length;
+
+      newSelections.push(newSelection);
+
+      // Adjust all following selections to originally selected characters
+      for (let j = i + 1; j < selections.length; j++) {
+        const s = selections[j];
+        if (s.empty()) {
+          s.head = s.anchor;
+        } else {
+          if (s.head.line === oldSelection.from().line) s.head.ch += before.length;
+          if (s.head.line === oldSelection.to().line) s.head.ch += after.length;
+        }
+        if (s.anchor.line === oldSelection.from().line) s.anchor.ch += before.length;
+        if (s.anchor.line === oldSelection.to().line) s.anchor.ch += after.length;
+        else break;
+      }
+    }
+
+    this.cm.setSelections(newSelections, undefined, { origin: '+toggleBlock' });
     this.cm.focus();
   }
 }
