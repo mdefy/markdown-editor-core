@@ -412,4 +412,8 @@ export class MarkdownEditor {
 
     this.cm.focus();
   }
+
+  public openMarkdownGuide() {
+    window.open('https://www.markdownguide.org/basic-syntax/', '_blank');
+  }
 }
