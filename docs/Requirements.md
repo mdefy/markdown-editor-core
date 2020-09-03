@@ -7,62 +7,60 @@
 - Default short cuts
 - Auto-save in local storage
 - Code highlighting (e.g. highlight.js)
-- API for basic editor functionality:
-  - Toggle Bold (for **selection**)
-  - Toggle Italic (for **selection**)
-  - Toggle Strikethrough (for **selection**)
-  - Set Heading level (whole line)
-  - Toggle List (order **or** unordered)
-  - Toggle Quote (always **before list symbol**)
-  - Insert link template
-  - Insert image link template
-  - Insert table template
-  - Insert horizontal line
-  - Toggle inline code fragment (for **selection**)
-  - Insert (if possible toggle) code block (for **selection**)
-  - Open Markdown Guide
+- ✓ API for basic editor functionality:
+  - ✓ Toggle Bold (for **selection**)
+  - ✓ Toggle Italic (for **selection**)
+  - ✓ Toggle Strikethrough (for **selection**)
+  - ✓ Set Heading level (whole line)
+  - ✓ Toggle List (order **or** unordered)
+  - ✓ Toggle Quote (always **before list symbol**)
+  - ✓ Insert link template
+  - ✓ Insert image link template
+  - ✓ Insert table template
+  - ✓ Insert horizontal line
+  - ✓ Toggle inline code fragment (for **selection**)
+  - ✓ Insert (if possible toggle) code block (for **selection**)
+  - ✓ Open Markdown Guide
 - API for extended editor functionality
-  - Undo / Redo
-  - Toggle rich-text in editor
-  - Possibility to replace given textarea and switch back to this native textarea later
-  - Side-by-side preview (with editor **or** textarea)
-  - Full-width preview
-  - Auto-formatting (indentation, empty lines ...)
-  - Edit as HTML
-  - Download / Save as...
-  - Import file
-  - Upload image (storage needs to be specified by app developer)
-  - set spellchecker language
-  - Toggle scroll sync for side-by-side preview
+  - ✓ . Undo / Redo
+  - ✓ .. Toggle rich-text in editor
+  - . Possibility to replace given textarea and switch back to this native textarea later
+  - ... Full-width preview
+  - ... Side-by-side preview (with editor **or** textarea)
+  - .... Toggle scroll sync for side-by-side preview
+  - ..... Auto-formatting (indentation, empty lines, table alignment? (needs mono-space) ...)
+  - .. Download / Save as...
+  - .. Import file
+  - ... set spellchecker language
+  - .... Upload image (storage needs to be specified by app developer)
+  - .... Edit as HTML and parse back
 - API for developers only
-  - Set/get content
-  - Set/get unformatted content
-  - emit error
-  - get character/word count
-  - get line/column cursor position
-  - reveal Codemirror instance
-  - is dirty
+  - ✓ Set/get content
+  - ✓ Set/get unformatted content
+  - ✓ get character/word count
+  - ✓ get line/column cursor position
+  - ✓ reveal Codemirror instance
+  - ✓ is dirty
 - Customizable options
   - Action short cuts
-  - Editor short cuts?
-  - Renderer + options
-  - Auto-formatting options
-  - Autofocus
-  - Block styles (e.g. \* or \_ for italic)
-  - Force sync with original textarea
-  - Custom templates for templated functions like _Insert link_
-  - line wrapping
-  - min/max height/width
-  - callbacks for all actions
-  - custom functions for actions
-  - placeholder
-  - spellchecker (default/custom)
-  - tab size
   - theme name (results in `.cm-s-[name]`)
-  - markdown guide per language
+  - Autofocus
+  - placeholder
+  - min/max height/width
+  - line wrapping
+  - tab size
+  - Block styles (e.g. \* or \_ for italic)
+  - Custom templates for templated functions like _Insert link_
+  - Renderer + options
+  - Force sync with original textarea
+  - callbacks for all actions
+  - Possibility to adjust enumeration depending on tab depth
+  - Editor short cuts?
+  - Auto-formatting options
+  - spellchecker (default/custom)
+  - set markdown guide url
   - Possibility to adjust enumeration of all lines of ordered list while typing
     (enter "1.", next line automatically changes to "2.", if it had an enumeration before)
-  - Possibility to adjust enumeration depending on tab depth
 
 ## Frameworks
 
@@ -71,7 +69,7 @@
 - Default tooltips
 - Custom toolbar (select which built-in actions to use)
 - Custom actions
-- Internationalization
+- Internationalization (Button icon, Button Tooltips, Markdown Guide)
 - Error handling (default/callback/custom)
 - Status bar (character/word count, cursor position, spellchecker language, custom items)
 - Set spellchecker language
