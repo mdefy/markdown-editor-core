@@ -6,7 +6,7 @@ export class MarkdownEditor {
   public static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
   public static readonly UNORDERED_LIST_PATTERN = /^(\*|-)(\t| )+/;
 
-  private cm: CodeMirror.Editor;
+  public cm: CodeMirror.Editor;
   private cmOptions: CodeMirror.EditorConfiguration;
 
   constructor(hostElement: HTMLElement) {
@@ -415,5 +415,63 @@ export class MarkdownEditor {
 
   public openMarkdownGuide() {
     window.open('https://www.markdownguide.org/basic-syntax/', '_blank');
+  }
+
+  /***** Extended Editor API *****/
+
+  public undo() {
+    this.cm.undo();
+  }
+
+  public redo() {
+    this.cm.redo();
+  }
+
+  public toggleRichTextMode() {
+    const currentMode = this.cm.getOption('mode');
+    if (currentMode === 'gfm') {
+      this.cm.setOption('mode', '');
+    } else {
+      this.cm.setOption('mode', 'gfm');
+    }
+  }
+
+  /***** Developer API *****/
+
+  public getContent(perLine?: boolean, separator: string = '\n'): string {
+    return this.cm.getValue(separator);
+  }
+
+  public getContentPerLine(): string[] {
+    return this.cm.getValue().split('\n');
+  }
+
+  public setContent(content: string) {
+    this.cm.setValue(content);
+  }
+
+  public setContentPerLine(content: string[]) {
+    this.cm.setValue(content.join('\n'));
+  }
+
+  public getCharacterCount(separator: string = '\n') {
+    return this.cm.getValue(separator).replace(RegExp(separator, 'gi'), '').length;
+  }
+
+  public getWordCount(separator: string = '\n') {
+    const content = this.cm.getValue(separator);
+    let s = content.replace(/(^\s*)|(\s*$)/gi, '');
+    s = s.replace(/\t/gi, ' ');
+    s = s.replace(RegExp(separator, 'gi'), ' ');
+    s = s.replace(/[ ]{2,}/gi, ' ');
+    return s.split(' ').length;
+  }
+
+  public getCursorPos() {
+    return this.cm.getCursor();
+  }
+
+  public isDirty() {
+    return !this.cm.isClean();
   }
 }
