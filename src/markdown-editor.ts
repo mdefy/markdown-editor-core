@@ -24,14 +24,14 @@ export class MarkdownEditor {
    * Toggles "bold" for each selection.
    */
   public toggleBold() {
-    this.toggleInlineFormatting('**');
+    this.toggleInlineFormatting('**', ['__']);
   }
 
   /**
    * Toggles "italic" for each selection.
    */
   public toggleItalic() {
-    this.toggleInlineFormatting('*');
+    this.toggleInlineFormatting('_', ['*']);
   }
 
   /**
@@ -53,7 +53,7 @@ export class MarkdownEditor {
    * with specified token.
    * @param token the token
    */
-  private toggleInlineFormatting(token: string) {
+  private toggleInlineFormatting(token: string, altTokens: string[] = []) {
     const newSelections: CodeMirror.Range[] = [];
     const selections = _.cloneDeep(this.cm.listSelections());
     for (let i = 0; i < selections.length; i++) {
@@ -63,22 +63,31 @@ export class MarkdownEditor {
       const from = oldSelection.from();
       const to = oldSelection.to();
       const endLineLength = this.cm.getLine(to.line).length;
-      const prefixStart = { line: from.line, ch: from.ch >= token.length ? from.ch - token.length : 0 };
-      const suffixEnd = {
-        line: to.line,
-        ch: to.ch <= endLineLength - token.length ? to.ch + token.length : endLineLength,
-      };
 
-      // Insert or delete tokens depending whether they exist
+      const linePartBefore = this.cm.getRange({ line: from.line, ch: 0 }, from);
+      const linePartAfter = this.cm.getRange(to, { line: to.line, ch: endLineLength });
+      const prefixToken = [token, ...altTokens].find((t) => {
+        console.log(this.escapeRegexChars(t));
+        return linePartBefore.search(RegExp(this.escapeRegexChars(t) + '$')) > -1;
+      });
+      const suffixToken = [token, ...altTokens].find((t) => {
+        return linePartAfter.search(RegExp('^' + this.escapeRegexChars(t))) > -1;
+      });
 
-      const hasPrefixToken = this.cm.getRange(prefixStart, from) === token;
-      const hasSuffixToken = this.cm.getRange(to, suffixEnd) === token;
+      console.log('prefix:', prefixToken);
+      console.log('suffix:', suffixToken);
 
       // indicate whether the tokens before/after the selection have been inserted or deleted
       let beforeShift = 0;
       let afterShift = 0;
 
-      if (hasSuffixToken) {
+      // Insert or delete tokens depending whether they exist
+
+      if (suffixToken) {
+        const suffixEnd = {
+          line: to.line,
+          ch: to.ch <= endLineLength - suffixToken.length ? to.ch + suffixToken.length : endLineLength,
+        };
         this.cm.replaceRange('', to, suffixEnd, '+toggleBlock');
         afterShift = -1;
       } else {
@@ -86,7 +95,8 @@ export class MarkdownEditor {
         afterShift = 1;
       }
 
-      if (hasPrefixToken) {
+      if (prefixToken) {
+        const prefixStart = { line: from.line, ch: from.ch >= prefixToken.length ? from.ch - prefixToken.length : 0 };
         this.cm.replaceRange('', prefixStart, from, '+toggleBlock');
         beforeShift = -1;
       } else {
@@ -118,6 +128,15 @@ export class MarkdownEditor {
 
     this.cm.setSelections(newSelections, undefined, { origin: '+toggleBlock' });
     this.cm.focus();
+  }
+
+  private escapeRegexChars(s: string) {
+    const reservedChars = ['.', '*', '+', '?', '!', '{', '}', '[', ']'];
+    s = s.replace(/\\/gi, '\\\\');
+    for (const reservedChar of reservedChars) {
+      s = s.replace(RegExp(`\\${reservedChar}`, 'gi'), '\\' + reservedChar);
+    }
+    return s;
   }
 
   /**
@@ -274,15 +293,16 @@ export class MarkdownEditor {
     for (let i = 0; i < selections.length; i++) {
       const oldSelection = selections[i];
       const newSelection = _.cloneDeep(oldSelection);
+      const codeBlockToken = '```';
 
       // Wrap selection with code block tokens
       let currentShift = 3;
-      let startToken = '```\n';
+      let startToken = codeBlockToken + '\n';
       if (newSelection.from().ch > 0) {
         startToken = '\n' + startToken;
         currentShift++;
       }
-      this.cm.replaceRange('\n```\n', newSelection.to(), undefined, '+insertCodeBlock');
+      this.cm.replaceRange('\n' + codeBlockToken + '\n', newSelection.to(), undefined, '+insertCodeBlock');
       this.cm.replaceRange(startToken, newSelection.from(), undefined, '+insertCodeBlock');
 
       // Adjust selections to originally selected characters
@@ -362,7 +382,8 @@ export class MarkdownEditor {
   }
 
   public insertHorizontalLine() {
-    this.insertBlockTemplateBelow('\n-----\n\n');
+    const token = '---';
+    this.insertBlockTemplateBelow(`\n${token}\n\n`);
   }
 
   public insertTable(rows = 1, columns = 2) {
