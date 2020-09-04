@@ -1,6 +1,7 @@
 import CodeMirror from 'codemirror';
 require('codemirror/mode/gfm/gfm.js');
 import _ from 'lodash';
+import { Options, DEFAULT_OPTIONS } from './options';
 
 export class MarkdownEditor {
   public static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
@@ -8,8 +9,10 @@ export class MarkdownEditor {
 
   public cm: CodeMirror.Editor;
   private cmOptions: CodeMirror.EditorConfiguration;
+  private readonly options: Options;
 
-  constructor(hostElement: HTMLElement) {
+  constructor(hostElement: HTMLElement, options?: Options) {
+    this.options = _.merge(DEFAULT_OPTIONS, options);
     this.cmOptions = {
       mode: 'gfm',
     };
@@ -24,14 +27,24 @@ export class MarkdownEditor {
    * Toggle "bold" for each selection.
    */
   public toggleBold() {
-    this.toggleInlineFormatting('**', ['__']);
+    const BOLD_TOKENS = ['**', '__'];
+    const preferred = this.options.preferredTokens.bold;
+    this.toggleInlineFormatting(
+      preferred,
+      BOLD_TOKENS.filter((t) => t !== preferred)
+    );
   }
 
   /**
    * Toggle "italic" for each selection.
    */
   public toggleItalic() {
-    this.toggleInlineFormatting('_', ['*']);
+    const ITALIC_TOKENS = ['*', '_'];
+    const preferred = this.options.preferredTokens.italic;
+    this.toggleInlineFormatting(
+      preferred,
+      ITALIC_TOKENS.filter((t) => t !== preferred)
+    );
   }
 
   /**
@@ -168,15 +181,20 @@ export class MarkdownEditor {
    * transformed to an unordered list.
    */
   public toggleUnorderedList() {
+    const UNORDERED_LIST_TOKENS = ['*', '_'];
+    const preferred = this.options.preferredTokens.unorderedList;
     this.replaceTokenAtLineStart((oldLineContent) => {
       // Has selected line a bullet point token?
       if (oldLineContent.search(MarkdownEditor.UNORDERED_LIST_PATTERN) === -1) {
-        const token = '- ';
+        this.toggleInlineFormatting(
+          preferred,
+          UNORDERED_LIST_TOKENS.filter((t) => t !== preferred)
+        );
         // Has selected line an enumeration token?
         if (oldLineContent.search(MarkdownEditor.ORDERED_LIST_PATTERN) === -1) {
-          return token + oldLineContent;
+          return preferred + oldLineContent;
         } else {
-          return oldLineContent.replace(MarkdownEditor.ORDERED_LIST_PATTERN, token);
+          return oldLineContent.replace(MarkdownEditor.ORDERED_LIST_PATTERN, preferred);
         }
       } else {
         return oldLineContent.replace(MarkdownEditor.UNORDERED_LIST_PATTERN, '');
@@ -289,21 +307,26 @@ export class MarkdownEditor {
    * Wrap each selection with code block tokens, which are inserted in separate lines.
    */
   public insertCodeBlock() {
+    const CODE_BLOCK_TOKENS = ['*', '_'];
     const newSelections: CodeMirror.Range[] = [];
     const selections = _.cloneDeep(this.cm.listSelections());
     for (let i = 0; i < selections.length; i++) {
       const oldSelection = selections[i];
       const newSelection = _.cloneDeep(oldSelection);
-      const codeBlockToken = '```';
+      const preferredToken = this.options.preferredTokens.italic;
+      this.toggleInlineFormatting(
+        preferredToken,
+        CODE_BLOCK_TOKENS.filter((t) => t !== preferredToken)
+      );
 
       // Wrap selection with code block tokens
       let currentShift = 3;
-      let startToken = codeBlockToken + '\n';
+      let startToken = preferredToken + '\n';
       if (newSelection.from().ch > 0) {
         startToken = '\n' + startToken;
         currentShift++;
       }
-      this.cm.replaceRange('\n' + codeBlockToken + '\n', newSelection.to(), undefined, '+insertCodeBlock');
+      this.cm.replaceRange('\n' + preferredToken + '\n', newSelection.to(), undefined, '+insertCodeBlock');
       this.cm.replaceRange(startToken, newSelection.from(), undefined, '+insertCodeBlock');
 
       // Adjust selections to originally selected characters
@@ -342,14 +365,16 @@ export class MarkdownEditor {
    * Wrap a link template around each selection.
    */
   public insertLink() {
-    this.insertInlineTemplate('[', '](https://)');
+    const [before, after] = this.options.preferredTemplates.link;
+    this.insertInlineTemplate(before, after);
   }
 
   /**
    * Wrap a image link template around each selection.
    */
   public insertImageLink() {
-    this.insertInlineTemplate('![', '](https://)');
+    const [before, after] = this.options.preferredTemplates.imageLink;
+    this.insertInlineTemplate(before, after);
   }
 
   /**
@@ -397,8 +422,8 @@ export class MarkdownEditor {
    * Insert a horizontal line in the subsequent line of each selection.
    */
   public insertHorizontalLine() {
-    const token = '---';
-    this.insertBlockTemplateBelow(`\n${token}\n\n`);
+    const preferred = this.options.preferredTokens.horizontalLine;
+    this.insertBlockTemplateBelow(`\n${preferred}\n\n`);
   }
 
   /**
@@ -408,23 +433,34 @@ export class MarkdownEditor {
    * @param columns number columns
    */
   public insertTable(rows = 1, columns = 2) {
-    let template = '\n';
-    for (let c = 1; c <= columns; c++) {
-      template += `| Column ${c} `;
-    }
-    template += '|\n';
-    for (let c = 1; c <= columns; c++) {
-      template += '| -------- ';
-    }
-    template += '|\n';
-    for (let r = 1; r <= rows; r++) {
+    const tableOptions = this.options.preferredTemplates.table;
+    if (typeof tableOptions === 'string') {
+      this.insertBlockTemplateBelow(tableOptions);
+    } else {
+      if (!rows && !columns) {
+        rows = tableOptions.rows;
+        columns = tableOptions.columns;
+      }
+
+      let template = '\n';
       for (let c = 1; c <= columns; c++) {
-        template += '| Content  ';
+        template += `| Column ${c} `;
       }
       template += '|\n';
+      for (let c = 1; c <= columns; c++) {
+        template += '| -------- ';
+      }
+      template += '|\n';
+      for (let r = 1; r <= rows; r++) {
+        for (let c = 1; c <= columns; c++) {
+          template += '| Content  ';
+        }
+        template += '|\n';
+      }
+      template += '\n';
+
+      this.insertBlockTemplateBelow(template);
     }
-    template += '\n';
-    this.insertBlockTemplateBelow(template);
   }
 
   /**
