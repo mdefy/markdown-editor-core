@@ -21,37 +21,38 @@ export class MarkdownEditor {
   }
 
   /**
-   * Toggles "bold" for each selection.
+   * Toggle "bold" for each selection.
    */
   public toggleBold() {
     this.toggleInlineFormatting('**', ['__']);
   }
 
   /**
-   * Toggles "italic" for each selection.
+   * Toggle "italic" for each selection.
    */
   public toggleItalic() {
     this.toggleInlineFormatting('_', ['*']);
   }
 
   /**
-   * Toggles "strikethrough" for each selection.
+   * Toggle "strikethrough" for each selection.
    */
   public toggleStrikethrough() {
     this.toggleInlineFormatting('~~');
   }
 
   /**
-   * Toggles "inline code" for each selection.
+   * Toggle "inline code" for each selection.
    */
   public toggleInlineCode() {
     this.toggleInlineFormatting('`');
   }
 
   /**
-   * Toggles inline formatting for each selection by wrapping and unwrapping each selection
-   * with specified token.
+   * Toggle inline formatting for each selection by wrapping it with the specified token
+   * and unwrapping it with the specified token or one of the alternative tokens.
    * @param token the token
+   * @param altTokens the alternative tokens
    */
   private toggleInlineFormatting(token: string, altTokens: string[] = []) {
     const newSelections: CodeMirror.Range[] = [];
@@ -67,15 +68,11 @@ export class MarkdownEditor {
       const linePartBefore = this.cm.getRange({ line: from.line, ch: 0 }, from);
       const linePartAfter = this.cm.getRange(to, { line: to.line, ch: endLineLength });
       const prefixToken = [token, ...altTokens].find((t) => {
-        console.log(this.escapeRegexChars(t));
         return linePartBefore.search(RegExp(this.escapeRegexChars(t) + '$')) > -1;
       });
       const suffixToken = [token, ...altTokens].find((t) => {
         return linePartAfter.search(RegExp('^' + this.escapeRegexChars(t))) > -1;
       });
-
-      console.log('prefix:', prefixToken);
-      console.log('suffix:', suffixToken);
 
       // indicate whether the tokens before/after the selection have been inserted or deleted
       let beforeShift = 0;
@@ -130,6 +127,10 @@ export class MarkdownEditor {
     this.cm.focus();
   }
 
+  /**
+   * Transform a string so that all Regex-reserved characters are escaped.
+   * @param s
+   */
   private escapeRegexChars(s: string) {
     const reservedChars = ['.', '*', '+', '?', '!', '{', '}', '[', ']'];
     s = s.replace(/\\/gi, '\\\\');
@@ -140,7 +141,7 @@ export class MarkdownEditor {
   }
 
   /**
-   * Sets the specified heading level for each selected line. If `level` is 0, the heading token is removed.
+   * Set the specified heading level for each selected line. If `level` is 0, the heading token is removed.
    * @param level the heading level
    */
   public setHeadingLevel(level: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
@@ -149,7 +150,7 @@ export class MarkdownEditor {
   }
 
   /**
-   * Toggles "quote" for each selected line.
+   * Toggle "quote" for each selected line.
    */
   public toggleQuote() {
     this.replaceTokenAtLineStart((oldLineContent) => {
@@ -163,7 +164,7 @@ export class MarkdownEditor {
   }
 
   /**
-   * Toggles "unordered list" for each selected line. Furthermore, a selected ordered list line is
+   * Toggle "unordered list" for each selected line. Furthermore, a selected ordered list line is
    * transformed to an unordered list.
    */
   public toggleUnorderedList() {
@@ -184,7 +185,7 @@ export class MarkdownEditor {
   }
 
   /**
-   * Toggles "ordered list" for each selected line. Furthermore, a selected unordered list line is
+   * Toggle "ordered list" for each selected line. Furthermore, a selected unordered list line is
    * transformed to an ordered list. Additionally adjusts the subsequent lines that are connected
    * to the list of the selected line.
    */
@@ -219,7 +220,7 @@ export class MarkdownEditor {
   }
 
   /**
-   * Adjusts enumeration of subsequent lines in same ordered list as line *baseLineNumber*.
+   * Adjust the enumeration of subsequent lines in same ordered list as line *baseLineNumber*.
    * @param baseLineNumber the selected line which is toggled
    * @param baseListNumber the list number of the selected line (should be 0, if list starts after selected line)
    */
@@ -241,7 +242,7 @@ export class MarkdownEditor {
   }
 
   /**
-   * Replaces each selected line with the result of the callback function `replaceFn`.
+   * Replace each selected line with the result of the callback function `replaceFn`.
    * Additionally adjusts the selection boundaries to the originally selected boundaries.
    * @param replaceFn callback function to the calculate the line replacements
    */
@@ -285,7 +286,7 @@ export class MarkdownEditor {
   }
 
   /**
-   * Wraps each selection with code block tokens, which are inserted in separate lines.
+   * Wrap each selection with code block tokens, which are inserted in separate lines.
    */
   public insertCodeBlock() {
     const newSelections: CodeMirror.Range[] = [];
@@ -337,14 +338,25 @@ export class MarkdownEditor {
     this.cm.focus();
   }
 
+  /**
+   * Wrap a link template around each selection.
+   */
   public insertLink() {
     this.insertInlineTemplate('[', '](https://)');
   }
 
+  /**
+   * Wrap a image link template around each selection.
+   */
   public insertImageLink() {
     this.insertInlineTemplate('![', '](https://)');
   }
 
+  /**
+   * Wrap a template around each selection with the specified `before` and `after` template parts.
+   * @param before the template part inserted **before** the selection start
+   * @param after the template part inserted **after** the selection start
+   */
   private insertInlineTemplate(before: string, after: string) {
     const newSelections: CodeMirror.Range[] = [];
     const selections = this.cm.listSelections();
@@ -381,11 +393,20 @@ export class MarkdownEditor {
     this.cm.focus();
   }
 
+  /**
+   * Insert a horizontal line in the subsequent line of each selection.
+   */
   public insertHorizontalLine() {
     const token = '---';
     this.insertBlockTemplateBelow(`\n${token}\n\n`);
   }
 
+  /**
+   * Insert a table template with the specified number of rows and columns
+   * in the subsequent line of each selection.
+   * @param rows number of rows
+   * @param columns number columns
+   */
   public insertTable(rows = 1, columns = 2) {
     let template = '\n';
     for (let c = 1; c <= columns; c++) {
@@ -406,7 +427,14 @@ export class MarkdownEditor {
     this.insertBlockTemplateBelow(template);
   }
 
-  private insertBlockTemplateBelow(template: string) {
+  /**
+   * Insert a block template in the subsequent line of each selection.
+   * The template can contain multiple lines separated with the specified `lineSeparator`.
+   * @param template the template
+   * @param lineSeparator The line separator. Default is `\n`.
+   */
+  private insertBlockTemplateBelow(template: string, lineSeparator: string = '\n') {
+    if (lineSeparator !== '\n') template = template.replace(RegExp(lineSeparator, 'g'), '\n');
     let currentShift = 0; // indicates how many lines have been inserted
     const selections = this.cm.listSelections();
     for (let i = 0; i < selections.length; i++) {
@@ -434,20 +462,32 @@ export class MarkdownEditor {
     this.cm.focus();
   }
 
+  /**
+   * Open a Markdown Guide in a new tab.
+   */
   public openMarkdownGuide() {
     window.open('https://www.markdownguide.org/basic-syntax/', '_blank');
   }
 
   /***** Extended Editor API *****/
 
+  /**
+   * Undo one edit. Shortcut to `Codemirror.undo()`.
+   */
   public undo() {
     this.cm.undo();
   }
 
+  /**
+   * Redo one edit. Shortcut to `Codemirror.redo()`.
+   */
   public redo() {
     this.cm.redo();
   }
 
+  /**
+   * Toggle the editor's rich-text mode. If off, there is no markdown styling inside the editor.
+   */
   public toggleRichTextMode() {
     const currentMode = this.cm.getOption('mode');
     if (currentMode === 'gfm') {
@@ -459,39 +499,69 @@ export class MarkdownEditor {
 
   /***** Developer API *****/
 
-  public getContent(perLine?: boolean, separator: string = '\n'): string {
-    return this.cm.getValue(separator);
+  /**
+   * Get the editor's content with the specified line break format.
+   * @param lineSeparator The line break format. Default is `\n`.
+   */
+  public getContent(lineSeparator: string = '\n'): string {
+    return this.cm.getValue(lineSeparator);
   }
 
+  /**
+   * Get the editor's content with the lines as array.
+   */
   public getContentPerLine(): string[] {
     return this.cm.getValue().split('\n');
   }
 
-  public setContent(content: string) {
+  /**
+   * Set the editor's content with the specified line break format.
+   * @param content The content.
+   * @param lineSeparator The line break format. Default is `\n`.
+   */
+  public setContent(content: string, lineSeparator: string = '\n') {
+    if (lineSeparator !== '\n') content = content.replace(RegExp(lineSeparator, 'g'), '\n');
     this.cm.setValue(content);
   }
 
+  /**
+   * Get the editor's content with the lines as array.
+   */
   public setContentPerLine(content: string[]) {
     this.cm.setValue(content.join('\n'));
   }
 
-  public getCharacterCount(separator: string = '\n') {
-    return this.cm.getValue(separator).replace(RegExp(separator, 'gi'), '').length;
+  /**
+   * Get the number of characters in the document.
+   */
+  public getCharacterCount() {
+    return this.cm.getValue().replace(RegExp('\n', 'gi'), '').length;
   }
 
-  public getWordCount(separator: string = '\n') {
-    const content = this.cm.getValue(separator);
+  /**
+   * Get the number of words in the document.
+   */
+  public getWordCount() {
+    const content = this.cm.getValue();
     let s = content.replace(/(^\s*)|(\s*$)/gi, '');
     s = s.replace(/\t/gi, ' ');
-    s = s.replace(RegExp(separator, 'gi'), ' ');
+    s = s.replace(RegExp('\n', 'gi'), ' ');
     s = s.replace(/[ ]{2,}/gi, ' ');
     return s.split(' ').length;
   }
 
+  /**
+   * Get the current cursor position as a `{line, ch}` object.
+   * Shortcut for `Codemirror.getCursor()`.
+   */
   public getCursorPos() {
     return this.cm.getCursor();
   }
 
+  /**
+   * Returns whether the document has been modified.
+   * Inverted shortcut for `Codemirror.isClean()`
+   */
   public isDirty() {
     return !this.cm.isClean();
   }
