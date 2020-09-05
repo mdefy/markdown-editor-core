@@ -9,7 +9,7 @@ export class MarkdownEditor {
 
   public cm: CodeMirror.Editor;
   private cmOptions: CodeMirror.EditorConfiguration;
-  private readonly options: Options;
+  private options: Options;
 
   constructor(hostElement: HTMLElement, options?: Options) {
     this.options = _.merge(DEFAULT_OPTIONS, options);
@@ -600,5 +600,25 @@ export class MarkdownEditor {
    */
   public isDirty() {
     return !this.cm.isClean();
+  }
+
+  /**
+   * Overwrites current options with specified options.
+   * Options that are not included in specified `options` will not be modified.
+   * @param options the set of options that shall be changed
+   */
+  public setOptions(options: Options) {
+    this.options = _.merge(this.options, options);
+    this.applyCodemirrorOptions();
+  }
+
+  /**
+   * Apply codemirror-specific options that are specified in `this.options`.
+   */
+  private applyCodemirrorOptions() {
+    this.cm.setOption('autofocus', this.options.autofocus);
+    this.cm.setOption('lineWrapping', this.options.lineWrapping);
+    this.cm.setOption('tabSize', this.options.tabSize);
+    this.cm.setOption('theme', this.options.theme);
   }
 }
