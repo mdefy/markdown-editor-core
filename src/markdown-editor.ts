@@ -17,6 +17,8 @@ export class MarkdownEditor {
       mode: 'gfm',
     };
     this.cm = CodeMirror(hostElement, this.cmOptions);
+    this.applyCodemirrorOptions();
+    this.applyEditorKeyMappings();
   }
 
   static fromTextarea(textarea: HTMLTextAreaElement) {
@@ -257,6 +259,15 @@ export class MarkdownEditor {
       );
       nextLine = this.cm.getLine(++nextLineNumber);
     }
+  }
+
+  /**
+   * Toggle "check list" for each selected line. Furthermore, a selected (un)ordered list line is
+   * transformed to a check list.
+   */
+  public toggleCheckList() {
+    // TODO
+    // Important: Refactor MarkdownEditor.toggle[Un]orderedList() to also replace check list.
   }
 
   /**
@@ -602,6 +613,8 @@ export class MarkdownEditor {
     return !this.cm.isClean();
   }
 
+  /***** Markdown Editor Options *****/
+
   /**
    * Overwrites current options with specified options.
    * Options that are not included in specified `options` will not be modified.
@@ -610,6 +623,7 @@ export class MarkdownEditor {
   public setOptions(options: Options) {
     this.options = _.merge(this.options, options);
     this.applyCodemirrorOptions();
+    this.applyEditorKeyMappings();
   }
 
   /**
@@ -620,5 +634,39 @@ export class MarkdownEditor {
     this.cm.setOption('lineWrapping', this.options.lineWrapping);
     this.cm.setOption('tabSize', this.options.tabSize);
     this.cm.setOption('theme', this.options.theme);
+  }
+
+  private applyEditorKeyMappings() {
+    const bindings: { [key: string]: () => any } = {
+      toggleBold: () => this.toggleBold(),
+      toggleItalic: () => this.toggleItalic(),
+      toggleStrikethrough: () => this.toggleStrikethrough(),
+      toggleUnorderedList: () => this.toggleUnorderedList(),
+      toggleOrderedList: () => this.toggleOrderedList(),
+      toggleCheckList: () => this.toggleCheckList(),
+      toggleQuote: () => this.toggleQuote(),
+      insertLink: () => this.insertLink(),
+      insertImageLink: () => this.insertImageLink(),
+      insertTable: () => this.insertTable(),
+      insertHorizontalLine: () => this.insertHorizontalLine(),
+      toggleInlineCode: () => this.toggleInlineCode(),
+      insertCodeBlock: () => this.insertCodeBlock(),
+      openMarkdownGuide: () => this.openMarkdownGuide(),
+      toggleRichTextMode: () => this.toggleRichTextMode(),
+    };
+
+    const shortcuts = this.options.shortcuts;
+    const extraKeys: { [key: string]: () => any } = {};
+    for (const [key, value] of Object.entries(shortcuts)) {
+      let shortcut: string;
+      if (isMac()) {
+        shortcut = value.replace('Ctrl', 'Cmd');
+      } else {
+        shortcut = value.replace('Cmd', 'Ctrl');
+      }
+      extraKeys[shortcut] = bindings[key];
+    }
+
+    this.cm.setOption('extraKeys', extraKeys);
   }
 }
