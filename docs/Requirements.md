@@ -2,9 +2,9 @@
 
 ## Core
 
-- TypeScript Rich-text Markdown Editor
+- ✓ TypeScript Rich-text Markdown Editor
 - Default Renderer?
-- Default short cuts
+- ✓ Default short cuts
 - Auto-save in local storage
 - Code highlighting (e.g. highlight.js)
 - API for basic editor functionality:
@@ -41,12 +41,11 @@
   - ✓ get line/column cursor position
   - ✓ reveal Codemirror instance
   - ✓ is dirty
+  - switch back and forth between textarea and editor?
 - Customizable options
-  - Action short cuts
+  - ✓ Action short cuts
   - ✓ theme name (results in `.cm-s-[name]`)
   - ✓ Autofocus
-  - placeholder
-  - min/max height/width
   - ✓ line wrapping
   - ✓ tab size
   - ✓ Block styles (e.g. \* or \_ for italic)
@@ -54,14 +53,19 @@
   - multiple selection?
   - Renderer + options
   - Force sync with original textarea
-  - callbacks for all actions
+  - callbacks for all actions?
   - Possibility to adjust enumeration depending on tab depth
-  - Editor short cuts?
+  - Editor shortcuts?
   - Auto-formatting options
   - spellchecker (default/custom)
   - set markdown guide url
   - Possibility to adjust enumeration of all lines of ordered list while typing
     (enter "1.", next line automatically changes to "2.", if it had an enumeration before)
+- Interesting Addons:
+  - ✓ placeholder
+  - RTL mode (bidirectional text)
+  - mark selection (with CSS class)
+  - scrollPastEnd
 
 ## Frameworks
 
@@ -78,3 +82,4 @@
 - emit change
 - emit focus
 - emit blur
+- min/max height/width
