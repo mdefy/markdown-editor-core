@@ -14,6 +14,7 @@ export interface Options {
     imageLink: [string, string];
     table: string | { rows: number; columns: number };
   };
+  richTextMode: boolean;
   shortcuts: {
     toggleBold: string;
     toggleItalic: string;
@@ -51,6 +52,7 @@ export const DEFAULT_OPTIONS: Options = {
     imageLink: ['![', '](https://)'],
     table: { rows: 2, columns: 2 },
   },
+  richTextMode: true,
   shortcuts: {
     toggleBold: 'Ctrl-B',
     toggleItalic: 'Ctrl-I',

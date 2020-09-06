@@ -612,9 +612,10 @@ export class MarkdownEditor {
   private applyCodemirrorOptions() {
     this.cm.setOption('autofocus', this.options.autofocus);
     this.cm.setOption('lineWrapping', this.options.lineWrapping);
+    this.cm.setOption('placeholder', this.options.placeholder);
+    this.cm.setOption('mode', this.options.richTextMode ? 'gfm' : '');
     this.cm.setOption('tabSize', this.options.tabSize);
     this.cm.setOption('theme', this.options.theme);
-    this.cm.setOption('placeholder', this.options.placeholder);
   }
 
   private applyEditorKeyMappings() {
