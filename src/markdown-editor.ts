@@ -2,28 +2,20 @@ import CodeMirror from 'codemirror';
 require('codemirror/mode/gfm/gfm.js');
 require('codemirror/addon/display/placeholder.js');
 import _ from 'lodash';
-import { Options, DEFAULT_OPTIONS } from './options';
+import { Options, DEFAULT_OPTIONS, FromTextareaOptions, DEFAULT_FROM_TEXTAREA_OPTIONS } from './options';
 
-export class MarkdownEditor {
+class MarkdownEditorBase {
   public static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
   public static readonly UNORDERED_LIST_PATTERN = /^(\*|-)(\t| )+/;
 
-  public cm: CodeMirror.Editor;
-  private cmOptions: CodeMirror.EditorConfiguration;
-  private options: Options;
+  public readonly cm: CodeMirror.Editor;
+  protected options: Options;
 
-  constructor(hostElement: HTMLElement, options?: Options) {
-    this.options = _.merge(DEFAULT_OPTIONS, options);
-    this.cmOptions = {
-      mode: 'gfm',
-    };
-    this.cm = CodeMirror(hostElement, this.cmOptions);
+  constructor(codemirror: CodeMirror.Editor, options: Options) {
+    this.cm = codemirror;
+    this.options = options;
     this.applyCodemirrorOptions();
     this.applyEditorKeyMappings();
-  }
-
-  static fromTextarea(textarea: HTMLTextAreaElement) {
-    CodeMirror.fromTextArea(textarea, { mode: 'gfm' });
   }
 
   /**
@@ -70,7 +62,7 @@ export class MarkdownEditor {
    * @param token the token
    * @param altTokens the alternative tokens
    */
-  private toggleInlineFormatting(token: string, altTokens: string[] = []) {
+  protected toggleInlineFormatting(token: string, altTokens: string[] = []) {
     const newSelections: CodeMirror.Range[] = [];
     const selections = _.cloneDeep(this.cm.listSelections());
     for (let i = 0; i < selections.length; i++) {
@@ -174,15 +166,15 @@ export class MarkdownEditor {
     const preferred = this.options.preferredTokens.unorderedList + ' ';
     this.replaceTokenAtLineStart((oldLineContent) => {
       // Has selected line a bullet point token?
-      if (oldLineContent.search(MarkdownEditor.UNORDERED_LIST_PATTERN) === -1) {
+      if (oldLineContent.search(MarkdownEditorBase.UNORDERED_LIST_PATTERN) === -1) {
         // Has selected line an enumeration token?
-        if (oldLineContent.search(MarkdownEditor.ORDERED_LIST_PATTERN) === -1) {
+        if (oldLineContent.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) === -1) {
           return preferred + oldLineContent;
         } else {
-          return oldLineContent.replace(MarkdownEditor.ORDERED_LIST_PATTERN, preferred);
+          return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, preferred);
         }
       } else {
-        return oldLineContent.replace(MarkdownEditor.UNORDERED_LIST_PATTERN, '');
+        return oldLineContent.replace(MarkdownEditorBase.UNORDERED_LIST_PATTERN, '');
       }
     });
   }
@@ -195,12 +187,12 @@ export class MarkdownEditor {
   public toggleOrderedList() {
     this.replaceTokenAtLineStart((oldLineContent, lineNumber) => {
       // Has selected line an enumeration token?
-      if (oldLineContent.search(MarkdownEditor.ORDERED_LIST_PATTERN) === -1) {
+      if (oldLineContent.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) === -1) {
         const prevLine = this.cm.getLine(lineNumber - 1);
         let listNumber: number;
 
         // Is previous line already enumerated list? -> Determine enumeration token for selected line
-        if (!prevLine || prevLine.search(MarkdownEditor.ORDERED_LIST_PATTERN) === -1) {
+        if (!prevLine || prevLine.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) === -1) {
           listNumber = 1;
         } else {
           const dotPos = prevLine.search(/\./);
@@ -210,14 +202,14 @@ export class MarkdownEditor {
         const numberToken = listNumber + '. ';
 
         // Has selected line a bullet point token?
-        if (oldLineContent.search(MarkdownEditor.UNORDERED_LIST_PATTERN) === -1) {
+        if (oldLineContent.search(MarkdownEditorBase.UNORDERED_LIST_PATTERN) === -1) {
           return numberToken + oldLineContent;
         } else {
-          return oldLineContent.replace(MarkdownEditor.UNORDERED_LIST_PATTERN, numberToken);
+          return oldLineContent.replace(MarkdownEditorBase.UNORDERED_LIST_PATTERN, numberToken);
         }
       } else {
         this.processNextLinesOfOrderedList(lineNumber, 0);
-        return oldLineContent.replace(MarkdownEditor.ORDERED_LIST_PATTERN, '');
+        return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, '');
       }
     });
   }
@@ -227,11 +219,11 @@ export class MarkdownEditor {
    * @param baseLineNumber the selected line which is toggled
    * @param baseListNumber the list number of the selected line (should be 0, if list starts after selected line)
    */
-  private processNextLinesOfOrderedList(baseLineNumber: number, baseListNumber: number) {
+  protected processNextLinesOfOrderedList(baseLineNumber: number, baseListNumber: number) {
     let listNumber = baseListNumber;
     let nextLineNumber = baseLineNumber + 1;
     let nextLine = this.cm.getLine(nextLineNumber);
-    while (nextLine && nextLine.search(MarkdownEditor.ORDERED_LIST_PATTERN) !== -1) {
+    while (nextLine && nextLine.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) !== -1) {
       const listNumberString = `${++listNumber}`;
       const dotPos = nextLine.search(/\./);
       this.cm.replaceRange(
@@ -258,7 +250,7 @@ export class MarkdownEditor {
    * Additionally adjusts the selection boundaries to the originally selected boundaries.
    * @param replaceFn callback function to the calculate the line replacements
    */
-  private replaceTokenAtLineStart(replaceFn: (oldLineContent: string, lineNumber: number) => string) {
+  protected replaceTokenAtLineStart(replaceFn: (oldLineContent: string, lineNumber: number) => string) {
     const newSelections: CodeMirror.Range[] = [];
     for (const sel of this.cm.listSelections()) {
       const selection = _.cloneDeep(sel);
@@ -371,7 +363,7 @@ export class MarkdownEditor {
    * @param before the template part inserted **before** the selection start
    * @param after the template part inserted **after** the selection start
    */
-  private insertInlineTemplate(before: string, after: string) {
+  protected insertInlineTemplate(before: string, after: string) {
     const newSelections: CodeMirror.Range[] = [];
     const selections = this.cm.listSelections();
     for (let i = 0; i < selections.length; i++) {
@@ -460,7 +452,7 @@ export class MarkdownEditor {
    * @param template the template
    * @param lineSeparator The line separator. Default is `\n`.
    */
-  private insertBlockTemplateBelow(template: string, lineSeparator: string = '\n') {
+  protected insertBlockTemplateBelow(template: string, lineSeparator: string = '\n') {
     if (lineSeparator !== '\n') template = template.replace(RegExp(lineSeparator, 'g'), '\n');
     let currentShift = 0; // indicates how many lines have been inserted
     const selections = this.cm.listSelections();
@@ -499,14 +491,14 @@ export class MarkdownEditor {
   /***** Extended Editor API *****/
 
   /**
-   * Undo one edit. Shortcut to `Codemirror.undo()`.
+   * Undo one edit. Shortcut for `Codemirror.undo()`.
    */
   public undo() {
     this.cm.undo();
   }
 
   /**
-   * Redo one edit. Shortcut to `Codemirror.redo()`.
+   * Redo one edit. Shortcut for `Codemirror.redo()`.
    */
   public redo() {
     this.cm.redo();
@@ -609,7 +601,7 @@ export class MarkdownEditor {
   /**
    * Apply codemirror-specific options that are specified in `this.options`.
    */
-  private applyCodemirrorOptions() {
+  protected applyCodemirrorOptions() {
     this.cm.setOption('autofocus', this.options.autofocus);
     this.cm.setOption('lineWrapping', this.options.lineWrapping);
     this.cm.setOption('placeholder', this.options.placeholder);
@@ -618,7 +610,7 @@ export class MarkdownEditor {
     this.cm.setOption('theme', this.options.theme);
   }
 
-  private applyEditorKeyMappings() {
+  protected applyEditorKeyMappings() {
     const bindings: { [key: string]: () => any } = {
       toggleBold: () => this.toggleBold(),
       toggleItalic: () => this.toggleItalic(),
@@ -650,6 +642,78 @@ export class MarkdownEditor {
     }
 
     this.cm.setOption('extraKeys', extraKeys);
+  }
+}
+
+export class MarkdownEditor extends MarkdownEditorBase {
+  constructor(element: HTMLElement, options?: Options) {
+    const opts = _.merge(DEFAULT_OPTIONS, options);
+    const cm = CodeMirror(element);
+    super(cm, opts);
+  }
+
+  static fromTextarea(textarea: HTMLTextAreaElement, options?: FromTextareaOptions) {
+    return new MarkdownEditorFromTextarea(textarea, options);
+  }
+}
+
+export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
+  public readonly cm: CodeMirror.EditorFromTextArea;
+  protected options: FromTextareaOptions;
+  protected saver?: (instance: CodeMirror.Editor) => void;
+
+  constructor(textarea: HTMLTextAreaElement, options?: FromTextareaOptions) {
+    const opts = _.merge(DEFAULT_FROM_TEXTAREA_OPTIONS, options);
+    const cm = CodeMirror.fromTextArea(textarea);
+    super(cm, opts);
+    this.cm = cm;
+    this.options = opts;
+  }
+
+  /**
+   * Copy the content of the editor into the textarea.
+   *
+   * Shortcut for `Codemirror.EditorFromTextarea.save()`.
+   */
+  public save() {
+    this.cm.save();
+  }
+
+  /**
+   * Remove the editor, and restore the original textarea (with the editor's current content).
+   *
+   * Shortcut for `Codemirror.EditorFromTextarea.toTextarea()`.
+   */
+  public toTextarea() {
+    this.cm.toTextArea();
+  }
+
+  /**
+   * Returns the textarea that the instance was based on.
+   *
+   * Shortcut for `Codemirror.EditorFromTextarea.getTextarea()`.
+   */
+  public getTextarea() {
+    this.cm.getTextArea();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public setOptions(options: Options) {
+    const opts = _.merge(this.options, options);
+    super.setOptions(opts);
+    this.options = opts;
+
+    if (this.saver !== undefined) {
+      if (this.options.autoSync) {
+        this.saver = () => this.save();
+        this.cm.on('changes', this.saver);
+      } else {
+        this.cm.off('changes', this.saver);
+        this.saver = undefined;
+      }
+    }
   }
 }
 

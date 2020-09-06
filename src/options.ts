@@ -73,3 +73,14 @@ export const DEFAULT_OPTIONS: Options = {
   tabSize: 2,
   theme: '',
 };
+
+export interface FromTextareaOptions extends Options {
+  autoSync: boolean;
+}
+
+export const DEFAULT_FROM_TEXTAREA_OPTIONS: FromTextareaOptions = Object.assign(
+  {
+    autoSync: true,
+  },
+  DEFAULT_OPTIONS
+);
