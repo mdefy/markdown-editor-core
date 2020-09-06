@@ -7,12 +7,12 @@
 - Default short cuts
 - Auto-save in local storage
 - Code highlighting (e.g. highlight.js)
-- ✓ API for basic editor functionality:
+- API for basic editor functionality:
   - ✓ Toggle Bold (for **selection**)
   - ✓ Toggle Italic (for **selection**)
   - ✓ Toggle Strikethrough (for **selection**)
   - ✓ Set Heading level (whole line)
-  - ✓ Toggle List (order **or** unordered)
+  - Toggle List (order **or** unordered **or** check)
   - ✓ Toggle Quote (always **before list symbol**)
   - ✓ Insert link template
   - ✓ Insert image link template
@@ -43,14 +43,15 @@
   - ✓ is dirty
 - Customizable options
   - Action short cuts
-  - theme name (results in `.cm-s-[name]`)
-  - Autofocus
+  - ✓ theme name (results in `.cm-s-[name]`)
+  - ✓ Autofocus
   - placeholder
   - min/max height/width
-  - line wrapping
-  - tab size
-  - Block styles (e.g. \* or \_ for italic)
-  - Custom templates for templated functions like _Insert link_
+  - ✓ line wrapping
+  - ✓ tab size
+  - ✓ Block styles (e.g. \* or \_ for italic)
+  - ✓ Custom templates for templated functions like _Insert link_
+  - multiple selection?
   - Renderer + options
   - Force sync with original textarea
   - callbacks for all actions
