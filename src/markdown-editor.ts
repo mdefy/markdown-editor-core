@@ -170,15 +170,10 @@ export class MarkdownEditor {
    * transformed to an unordered list.
    */
   public toggleUnorderedList() {
-    const UNORDERED_LIST_TOKENS = ['*', '_'];
-    const preferred = this.options.preferredTokens.unorderedList;
+    const preferred = this.options.preferredTokens.unorderedList + ' ';
     this.replaceTokenAtLineStart((oldLineContent) => {
       // Has selected line a bullet point token?
       if (oldLineContent.search(MarkdownEditor.UNORDERED_LIST_PATTERN) === -1) {
-        this.toggleInlineFormatting(
-          preferred,
-          UNORDERED_LIST_TOKENS.filter((t) => t !== preferred)
-        );
         // Has selected line an enumeration token?
         if (oldLineContent.search(MarkdownEditor.ORDERED_LIST_PATTERN) === -1) {
           return preferred + oldLineContent;
@@ -305,17 +300,12 @@ export class MarkdownEditor {
    * Wrap each selection with code block tokens, which are inserted in separate lines.
    */
   public insertCodeBlock() {
-    const CODE_BLOCK_TOKENS = ['*', '_'];
     const newSelections: CodeMirror.Range[] = [];
     const selections = _.cloneDeep(this.cm.listSelections());
     for (let i = 0; i < selections.length; i++) {
       const oldSelection = selections[i];
       const newSelection = _.cloneDeep(oldSelection);
-      const preferredToken = this.options.preferredTokens.italic;
-      this.toggleInlineFormatting(
-        preferredToken,
-        CODE_BLOCK_TOKENS.filter((t) => t !== preferredToken)
-      );
+      const preferredToken = this.options.preferredTokens.codeBlock;
 
       // Wrap selection with code block tokens
       let currentShift = 3;
@@ -430,13 +420,15 @@ export class MarkdownEditor {
    * @param rows number of rows
    * @param columns number columns
    */
-  public insertTable(rows = 1, columns = 2) {
+  public insertTable(rows?: number, columns?: number) {
     const tableOptions = this.options.preferredTemplates.table;
     if (typeof tableOptions === 'string') {
       this.insertBlockTemplateBelow(tableOptions);
     } else {
-      if (!rows && !columns) {
+      if (!rows) {
         rows = tableOptions.rows;
+      }
+      if (!columns) {
         columns = tableOptions.columns;
       }
 
