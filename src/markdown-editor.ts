@@ -83,10 +83,10 @@ export class MarkdownEditor {
       const linePartBefore = this.cm.getRange({ line: from.line, ch: 0 }, from);
       const linePartAfter = this.cm.getRange(to, { line: to.line, ch: endLineLength });
       const prefixToken = [token, ...altTokens].find((t) => {
-        return linePartBefore.search(RegExp(this.escapeRegexChars(t) + '$')) > -1;
+        return linePartBefore.search(RegExp(escapeRegexChars(t) + '$')) > -1;
       });
       const suffixToken = [token, ...altTokens].find((t) => {
-        return linePartAfter.search(RegExp('^' + this.escapeRegexChars(t))) > -1;
+        return linePartAfter.search(RegExp('^' + escapeRegexChars(t))) > -1;
       });
 
       // indicate whether the tokens before/after the selection have been inserted or deleted
@@ -140,19 +140,6 @@ export class MarkdownEditor {
 
     this.cm.setSelections(newSelections, undefined, { origin: '+toggleBlock' });
     this.cm.focus();
-  }
-
-  /**
-   * Transform a string so that all Regex-reserved characters are escaped.
-   * @param s
-   */
-  private escapeRegexChars(s: string) {
-    const reservedChars = ['.', '*', '+', '?', '!', '{', '}', '[', ']'];
-    s = s.replace(/\\/gi, '\\\\');
-    for (const reservedChar of reservedChars) {
-      s = s.replace(RegExp(`\\${reservedChar}`, 'gi'), '\\' + reservedChar);
-    }
-    return s;
   }
 
   /**
@@ -669,4 +656,23 @@ export class MarkdownEditor {
 
     this.cm.setOption('extraKeys', extraKeys);
   }
+}
+
+/***** Util ******/
+
+/**
+ * Transform a string so that all Regex-reserved characters are escaped.
+ * @param s
+ */
+function escapeRegexChars(s: string) {
+  const reservedChars = ['.', '*', '+', '?', '!', '{', '}', '[', ']'];
+  s = s.replace(/\\/gi, '\\\\');
+  for (const reservedChar of reservedChars) {
+    s = s.replace(RegExp(`\\${reservedChar}`, 'gi'), '\\' + reservedChar);
+  }
+  return s;
+}
+
+function isMac(): boolean {
+  return /Mac/.test(navigator.platform);
 }
