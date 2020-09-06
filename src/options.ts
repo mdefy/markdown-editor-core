@@ -1,6 +1,7 @@
 export interface Options {
   autofocus: boolean;
   lineWrapping: boolean;
+  placeholder: string | Element;
   preferredTokens: {
     bold: '**' | '__';
     italic: '*' | '_';
@@ -37,6 +38,7 @@ export interface Options {
 export const DEFAULT_OPTIONS: Options = {
   autofocus: true,
   lineWrapping: true,
+  placeholder: '',
   preferredTokens: {
     bold: '**',
     italic: '_',

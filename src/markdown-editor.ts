@@ -1,5 +1,6 @@
 import CodeMirror from 'codemirror';
 require('codemirror/mode/gfm/gfm.js');
+require('codemirror/addon/display/placeholder.js');
 import _ from 'lodash';
 import { Options, DEFAULT_OPTIONS } from './options';
 
@@ -613,6 +614,7 @@ export class MarkdownEditor {
     this.cm.setOption('lineWrapping', this.options.lineWrapping);
     this.cm.setOption('tabSize', this.options.tabSize);
     this.cm.setOption('theme', this.options.theme);
+    this.cm.setOption('placeholder', this.options.placeholder);
   }
 
   private applyEditorKeyMappings() {
@@ -667,4 +669,12 @@ function escapeRegexChars(s: string) {
 
 function isMac(): boolean {
   return /Mac/.test(navigator.platform);
+}
+
+// Extend CodeMirror.EditorConfiguration with options from add ons:
+declare module 'codemirror' {
+  interface EditorConfiguration {
+    // display/placeholder.js
+    placeholder?: string | Element;
+  }
 }
