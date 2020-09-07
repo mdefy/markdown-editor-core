@@ -1,6 +1,7 @@
 export interface Options {
   autofocus: boolean;
   lineWrapping: boolean;
+  markdownGuideUrl: string;
   placeholder: string | Element;
   preferredTokens: {
     bold: '**' | '__';
@@ -39,6 +40,7 @@ export interface Options {
 export const DEFAULT_OPTIONS: Options = {
   autofocus: true,
   lineWrapping: true,
+  markdownGuideUrl: 'https://www.markdownguide.org/basic-syntax/',
   placeholder: '',
   preferredTokens: {
     bold: '**',

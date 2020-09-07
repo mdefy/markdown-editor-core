@@ -485,7 +485,7 @@ class MarkdownEditorBase {
    * Open a Markdown Guide in a new tab.
    */
   public openMarkdownGuide() {
-    window.open('https://www.markdownguide.org/basic-syntax/', '_blank');
+    window.open(this.options.markdownGuideUrl, '_blank');
   }
 
   /***** Extended Editor API *****/
