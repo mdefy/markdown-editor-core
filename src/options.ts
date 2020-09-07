@@ -1,5 +1,6 @@
 export interface Options {
   autofocus: boolean;
+  downloadFileName: string;
   lineWrapping: boolean;
   markdownGuideUrl: string;
   placeholder: string | Element;
@@ -16,29 +17,34 @@ export interface Options {
     table: string | { rows: number; columns: number };
   };
   richTextMode: boolean;
-  shortcuts: {
-    toggleBold: string;
-    toggleItalic: string;
-    toggleStrikethrough: string;
-    toggleUnorderedList: string;
-    toggleOrderedList: string;
-    toggleCheckList: string;
-    toggleQuote: string;
-    insertLink: string;
-    insertImageLink: string;
-    insertTable: string;
-    insertHorizontalLine: string;
-    toggleInlineCode: string;
-    insertCodeBlock: string;
-    openMarkdownGuide: string;
-    toggleRichTextMode: string;
-  };
+  shortcuts: MarkdownEditorShortcuts;
   tabSize: number;
   theme: string; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
 }
 
+export interface MarkdownEditorShortcuts {
+  toggleBold: string;
+  toggleItalic: string;
+  toggleStrikethrough: string;
+  toggleUnorderedList: string;
+  toggleOrderedList: string;
+  toggleCheckList: string;
+  toggleQuote: string;
+  insertLink: string;
+  insertImageLink: string;
+  insertTable: string;
+  insertHorizontalLine: string;
+  toggleInlineCode: string;
+  insertCodeBlock: string;
+  openMarkdownGuide: string;
+  toggleRichTextMode: string;
+  downloadAsFile: string;
+  importFromFile: string;
+}
+
 export const DEFAULT_OPTIONS: Options = {
   autofocus: true,
+  downloadFileName: new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:|-/gi, '') + '.md',
   lineWrapping: true,
   markdownGuideUrl: 'https://www.markdownguide.org/basic-syntax/',
   placeholder: '',
@@ -71,6 +77,8 @@ export const DEFAULT_OPTIONS: Options = {
     insertCodeBlock: 'Shift-Ctrl-7',
     openMarkdownGuide: 'F1',
     toggleRichTextMode: 'Alt-R',
+    downloadAsFile: 'Shift-Ctrl-S',
+    importFromFile: 'Ctrl-Alt-I',
   },
   tabSize: 2,
   theme: '',

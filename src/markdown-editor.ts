@@ -2,7 +2,13 @@ import CodeMirror from 'codemirror';
 require('codemirror/mode/gfm/gfm.js');
 require('codemirror/addon/display/placeholder.js');
 import _ from 'lodash';
-import { Options, DEFAULT_OPTIONS, FromTextareaOptions, DEFAULT_FROM_TEXTAREA_OPTIONS } from './options';
+import {
+  Options,
+  FromTextareaOptions,
+  MarkdownEditorShortcuts,
+  DEFAULT_OPTIONS,
+  DEFAULT_FROM_TEXTAREA_OPTIONS,
+} from './options';
 
 class MarkdownEditorBase {
   public static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
@@ -516,6 +522,52 @@ class MarkdownEditorBase {
     }
   }
 
+  /**
+   * Start a file download containing the editor content as plain text.
+   * The name of the file is either `fileName` if specified, or the default `downloadFileName`
+   * specified in the Markdown Editor options.
+   * @param fileName The name of the downloaded file. Preferred over `options.downloadFileName`.
+   */
+  public downloadAsFile(fileName?: string) {
+    const data = new Blob([this.getContent()], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(data);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', fileName || this.options.downloadFileName); // option
+    a.click();
+  }
+
+  /**
+   * Import content from a file. Reads the content of `file` if specified, or opens the browser's
+   * file selection dialog and reads the content of the user-selected file.
+   * @param file The file to import the content from.
+   */
+  public importFromFile(file?: File) {
+    const readFile = (file: File) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        this.setContent(((event.target as FileReader).result || '') as string);
+        console.log((event.target as FileReader).result);
+      };
+      reader.readAsText(file);
+    };
+
+    if (file) {
+      readFile(file);
+    } else {
+      const input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', '.txt, .text, .markdown, .mdown, .mkdn, .md, .mkd, .mdwn, .mdtxt, .mdtext');
+      input.onchange = (event) => {
+        const files = (event?.target as HTMLInputElement).files;
+        if (files) {
+          readFile(files[0]);
+        }
+      };
+      input.click();
+    }
+  }
+
   /***** Developer API *****/
 
   /**
@@ -611,7 +663,7 @@ class MarkdownEditorBase {
   }
 
   protected applyEditorKeyMappings() {
-    const bindings: { [key: string]: () => any } = {
+    const bindings: { [key in keyof MarkdownEditorShortcuts]: () => any } = {
       toggleBold: () => this.toggleBold(),
       toggleItalic: () => this.toggleItalic(),
       toggleStrikethrough: () => this.toggleStrikethrough(),
@@ -627,6 +679,8 @@ class MarkdownEditorBase {
       insertCodeBlock: () => this.insertCodeBlock(),
       openMarkdownGuide: () => this.openMarkdownGuide(),
       toggleRichTextMode: () => this.toggleRichTextMode(),
+      downloadAsFile: () => this.downloadAsFile(),
+      importFromFile: () => this.importFromFile(),
     };
 
     const shortcuts = this.options.shortcuts;
@@ -638,7 +692,7 @@ class MarkdownEditorBase {
       } else {
         shortcut = value.replace('Cmd', 'Ctrl');
       }
-      extraKeys[shortcut] = bindings[key];
+      extraKeys[shortcut] = bindings[key as keyof MarkdownEditorShortcuts];
     }
 
     this.cm.setOption('extraKeys', extraKeys);
