@@ -81,7 +81,7 @@ export const DEFAULT_OPTIONS: Options = {
     importFromFile: 'Ctrl-Alt-I',
   },
   tabSize: 2,
-  theme: '',
+  theme: 'default',
 };
 
 export interface FromTextareaOptions extends Options {
