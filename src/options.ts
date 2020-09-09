@@ -40,6 +40,7 @@ export interface MarkdownEditorShortcuts {
   toggleRichTextMode: string;
   downloadAsFile: string;
   importFromFile: string;
+  formatContent: string;
 }
 
 export const DEFAULT_OPTIONS: Options = {
@@ -79,6 +80,7 @@ export const DEFAULT_OPTIONS: Options = {
     toggleRichTextMode: 'Alt-R',
     downloadAsFile: 'Shift-Ctrl-S',
     importFromFile: 'Ctrl-Alt-I',
+    formatContent: 'Alt-F',
   },
   tabSize: 2,
   theme: 'default',

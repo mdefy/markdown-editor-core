@@ -2,6 +2,8 @@ import CodeMirror from 'codemirror';
 require('codemirror/mode/gfm/gfm.js');
 require('codemirror/addon/display/placeholder.js');
 import _ from 'lodash';
+import prettier from 'prettier/standalone';
+import parserMarkdown from 'prettier/parser-markdown';
 import {
   Options,
   FromTextareaOptions,
@@ -568,6 +570,18 @@ class MarkdownEditorBase {
     }
   }
 
+  /**
+   * Formats the content using Prettier's Markdown parser.
+   */
+  public formatContent() {
+    this.setContent(
+      prettier.format(this.getContent(), {
+        parser: 'markdown',
+        plugins: [parserMarkdown],
+      })
+    );
+  }
+
   /***** Developer API *****/
 
   /**
@@ -681,6 +695,7 @@ class MarkdownEditorBase {
       toggleRichTextMode: () => this.toggleRichTextMode(),
       downloadAsFile: () => this.downloadAsFile(),
       importFromFile: () => this.importFromFile(),
+      formatContent: () => this.formatContent(),
     };
 
     const shortcuts = this.options.shortcuts;
