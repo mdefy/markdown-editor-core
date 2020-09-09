@@ -759,14 +759,12 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
     super.setOptions(opts);
     this.options = opts;
 
-    if (this.saver !== undefined) {
-      if (this.options.autoSync) {
-        this.saver = () => this.save();
-        this.cm.on('changes', this.saver);
-      } else {
-        this.cm.off('changes', this.saver);
-        this.saver = undefined;
-      }
+    if (this.saver === undefined && this.options.autoSync) {
+      this.saver = () => this.save();
+      this.cm.on('changes', this.saver);
+    } else if (this.saver !== undefined && !this.options.autoSync) {
+      this.cm.off('changes', this.saver);
+      this.saver = undefined;
     }
   }
 }
