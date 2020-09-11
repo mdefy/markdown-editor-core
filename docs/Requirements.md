@@ -6,7 +6,6 @@
 - Default Renderer?
 - ✓ Default short cuts
 - Auto-save in local storage
-- Code highlighting (e.g. highlight.js)
 - API for basic editor functionality:
   - ✓ Toggle Bold (for **selection**)
   - ✓ Toggle Italic (for **selection**)
@@ -24,13 +23,13 @@
 - API for extended editor functionality
   - ✓ . Undo / Redo
   - ✓ .. Toggle rich-text in editor
-  - . Possibility to replace given textarea and switch back to this native textarea later
+  - ✓ . Possibility to replace given textarea and switch back to this native textarea later
   - ... Full-width preview
   - ... Side-by-side preview (with editor **or** textarea)
   - .... Toggle scroll sync for side-by-side preview
-  - ..... Auto-formatting (indentation, empty lines, table alignment? (needs mono-space) ...)
-  - .. Download / Save as...
-  - .. Import file
+  - ✓ ..... Auto-formatting (indentation, empty lines, table alignment? (needs mono-space) ...)
+  - ✓ .. Download / Save as...
+  - ✓ .. Import file
   - ... set spellchecker language
   - .... Upload image (storage needs to be specified by app developer)
   - .... Edit as HTML and parse back
@@ -52,11 +51,13 @@
   - ✓ Custom templates for templated functions like _Insert link_
   - multiple selection?
   - Renderer + options
-  - Force sync with original textarea
+  - ✓ Force sync with original textarea
+  - highlightFormatting? (e.g. brackets [])
+  - languages (modes) for fencedCodeHighlighting
   - callbacks for all actions?
   - Possibility to adjust enumeration depending on tab depth
   - Editor shortcuts?
-  - Auto-formatting options
+  - Auto-formatting options (not possible with Prettier)
   - spellchecker (default/custom)
   - set markdown guide url
   - Possibility to adjust enumeration of all lines of ordered list while typing
