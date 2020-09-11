@@ -8,8 +8,9 @@
     "url": "https://github.com/lenardfunk/markdown-editor-core"
   },
   "scripts": {
-    "start": "webpack --watch",
-    "build": "webpack"
+    "start": "webpack-dev-server",
+    "build": "webpack --mode development",
+    "build:prod": "webpack --mode production"
   },
   "private": true,
   "dependencies": {
