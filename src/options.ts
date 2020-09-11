@@ -73,7 +73,7 @@ export const DEFAULT_OPTIONS: Options = {
     insertLink: 'Ctrl-M',
     insertImageLink: 'Shift-Ctrl-M',
     insertTable: 'Ctrl-Alt-T',
-    insertHorizontalLine: 'Ctrl--',
+    insertHorizontalLine: 'Shift-Ctrl--',
     toggleInlineCode: 'Ctrl-7',
     insertCodeBlock: 'Shift-Ctrl-7',
     openMarkdownGuide: 'F1',

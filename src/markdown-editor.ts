@@ -13,8 +13,10 @@ import {
 } from './options';
 
 class MarkdownEditorBase {
-  public static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
-  public static readonly UNORDERED_LIST_PATTERN = /^(\*|-)(\t| )+/;
+  protected static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
+  protected static readonly UNORDERED_LIST_PATTERN = /^(\*|-)(\t| )+/;
+  protected static readonly BOLD_TOKENS = ['**', '__'];
+  protected static readonly ITALIC_TOKENS = ['*', '_'];
 
   public readonly cm: CodeMirror.Editor;
   protected options: Options;
@@ -26,15 +28,16 @@ class MarkdownEditorBase {
     this.applyEditorKeyMappings();
   }
 
+  /***** Basic Editor API *****/
+
   /**
    * Toggle "bold" for each selection.
    */
   public toggleBold() {
-    const BOLD_TOKENS = ['**', '__'];
     const preferred = this.options.preferredTokens.bold;
     this.toggleInlineFormatting(
       preferred,
-      BOLD_TOKENS.filter((t) => t !== preferred)
+      MarkdownEditorBase.BOLD_TOKENS.filter((t) => t !== preferred)
     );
   }
 
@@ -42,11 +45,10 @@ class MarkdownEditorBase {
    * Toggle "italic" for each selection.
    */
   public toggleItalic() {
-    const ITALIC_TOKENS = ['*', '_'];
     const preferred = this.options.preferredTokens.italic;
     this.toggleInlineFormatting(
       preferred,
-      ITALIC_TOKENS.filter((t) => t !== preferred)
+      MarkdownEditorBase.ITALIC_TOKENS.filter((t) => t !== preferred)
     );
   }
 
@@ -383,7 +385,8 @@ class MarkdownEditorBase {
       this.cm.replaceRange(before, newSelection.from(), undefined, '+toggleBlock');
 
       // Adjust selections to originally selected characters
-      if (!newSelection.empty()) newSelection.to().ch += before.length;
+      if (newSelection.empty()) newSelection.head = newSelection.anchor;
+      else newSelection.to().ch += before.length;
       newSelection.from().ch += before.length;
 
       newSelections.push(newSelection);
@@ -547,10 +550,7 @@ class MarkdownEditorBase {
   public importFromFile(file?: File) {
     const readFile = (file: File) => {
       const reader = new FileReader();
-      reader.onload = (event) => {
-        this.setContent(((event.target as FileReader).result || '') as string);
-        console.log((event.target as FileReader).result);
-      };
+      reader.onload = (event) => this.setContent(((event.target as FileReader).result || '') as string);
       reader.readAsText(file);
     };
 
@@ -676,6 +676,10 @@ class MarkdownEditorBase {
     this.cm.setOption('theme', this.options.theme);
   }
 
+  /**
+   * Apply the key map for markdown editor actions specified in `this.options.shortcuts`
+   * to the Codemirror editor instance.
+   */
   protected applyEditorKeyMappings() {
     const bindings: { [key in keyof MarkdownEditorShortcuts]: () => any } = {
       toggleBold: () => this.toggleBold(),
@@ -721,6 +725,11 @@ export class MarkdownEditor extends MarkdownEditorBase {
     super(cm, opts);
   }
 
+  /**
+   * Create a editor instance and replace the specified textarea with it.
+   * @param textarea the textarea to be replaced with the editor
+   * @param options the editor options
+   */
   static fromTextarea(textarea: HTMLTextAreaElement, options?: FromTextareaOptions) {
     return new MarkdownEditorFromTextarea(textarea, options);
   }
