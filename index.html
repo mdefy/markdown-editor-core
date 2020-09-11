@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css" />
 
     <style>
+      th {
+        text-align: left;
+        font-weight: bold;
+      }
+      th,
+      td {
+        padding: 0 10px;
+      }
+
       .CodeMirror {
         box-sizing: border-box;
         height: auto;
@@ -23,9 +32,91 @@
   </head>
   <body>
     <h1>Markdown Editor</h1>
-    <!-- <textarea id="my-textarea"></textarea> -->
-    <input id="testInput" type="file" style="display: none" />
-    <button id="testButton">Test</button>
+    <div id="editor"></div>
+    <br />
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Shortcut</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>toggle bold:</td>
+          <td>Ctrl-B</td>
+        </tr>
+        <tr>
+          <td>toggle italic:</td>
+          <td>Ctrl-I</td>
+        </tr>
+        <tr>
+          <td>toggle strikethrough:</td>
+          <td>Ctrl-K</td>
+        </tr>
+        <tr>
+          <td>toggle unorderedList:</td>
+          <td>Ctrl-L</td>
+        </tr>
+        <tr>
+          <td>toggle orderedList:</td>
+          <td>Shift-Ctrl-L</td>
+        </tr>
+        <tr>
+          <td>toggle checkList:</td>
+          <td>Shift-Ctrl-Alt-L</td>
+        </tr>
+        <tr>
+          <td>toggle quote:</td>
+          <td>Ctrl-Q</td>
+        </tr>
+        <tr>
+          <td>insert link:</td>
+          <td>Ctrl-M</td>
+        </tr>
+        <tr>
+          <td>insert imageLink:</td>
+          <td>Shift-Ctrl-M</td>
+        </tr>
+        <tr>
+          <td>insert table:</td>
+          <td>Ctrl-Alt-T</td>
+        </tr>
+        <tr>
+          <td>insert horizontal line:</td>
+          <td>Shift-Ctrl--</td>
+        </tr>
+        <tr>
+          <td>toggle inline code:</td>
+          <td>Ctrl-7</td>
+        </tr>
+        <tr>
+          <td>insert code block:</td>
+          <td>Shift-Ctrl-7</td>
+        </tr>
+        <tr>
+          <td>open markdown guide:</td>
+          <td>F1</td>
+        </tr>
+        <tr>
+          <td>toggle rich-text mode:</td>
+          <td>Alt-R</td>
+        </tr>
+        <tr>
+          <td>download as file:</td>
+          <td>Shift-Ctrl-S</td>
+        </tr>
+        <tr>
+          <td>import from file:</td>
+          <td>Ctrl-Alt-I</td>
+        </tr>
+        <tr>
+          <td>format content:</td>
+          <td>Alt-F</td>
+        </tr>
+      </table>
+    </div>
+
     <script src="./dist/bundle.js"></script>
   </body>
 </html>
