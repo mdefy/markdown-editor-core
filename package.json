@@ -10,7 +10,9 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack --mode development",
-    "build:prod": "webpack --mode production"
+    "build:prod": "webpack --mode production",
+    "format:check": "prettier -c .",
+    "format:write": "prettier -w ."
   },
   "private": true,
   "dependencies": {
