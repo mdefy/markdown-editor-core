@@ -1,6 +1,7 @@
 # Source code
 node_modules
-dist/bundle.js
+dist
+build
 
 # Editors and Plugins 
 .history

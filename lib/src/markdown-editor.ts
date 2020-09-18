@@ -1,6 +1,6 @@
 import CodeMirror from 'codemirror';
-require('codemirror/mode/gfm/gfm.js');
-require('codemirror/addon/display/placeholder.js');
+import 'codemirror/mode/gfm/gfm.js';
+import 'codemirror/addon/display/placeholder.js';
 import _ from 'lodash';
 import prettier from 'prettier/standalone';
 import parserMarkdown from 'prettier/parser-markdown';
@@ -813,9 +813,9 @@ function isMac(): boolean {
 }
 
 // Extend CodeMirror.EditorConfiguration with options from add ons:
-declare module 'codemirror' {
-  interface EditorConfiguration {
-    // display/placeholder.js
-    placeholder?: string | Element;
-  }
-}
+// declare module 'codemirror' {
+//   interface EditorConfiguration {
+//     // display/placeholder.js
+//     placeholder?: string | Element;
+//   }
+// }

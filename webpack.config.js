@@ -1,7 +1,7 @@
 const path = require('path');
 
-module.exports = {
-  entry: './src/index.ts',
+module.exports = ['source-map'].map((devTool) => ({
+  entry: './demo/demo.ts',
   module: {
     rules: [
       {
@@ -16,10 +16,19 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/dist',
+    path: path.resolve(__dirname, 'demo/dist'),
+    publicPath: '/demo/dist',
   },
+  devtool: devTool,
   optimization: {
     minimize: true,
   },
-};
+  // externals: {
+  //   lodash: {
+  //     commonjs: 'lodash',
+  //     commonjs2: 'lodash',
+  //     amd: 'lodash',
+  //     root: '_',
+  //   },
+  // },
+}));

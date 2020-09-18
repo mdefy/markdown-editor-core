@@ -3,7 +3,7 @@ export interface Options {
   downloadFileName: string;
   lineWrapping: boolean;
   markdownGuideUrl: string;
-  placeholder: string | Element;
+  placeholder: string; // | Element;
   preferredTokens: {
     bold: '**' | '__';
     italic: '*' | '_';
