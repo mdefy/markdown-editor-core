@@ -5,12 +5,12 @@ import _ from 'lodash';
 import prettier from 'prettier/standalone';
 import parserMarkdown from 'prettier/parser-markdown';
 import {
-  Options,
+  MarkdownEditorOptions,
   FromTextareaOptions,
   MarkdownEditorShortcuts,
   DEFAULT_OPTIONS,
   DEFAULT_FROM_TEXTAREA_OPTIONS,
-} from './options';
+} from './markdown-editor-options';
 
 class MarkdownEditorBase {
   protected static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
@@ -19,9 +19,9 @@ class MarkdownEditorBase {
   protected static readonly ITALIC_TOKENS = ['*', '_'];
 
   public readonly cm: CodeMirror.Editor;
-  protected options: Options;
+  protected options: MarkdownEditorOptions;
 
-  constructor(codemirror: CodeMirror.Editor, options: Options) {
+  constructor(codemirror: CodeMirror.Editor, options: MarkdownEditorOptions) {
     this.cm = codemirror;
     this.options = options;
     this.applyCodemirrorOptions();
@@ -658,7 +658,7 @@ class MarkdownEditorBase {
    * Options that are not included in specified `options` will not be modified.
    * @param options the set of options that shall be changed
    */
-  public setOptions(options: Options) {
+  public setOptions(options: MarkdownEditorOptions) {
     this.options = _.merge(this.options, options);
     this.applyCodemirrorOptions();
     this.applyEditorKeyMappings();
@@ -719,7 +719,7 @@ class MarkdownEditorBase {
 }
 
 export class MarkdownEditor extends MarkdownEditorBase {
-  constructor(element: HTMLElement, options?: Options) {
+  constructor(element: HTMLElement, options?: MarkdownEditorOptions) {
     const opts = _.merge(DEFAULT_OPTIONS, options);
     const cm = CodeMirror(element);
     super(cm, opts);
@@ -778,7 +778,7 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
   /**
    * @inheritdoc
    */
-  public setOptions(options: Options) {
+  public setOptions(options: MarkdownEditorOptions) {
     const opts = _.merge(this.options, options);
     super.setOptions(opts);
     this.options = opts;

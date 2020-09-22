@@ -1,4 +1,4 @@
-export interface Options {
+export interface MarkdownEditorOptions {
   autofocus: boolean;
   downloadFileName: string;
   lineWrapping: boolean;
@@ -22,28 +22,30 @@ export interface Options {
   theme: string; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
 }
 
-export interface MarkdownEditorShortcuts {
-  toggleBold: string;
-  toggleItalic: string;
-  toggleStrikethrough: string;
-  toggleUnorderedList: string;
-  toggleOrderedList: string;
-  toggleCheckList: string;
-  toggleQuote: string;
-  insertLink: string;
-  insertImageLink: string;
-  insertTable: string;
-  insertHorizontalLine: string;
-  toggleInlineCode: string;
-  insertCodeBlock: string;
-  openMarkdownGuide: string;
-  toggleRichTextMode: string;
-  downloadAsFile: string;
-  importFromFile: string;
-  formatContent: string;
-}
+export type MarkdownEditorAction =
+  | 'setHeadingLevel'
+  | 'toggleBold'
+  | 'toggleItalic'
+  | 'toggleStrikethrough'
+  | 'toggleUnorderedList'
+  | 'toggleOrderedList'
+  | 'toggleCheckList'
+  | 'toggleQuote'
+  | 'insertLink'
+  | 'insertImageLink'
+  | 'insertTable'
+  | 'insertHorizontalLine'
+  | 'toggleInlineCode'
+  | 'insertCodeBlock'
+  | 'openMarkdownGuide'
+  | 'toggleRichTextMode'
+  | 'downloadAsFile'
+  | 'importFromFile'
+  | 'formatContent';
 
-export const DEFAULT_OPTIONS: Options = {
+export type MarkdownEditorShortcuts = Record<Exclude<MarkdownEditorAction, 'setHeadingLevel'>, string>;
+
+export const DEFAULT_OPTIONS: MarkdownEditorOptions = {
   autofocus: true,
   downloadFileName: new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:|-/gi, '') + '.md',
   lineWrapping: true,
@@ -86,7 +88,7 @@ export const DEFAULT_OPTIONS: Options = {
   theme: 'default',
 };
 
-export interface FromTextareaOptions extends Options {
+export interface FromTextareaOptions extends MarkdownEditorOptions {
   autoSync: boolean;
 }
 
