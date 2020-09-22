@@ -7,8 +7,9 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "tsc ./lib",
-    "build:prod": "tsc ./lib -p",
+    "build": "rmdir .\\lib\\dist /s /q && tsc ./lib",
+    "build:prod": "rmdir .\\lib\\dist /s /q && tsc -p ./lib",
+    "pack": "cd ./build && npm pack ../lib && cd ..",
     "format:check": "prettier -c .",
     "format:write": "prettier -w ."
   },
