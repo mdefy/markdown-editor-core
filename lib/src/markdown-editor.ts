@@ -675,6 +675,27 @@ class MarkdownEditorBase {
     return !this.cm.isClean();
   }
 
+  /**
+   * Check if text at current cursor position has specified token type
+   * like returned by `CodeMirror.getTokenTypeAt()`.
+   * @param token
+   */
+  public hasTokenAtCursorPos(token: string): boolean {
+    return this.cm.getTokenTypeAt(this.getCursorPos())?.split(' ').includes(token) || false;
+  }
+
+  /**
+   * Get the type of list in the specified line. Return undefined, if the line contains no list token.
+   * @param lineNumber
+   */
+  public getListTypeOfLine(lineNumber: number): 'unordered' | 'ordered' | 'check' | undefined {
+    const line = this.cm.getLine(lineNumber);
+    if (MarkdownEditorBase.CHECK_LIST_PATTERN.test(line)) return 'check';
+    if (MarkdownEditorBase.UNORDERED_LIST_PATTERN.test(line)) return 'unordered';
+    if (MarkdownEditorBase.ORDERED_LIST_PATTERN.test(line)) return 'ordered';
+    return undefined;
+  }
+
   /***** Markdown Editor Options *****/
 
   /**
