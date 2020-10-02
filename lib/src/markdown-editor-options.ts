@@ -1,4 +1,4 @@
-export interface MarkdownEditorOptions {
+export interface MarkdownEditorOptionsComplete {
   autofocus: boolean;
   downloadFileName: string;
   lineWrapping: boolean;
@@ -23,6 +23,8 @@ export interface MarkdownEditorOptions {
   theme: string; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
 }
 
+export type MarkdownEditorOptions = DeepPartial<MarkdownEditorOptionsComplete>;
+
 export type MarkdownEditorAction =
   | 'setHeadingLevel'
   | 'toggleBold'
@@ -46,7 +48,7 @@ export type MarkdownEditorAction =
 
 export type MarkdownEditorShortcuts = Record<Exclude<MarkdownEditorAction, 'setHeadingLevel'>, string>;
 
-export const DEFAULT_OPTIONS: MarkdownEditorOptions = {
+export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
   autofocus: true,
   downloadFileName: new Date().toISOString().substr(0, 19).replace('T', '_').replace(/:|-/gi, '') + '.md',
   lineWrapping: true,
@@ -90,13 +92,19 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptions = {
   theme: 'default',
 };
 
-export interface FromTextareaOptions extends MarkdownEditorOptions {
+export interface FromTextareaOptionsComplete extends MarkdownEditorOptionsComplete {
   autoSync: boolean;
 }
 
-export const DEFAULT_FROM_TEXTAREA_OPTIONS: FromTextareaOptions = Object.assign(
+export type FromTextareaOptions = DeepPartial<FromTextareaOptionsComplete>;
+
+export const DEFAULT_FROM_TEXTAREA_OPTIONS: FromTextareaOptionsComplete = Object.assign(
   {
     autoSync: true,
   },
   DEFAULT_OPTIONS
 );
+
+type DeepPartial<T> = {
+  [K in keyof T]?: DeepPartial<T[K]>;
+};

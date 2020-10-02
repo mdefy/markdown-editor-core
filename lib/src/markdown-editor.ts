@@ -5,7 +5,9 @@ import _ from 'lodash';
 import prettier from 'prettier/standalone';
 import parserMarkdown from 'prettier/parser-markdown';
 import {
+  MarkdownEditorOptionsComplete,
   MarkdownEditorOptions,
+  FromTextareaOptionsComplete,
   FromTextareaOptions,
   MarkdownEditorShortcuts,
   DEFAULT_OPTIONS,
@@ -20,9 +22,9 @@ class MarkdownEditorBase {
   protected static readonly ITALIC_TOKENS = ['*', '_'];
 
   public readonly cm: CodeMirror.Editor;
-  protected options: MarkdownEditorOptions;
+  protected options: MarkdownEditorOptionsComplete;
 
-  constructor(codemirror: CodeMirror.Editor, options: MarkdownEditorOptions) {
+  constructor(codemirror: CodeMirror.Editor, options: MarkdownEditorOptionsComplete) {
     this.cm = codemirror;
     this.options = options;
     this.applyCodemirrorOptions();
@@ -705,7 +707,9 @@ class MarkdownEditorBase {
    * Options that are not included in specified `options` will not be modified.
    * @param options the set of options that shall be changed
    */
-  public setOptions(options: MarkdownEditorOptions) {
+  public setOptions(options: MarkdownEditorOptions | undefined) {
+    if (!options) return;
+
     this.options = _.merge(this.options, options);
     this.applyCodemirrorOptions();
     this.applyEditorKeyMappings();
@@ -784,7 +788,7 @@ export class MarkdownEditor extends MarkdownEditorBase {
 
 export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
   public readonly cm: CodeMirror.EditorFromTextArea;
-  protected options: FromTextareaOptions;
+  protected options: FromTextareaOptionsComplete;
   protected saver?: (instance: CodeMirror.Editor) => void;
 
   constructor(textarea: HTMLTextAreaElement, options?: FromTextareaOptions) {
@@ -825,7 +829,9 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
   /**
    * @inheritdoc
    */
-  public setOptions(options: MarkdownEditorOptions) {
+  public setOptions(options: MarkdownEditorOptions | undefined) {
+    if (!options) return;
+
     const opts = _.merge(this.options, options);
     super.setOptions(opts);
     this.options = opts;
