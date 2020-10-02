@@ -10,6 +10,7 @@ export interface MarkdownEditorOptions {
     horizontalLine: '---' | '***' | '___';
     codeBlock: '```' | '~~~';
     unorderedList: '-' | '*';
+    checkList: '-' | '*'; // `- [x]`  OR  `* [x]`
   };
   preferredTemplates: {
     link: [string, string];
@@ -57,6 +58,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptions = {
     horizontalLine: '---',
     codeBlock: '```',
     unorderedList: '-',
+    checkList: '-',
   },
   preferredTemplates: {
     link: ['[', '](https://)'],

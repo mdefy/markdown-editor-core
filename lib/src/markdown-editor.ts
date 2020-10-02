@@ -15,6 +15,7 @@ import {
 class MarkdownEditorBase {
   protected static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
   protected static readonly UNORDERED_LIST_PATTERN = /^(\*|-)(\t| )+/;
+  protected static readonly CHECK_LIST_PATTERN = /^(\*|-) \[(X|x| )\](\t| )+/;
   protected static readonly BOLD_TOKENS = ['**', '__'];
   protected static readonly ITALIC_TOKENS = ['*', '_'];
 
@@ -175,16 +176,21 @@ class MarkdownEditorBase {
   public toggleUnorderedList() {
     const preferred = this.options.preferredTokens.unorderedList + ' ';
     this.replaceTokenAtLineStart((oldLineContent) => {
+      // Has selected line a check list token?
+      if (oldLineContent.search(MarkdownEditorBase.CHECK_LIST_PATTERN) !== -1) {
+        return oldLineContent.replace(MarkdownEditorBase.CHECK_LIST_PATTERN, preferred);
+      }
+
+      // Has selected line an enumeration token?
+      if (oldLineContent.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) !== -1) {
+        return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, preferred);
+      }
+
       // Has selected line a bullet point token?
-      if (oldLineContent.search(MarkdownEditorBase.UNORDERED_LIST_PATTERN) === -1) {
-        // Has selected line an enumeration token?
-        if (oldLineContent.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) === -1) {
-          return preferred + oldLineContent;
-        } else {
-          return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, preferred);
-        }
-      } else {
+      if (oldLineContent.search(MarkdownEditorBase.UNORDERED_LIST_PATTERN) !== -1) {
         return oldLineContent.replace(MarkdownEditorBase.UNORDERED_LIST_PATTERN, '');
+      } else {
+        return preferred + oldLineContent;
       }
     });
   }
@@ -211,12 +217,15 @@ class MarkdownEditorBase {
         this.processNextLinesOfOrderedList(lineNumber, listNumber);
         const numberToken = listNumber + '. ';
 
+        // Has selected line a check list token?
+        if (oldLineContent.search(MarkdownEditorBase.CHECK_LIST_PATTERN) !== -1) {
+          return oldLineContent.replace(MarkdownEditorBase.CHECK_LIST_PATTERN, numberToken);
+        }
         // Has selected line a bullet point token?
-        if (oldLineContent.search(MarkdownEditorBase.UNORDERED_LIST_PATTERN) === -1) {
-          return numberToken + oldLineContent;
-        } else {
+        if (oldLineContent.search(MarkdownEditorBase.UNORDERED_LIST_PATTERN) !== -1) {
           return oldLineContent.replace(MarkdownEditorBase.UNORDERED_LIST_PATTERN, numberToken);
         }
+        return numberToken + oldLineContent;
       } else {
         this.processNextLinesOfOrderedList(lineNumber, 0);
         return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, '');
@@ -251,8 +260,23 @@ class MarkdownEditorBase {
    * transformed to a check list.
    */
   public toggleCheckList() {
-    // TODO
-    // Important: Refactor MarkdownEditor.toggle[Un]orderedList() to also replace check list.
+    const preferred = this.options.preferredTokens.checkList + ' [ ] ';
+    this.replaceTokenAtLineStart((oldLineContent) => {
+      // Has selected line a bullet point token?
+      if (oldLineContent.search(MarkdownEditorBase.CHECK_LIST_PATTERN) === -1) {
+        // Has selected line an enumeration token?
+        if (oldLineContent.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) !== -1) {
+          return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, preferred);
+        }
+        // Has selected line a check list token?
+        if (oldLineContent.search(MarkdownEditorBase.UNORDERED_LIST_PATTERN) !== -1) {
+          return oldLineContent.replace(MarkdownEditorBase.UNORDERED_LIST_PATTERN, preferred);
+        }
+        return preferred + oldLineContent;
+      } else {
+        return oldLineContent.replace(MarkdownEditorBase.CHECK_LIST_PATTERN, '');
+      }
+    });
   }
 
   /**
