@@ -652,11 +652,13 @@ class MarkdownEditorBase {
    */
   public getWordCount() {
     const content = this.cm.getValue();
-    let s = content.replace(/(^\s*)|(\s*$)/gi, '');
-    s = s.replace(/\t/gi, ' ');
-    s = s.replace(RegExp('\n', 'gi'), ' ');
-    s = s.replace(/[ ]{2,}/gi, ' ');
-    return s.split(' ').length;
+    let s = content.replace(/(^\s*)|(\s*$)/gi, ''); // Trim left and right
+    s = s.replace(/\t/gi, ' '); // Replace tabs by single whitespace
+    s = s.replace(/\n/gi, ' '); // Replace line breaks by single whitespace
+    s = s.replace(/[ ]{2,}/gi, ' '); // Reduce multiple whitespaces to a single one
+    let split = s.split(' '); // Split string by whitespaces
+    split = split.filter((x) => !/^\W+$/.test(x)); // Filter out non-alphanumeric words
+    return s === '' ? 0 : split.length;
   }
 
   /**
