@@ -700,6 +700,16 @@ class MarkdownEditorBase {
     return undefined;
   }
 
+  /**
+   * Get the action shortcuts effectively applied to the editor.
+   *
+   * This might be a mix of custom shortcuts
+   * and default shortcuts as specified in `DEFAULT_OPTIONS`.
+   */
+  public getShortcuts(): MarkdownEditorShortcuts {
+    return this.options.shortcuts;
+  }
+
   /***** Markdown Editor Options *****/
 
   /**
