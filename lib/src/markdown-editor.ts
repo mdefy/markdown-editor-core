@@ -564,7 +564,7 @@ class MarkdownEditorBase {
     const url = window.URL.createObjectURL(data);
     const a = document.createElement('a');
     a.setAttribute('href', url);
-    a.setAttribute('download', fileName || this.options.downloadFileName); // option
+    a.setAttribute('download', fileName || this.options.downloadFileNameGenerator()); // option
     a.click();
   }
 
