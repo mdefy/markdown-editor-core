@@ -765,7 +765,7 @@ class MarkdownEditorBase {
     };
 
     const shortcuts = this.options.shortcuts;
-    const extraKeys: { [key: string]: () => any } = {};
+    const extraKeys = {} as CodeMirror.KeyMap;
     for (const [key, value] of Object.entries(shortcuts)) {
       let shortcut: string;
       if (isMac()) {
@@ -783,7 +783,7 @@ class MarkdownEditorBase {
 export class MarkdownEditor extends MarkdownEditorBase {
   constructor(element: HTMLElement, options?: MarkdownEditorOptions) {
     const opts = _.merge(DEFAULT_OPTIONS, options);
-    const cm = CodeMirror(element);
+    const cm = CodeMirror(element, opts);
     super(cm, opts);
   }
 
