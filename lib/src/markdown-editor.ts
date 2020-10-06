@@ -710,6 +710,49 @@ class MarkdownEditorBase {
     return this.options.shortcuts;
   }
 
+  /**
+   * Add the specified keyboard shortcut to the specified action function.
+   *
+   * **Note:** This does **not** replace an existing shortcut to the specified action,
+   * but only **adds** it. In case of an already existing shortcut, the result will be
+   * two distinct shortcuts to the same function. However, you can use `removeShortcut()`
+   * to remove the old one.
+   * @param hotkeys the hotkeys string as required by Codemirror
+   * @param action the action function
+   * @see https://codemirror.net/doc/manual.html#keymaps
+   */
+  public addShortcut(hotkeys: string, action: () => any) {
+    const extraKeys = (this.cm.getOption('extraKeys') || {}) as CodeMirror.KeyMap;
+    let shortcut: string;
+    if (isMac()) {
+      shortcut = hotkeys.replace('Ctrl', 'Cmd');
+    } else {
+      shortcut = hotkeys.replace('Cmd', 'Ctrl');
+    }
+    extraKeys[shortcut] = action;
+
+    this.cm.setOption('extraKeys', extraKeys);
+  }
+
+  /**
+   * Remove the specified keyboard shortcut.
+   *
+   * @param hotkeys the hotkeys string as required by Codemirror
+   * @see https://codemirror.net/doc/manual.html#keymaps
+   */
+  public removeShortcut(hotkeys: string) {
+    const extraKeys = (this.cm.getOption('extraKeys') || {}) as CodeMirror.KeyMap;
+    let shortcut: string;
+    if (isMac()) {
+      shortcut = hotkeys.replace('Ctrl', 'Cmd');
+    } else {
+      shortcut = hotkeys.replace('Cmd', 'Ctrl');
+    }
+    delete extraKeys[shortcut];
+
+    this.cm.setOption('extraKeys', extraKeys);
+  }
+
   /***** Markdown Editor Options *****/
 
   /**
