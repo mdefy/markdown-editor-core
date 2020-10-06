@@ -1,6 +1,7 @@
 export interface MarkdownEditorOptionsComplete {
   autofocus: boolean;
   downloadFileNameGenerator: () => string;
+  lineNumbers: boolean;
   lineWrapping: boolean;
   markdownGuideUrl: string;
   placeholder: string; // | Element;
@@ -55,6 +56,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
     const shift = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     return shift.toISOString().substr(0, 19).replace('T', '_').replace(/:|-/gi, '') + '.md';
   },
+  lineNumbers: false,
   lineWrapping: true,
   markdownGuideUrl: 'https://www.markdownguide.org/basic-syntax/',
   placeholder: '',
