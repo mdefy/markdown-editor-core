@@ -1,5 +1,6 @@
 export interface MarkdownEditorOptionsComplete {
   autofocus: boolean;
+  disabled: boolean;
   downloadFileNameGenerator: () => string;
   lineNumbers: boolean;
   lineWrapping: boolean;
@@ -51,6 +52,7 @@ export interface MarkdownEditorShortcuts extends Record<Exclude<MarkdownEditorAc
 
 export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
   autofocus: true,
+  disabled: false,
   downloadFileNameGenerator: () => {
     const now = new Date();
     const shift = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
