@@ -643,6 +643,13 @@ class MarkdownEditorBase {
   }
 
   /**
+   * Focus the editor. Shortcut for `Codemirror.focus()`.
+   */
+  public focus() {
+    this.cm.focus();
+  }
+
+  /**
    * Get the number of characters in the document.
    */
   public getCharacterCount() {
