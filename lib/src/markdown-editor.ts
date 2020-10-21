@@ -158,6 +158,35 @@ class MarkdownEditorBase {
   }
 
   /**
+   * Increase the heading level for each selected line, i.e. make the heading smaller.
+   * If the current heading level is at the maximum of 6, the heading token is just removed.
+   * If the current heading level is 0 (no heading), the new heading level is set to 1.
+   */
+  public increaseHeadingLevel() {
+    this.replaceTokenAtLineStart((oldLineContent) => {
+      let currentHeadingLevel = oldLineContent.search(/(?<=(^((#)+ ))).*/) - 1;
+      if (currentHeadingLevel < 0) currentHeadingLevel = 0;
+      const newLevel = currentHeadingLevel < 6 ? currentHeadingLevel + 1 : 0;
+      const headingToken = '#'.repeat(newLevel) + (newLevel === 0 ? '' : ' ');
+      return oldLineContent.replace(/^((#)*( )?)/, headingToken);
+    });
+  }
+
+  /**
+   * Decrease the heading level for each selected line, i.e. make the heading bigger.
+   * If the current heading level is at the minimum of 1, the heading token is just removed.
+   * If the current heading level is 0 (no heading), the new heading level is set to 6.
+   */
+  public decreaseHeadingLevel() {
+    this.replaceTokenAtLineStart((oldLineContent) => {
+      const currentHeadingLevel = oldLineContent.search(/(?<=(^((#)+ ))).*/) - 1;
+      const newLevel = currentHeadingLevel > 0 ? currentHeadingLevel - 1 : 6;
+      const headingToken = '#'.repeat(newLevel) + (newLevel === 0 ? '' : ' ');
+      return oldLineContent.replace(/^((#)*( )?)/, headingToken);
+    });
+  }
+
+  /**
    * Toggle "quote" for each selected line.
    */
   public toggleQuote() {
@@ -795,6 +824,8 @@ class MarkdownEditorBase {
    */
   protected applyEditorKeyMappings() {
     const bindings: { [key in keyof MarkdownEditorShortcuts]: () => any } = {
+      increaseHeadingLevel: () => this.increaseHeadingLevel(),
+      decreaseHeadingLevel: () => this.decreaseHeadingLevel(),
       toggleBold: () => this.toggleBold(),
       toggleItalic: () => this.toggleItalic(),
       toggleStrikethrough: () => this.toggleStrikethrough(),

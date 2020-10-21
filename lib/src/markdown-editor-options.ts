@@ -29,6 +29,8 @@ export interface MarkdownEditorOptions extends DeepPartial<MarkdownEditorOptions
 
 export type MarkdownEditorAction =
   | 'setHeadingLevel'
+  | 'increaseHeadingLevel'
+  | 'decreaseHeadingLevel'
   | 'toggleBold'
   | 'toggleItalic'
   | 'toggleStrikethrough'
@@ -77,6 +79,8 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
   },
   richTextMode: true,
   shortcuts: {
+    increaseHeadingLevel: 'Alt-H',
+    decreaseHeadingLevel: 'Shift-Alt-H',
     toggleBold: 'Ctrl-B',
     toggleItalic: 'Ctrl-I',
     toggleStrikethrough: 'Ctrl-K',
