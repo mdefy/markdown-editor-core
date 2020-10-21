@@ -14,9 +14,6 @@
     "format:write": "prettier -w ."
   },
   "private": true,
-  "dependencies": {
-    "markdown-editor-core": "file:./build/markdown-editor-core-0.0.0.tgz"
-  },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^11.0.0",
