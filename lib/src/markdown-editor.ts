@@ -518,7 +518,7 @@ class MarkdownEditorBase {
    * @param template the template
    * @param lineSeparator The line separator. Default is `\n`.
    */
-  protected insertBlockTemplateBelow(template: string, lineSeparator: string = '\n') {
+  protected insertBlockTemplateBelow(template: string, lineSeparator = '\n') {
     if (lineSeparator !== '\n') template = template.replace(RegExp(lineSeparator, 'g'), '\n');
     let currentShift = 0; // indicates how many lines have been inserted
     const selections = this.cm.listSelections();
@@ -643,7 +643,7 @@ class MarkdownEditorBase {
    * Get the editor's content with the specified line break format.
    * @param lineSeparator The line break format. Default is `\n`.
    */
-  public getContent(lineSeparator: string = '\n'): string {
+  public getContent(lineSeparator = '\n'): string {
     return this.cm.getValue(lineSeparator);
   }
 
@@ -659,7 +659,7 @@ class MarkdownEditorBase {
    * @param content The content.
    * @param lineSeparator The line break format. Default is `\n`.
    */
-  public setContent(content: string, lineSeparator: string = '\n') {
+  public setContent(content: string, lineSeparator = '\n') {
     if (lineSeparator !== '\n') content = content.replace(RegExp(lineSeparator, 'g'), '\n');
     this.cm.setValue(content);
   }
@@ -682,6 +682,7 @@ class MarkdownEditorBase {
    * Get the number of characters in the document.
    */
   public getCharacterCount() {
+    // eslint-disable-next-line no-control-regex
     return this.cm.getValue().replace(RegExp('\n', 'gi'), '').length;
   }
 
@@ -757,7 +758,7 @@ class MarkdownEditorBase {
    * @param action the action function
    * @see https://codemirror.net/doc/manual.html#keymaps
    */
-  public addShortcut(hotkeys: string, action: () => any) {
+  public addShortcut(hotkeys: string, action: () => void) {
     const extraKeys = (this.cm.getOption('extraKeys') || {}) as CodeMirror.KeyMap;
     let shortcut: string;
     if (isMac()) {
@@ -823,7 +824,7 @@ class MarkdownEditorBase {
    * to the Codemirror editor instance.
    */
   protected applyEditorKeyMappings() {
-    const bindings: { [key in keyof MarkdownEditorShortcuts]: () => any } = {
+    const bindings: { [key in keyof MarkdownEditorShortcuts]: () => void } = {
       increaseHeadingLevel: () => this.increaseHeadingLevel(),
       decreaseHeadingLevel: () => this.decreaseHeadingLevel(),
       toggleBold: () => this.toggleBold(),
@@ -874,7 +875,7 @@ export class MarkdownEditor extends MarkdownEditorBase {
    * @param textarea the textarea to be replaced with the editor
    * @param options the editor options
    */
-  static fromTextarea(textarea: HTMLTextAreaElement, options?: FromTextareaOptions) {
+  static fromTextarea(textarea: HTMLTextAreaElement, options?: FromTextareaOptions): MarkdownEditorFromTextarea {
     return new MarkdownEditorFromTextarea(textarea, options);
   }
 }
@@ -897,7 +898,7 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
    *
    * Shortcut for `Codemirror.EditorFromTextarea.save()`.
    */
-  public save() {
+  public save(): void {
     this.cm.save();
   }
 
@@ -906,7 +907,7 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
    *
    * Shortcut for `Codemirror.EditorFromTextarea.toTextarea()`.
    */
-  public toTextarea() {
+  public toTextarea(): void {
     this.cm.toTextArea();
   }
 
@@ -915,14 +916,14 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
    *
    * Shortcut for `Codemirror.EditorFromTextarea.getTextarea()`.
    */
-  public getTextarea() {
-    this.cm.getTextArea();
+  public getTextarea(): HTMLTextAreaElement {
+    return this.cm.getTextArea();
   }
 
   /**
    * @inheritdoc
    */
-  public setOptions(options: MarkdownEditorOptions | undefined) {
+  public setOptions(options: MarkdownEditorOptions | undefined): void {
     if (!options) return;
 
     const opts = _.merge(this.options, options);

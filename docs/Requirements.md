@@ -25,7 +25,7 @@
   - ✓ . Undo / Redo
   - ✓ .. Toggle rich-text in editor
   - ✓ . Possibility to replace given textarea and switch back to this native textarea later
-  - !.... Upload image (storage needs to be specified by app developer)
+  - !..... Upload image (storage needs to be specified by app developer)
   - .... Edit as HTML and parse back
   - ... set spellchecker language
   - ... Full-width preview

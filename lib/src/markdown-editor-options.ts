@@ -25,7 +25,7 @@ export interface MarkdownEditorOptionsComplete {
   theme: string; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
 }
 
-export interface MarkdownEditorOptions extends DeepPartial<MarkdownEditorOptionsComplete> {}
+export type MarkdownEditorOptions = DeepPartial<MarkdownEditorOptionsComplete>;
 
 export type MarkdownEditorAction =
   | 'setHeadingLevel'
@@ -50,7 +50,7 @@ export type MarkdownEditorAction =
   | 'importFromFile'
   | 'formatContent';
 
-export interface MarkdownEditorShortcuts extends Record<Exclude<MarkdownEditorAction, 'setHeadingLevel'>, string> {}
+export type MarkdownEditorShortcuts = Record<Exclude<MarkdownEditorAction, 'setHeadingLevel'>, string>;
 
 export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
   autofocus: true,
@@ -108,7 +108,7 @@ export interface FromTextareaOptionsComplete extends MarkdownEditorOptionsComple
   autoSync: boolean;
 }
 
-export interface FromTextareaOptions extends DeepPartial<FromTextareaOptionsComplete> {}
+export type FromTextareaOptions = DeepPartial<FromTextareaOptionsComplete>;
 
 export const DEFAULT_FROM_TEXTAREA_OPTIONS: FromTextareaOptionsComplete = Object.assign(
   {
