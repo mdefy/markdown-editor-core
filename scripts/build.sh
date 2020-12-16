@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 LIB_ROOT=./lib
 LIB_DIST=$LIB_ROOT/dist
 LIB_PACKAGE=./lib/package.json

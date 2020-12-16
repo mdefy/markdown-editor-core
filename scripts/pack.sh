@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 echo "Pack ./lib/dist to ./build\n"
 
 cd ./build
