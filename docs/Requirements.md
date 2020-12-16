@@ -6,12 +6,13 @@
 - Default Renderer?
 - ✓ Default short cuts
 - Auto-save in local storage
-- API for basic editor functionality:
+- ✓ API for basic editor functionality:
   - ✓ Toggle Bold (for **selection**)
   - ✓ Toggle Italic (for **selection**)
   - ✓ Toggle Strikethrough (for **selection**)
   - ✓ Set Heading level (whole line)
-  - Toggle List (order **or** unordered **or** check)
+  - ✓ Increase / decrease heading level
+  - ✓ Toggle List (order **or** unordered **or** check)
   - ✓ Toggle Quote (always **before list symbol**)
   - ✓ Insert link template
   - ✓ Insert image link template
@@ -24,15 +25,15 @@
   - ✓ . Undo / Redo
   - ✓ .. Toggle rich-text in editor
   - ✓ . Possibility to replace given textarea and switch back to this native textarea later
+  - !.... Upload image (storage needs to be specified by app developer)
+  - .... Edit as HTML and parse back
+  - ... set spellchecker language
   - ... Full-width preview
   - ... Side-by-side preview (with editor **or** textarea)
   - .... Toggle scroll sync for side-by-side preview
   - ✓ ..... Auto-formatting (indentation, empty lines, table alignment? (needs mono-space) ...)
   - ✓ .. Download / Save as...
   - ✓ .. Import file
-  - ... set spellchecker language
-  - .... Upload image (storage needs to be specified by app developer)
-  - .... Edit as HTML and parse back
 - API for developers only
   - ✓ Set/get content
   - ✓ Set/get unformatted content
@@ -40,6 +41,7 @@
   - ✓ get line/column cursor position
   - ✓ reveal Codemirror instance
   - ✓ is dirty
+  - ✓ focus editor
   - switch back and forth between textarea and editor?
 - Customizable options
   - ✓ Action short cuts
@@ -49,38 +51,22 @@
   - ✓ tab size
   - ✓ Block styles (e.g. \* or \_ for italic)
   - ✓ Custom templates for templated functions like _Insert link_
-  - multiple selection?
-  - Renderer + options
   - ✓ Force sync with original textarea
-  - highlightFormatting? (e.g. brackets [])
+  - ✓ set markdown guide url
+  - ! multiple selection
+  - ! Possibility to adjust enumeration depending on tab depth
   - languages (modes) for fencedCodeHighlighting
+  - highlightFormatting? (e.g. brackets [])
+  - Possibility to adjust enumeration of all lines of ordered list while typing
+    (enter "1.", next line automatically changes to "2.", if it had an enumeration before)
   - callbacks for all actions?
-  - Possibility to adjust enumeration depending on tab depth
   - Editor shortcuts?
   - Auto-formatting options (not possible with Prettier)
   - spellchecker (default/custom)
-  - set markdown guide url
-  - Possibility to adjust enumeration of all lines of ordered list while typing
-    (enter "1.", next line automatically changes to "2.", if it had an enumeration before)
+  - Renderer + options
 - Interesting Addons:
   - ✓ placeholder
   - RTL mode (bidirectional text)
   - mark selection (with CSS class)
   - scrollPastEnd
 
-## Frameworks
-
-- Buttons for all actions
-- Default toolbar
-- Default tooltips
-- Custom toolbar (select which built-in actions to use)
-- Custom actions
-- Internationalization (Button icon, Button Tooltips, Markdown Guide)
-- Error handling (default/callback/custom)
-- Status bar (character/word count, cursor position, spellchecker language, custom items)
-- Set spellchecker language
-- Read-only mode (use preview)
-- emit change
-- emit focus
-- emit blur
-- min/max height/width
