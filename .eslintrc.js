@@ -10,4 +10,14 @@ module.exports = {
     'plugin:import/errors',
     'plugin:import/warnings',
   ],
+  env: {
+    node: true,
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.ts'],
+      },
+    },
+  },
 };
