@@ -10,7 +10,8 @@
     "build": "./scripts/build.sh",
     "pack": "./scripts/pack.sh",
     "format:check": "prettier -c .",
-    "format:write": "prettier -w ."
+    "format:write": "prettier -w .",
+    "deps:check": "ncu"
   },
   "private": true,
   "devDependencies": {
@@ -25,6 +26,8 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "husky": "^4.2.5",
+    "npm-check-updates": "^10.2.5",
+    "prettier": "^2.1.1",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
