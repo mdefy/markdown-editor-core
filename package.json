@@ -14,6 +14,9 @@
     "deps:check": "ncu"
   },
   "private": true,
+  "dependencies": {
+    "markdown-editor-core": "file:./build/markdown-editor-core-0.0.0.tgz"
+  },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^11.0.0",
@@ -29,7 +32,7 @@
     "npm-check-updates": "^10.2.5",
     "prettier": "^2.1.1",
     "ts-loader": "^8.0.12",
-    "typescript": "^4.0.2",
+    "typescript": "^4.1.3",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
