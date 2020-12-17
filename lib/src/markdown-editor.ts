@@ -51,7 +51,8 @@ class MarkdownEditorBase {
     const preferred = this.options.preferredTokens.italic;
     this.toggleInlineFormatting(
       preferred,
-      MarkdownEditorBase.ITALIC_TOKENS.filter((t) => t !== preferred)
+      MarkdownEditorBase.ITALIC_TOKENS.filter((t) => t !== preferred),
+      true
     );
   }
 
@@ -75,7 +76,7 @@ class MarkdownEditorBase {
    * @param token the token
    * @param altTokens the alternative tokens
    */
-  protected toggleInlineFormatting(token: string, altTokens: string[] = []) {
+  protected toggleInlineFormatting(token: string, altTokens: string[] = [], preventDoubledTokenMatch = false) {
     const newSelections: CodeMirror.Range[] = [];
     const selections = _.cloneDeep(this.cm.listSelections());
     for (let i = 0; i < selections.length; i++) {
@@ -89,10 +90,14 @@ class MarkdownEditorBase {
       const linePartBefore = this.cm.getRange({ line: from.line, ch: 0 }, from);
       const linePartAfter = this.cm.getRange(to, { line: to.line, ch: endLineLength });
       const prefixToken = [token, ...altTokens].find((t) => {
-        return linePartBefore.search(RegExp(escapeRegexChars(t) + '$')) > -1;
+        const escapedToken = escapeRegexChars(t);
+        const lookBehind = preventDoubledTokenMatch ? '(?<!' + escapedToken + ')' : '';
+        return linePartBefore.search(RegExp(lookBehind + escapedToken + '$')) > -1;
       });
       const suffixToken = [token, ...altTokens].find((t) => {
-        return linePartAfter.search(RegExp('^' + escapeRegexChars(t))) > -1;
+        const escapedToken = escapeRegexChars(t);
+        const lookAhead = preventDoubledTokenMatch ? '(?!' + escapedToken + ')' : '';
+        return linePartAfter.search(RegExp('^' + escapedToken + lookAhead)) > -1;
       });
 
       // indicate whether the tokens before/after the selection have been inserted or deleted
