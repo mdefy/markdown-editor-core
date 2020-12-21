@@ -1,4 +1,4 @@
-import CodeMirror from 'codemirror';
+import CodeMirror, { EditorConfiguration } from 'codemirror';
 import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/display/placeholder.js';
 import _ from 'lodash';
@@ -818,6 +818,10 @@ class MarkdownEditorBase {
     this.cm.setOption('lineNumbers', this.options.lineNumbers);
     this.cm.setOption('lineWrapping', this.options.lineWrapping);
     this.cm.setOption('mode', this.options.richTextMode ? 'gfm' : '');
+    this.cm.setOption(
+      'configureMouse' as keyof EditorConfiguration,
+      this.options.multipleCursors ? undefined : () => ({ addNew: false })
+    );
     this.cm.setOption('placeholder', this.options.placeholder);
     this.cm.setOption('readOnly', this.options.disabled);
     this.cm.setOption('tabSize', this.options.tabSize);

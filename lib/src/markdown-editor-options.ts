@@ -5,6 +5,7 @@ export interface MarkdownEditorOptionsComplete {
   lineNumbers: boolean;
   lineWrapping: boolean;
   markdownGuideUrl: string;
+  multipleCursors: boolean;
   placeholder: string;
   preferredTokens: {
     bold: '**' | '__';
@@ -64,6 +65,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
   lineNumbers: false,
   lineWrapping: true,
   markdownGuideUrl: 'https://www.markdownguide.org/basic-syntax/',
+  multipleCursors: true,
   placeholder: '',
   preferredTokens: {
     bold: '**',
