@@ -53,14 +53,15 @@
   - ✓ Custom templates for templated functions like _Insert link_
   - ✓ Force sync with original textarea
   - ✓ set markdown guide url
-  - ! multiple selection
+  - ✓ multiple cursors
+  - ✓ use default shortcuts
   - ! Possibility to adjust enumeration depending on tab depth
   - languages (modes) for fencedCodeHighlighting
-  - highlightFormatting? (e.g. brackets [])
+  - ? highlightFormatting (e.g. brackets [])
   - Possibility to adjust enumeration of all lines of ordered list while typing
     (enter "1.", next line automatically changes to "2.", if it had an enumeration before)
-  - callbacks for all actions?
-  - Editor shortcuts?
+  - ? callbacks for all actions
+  - ? Editor shortcuts
   - Auto-formatting options (not possible with Prettier)
   - spellchecker (default/custom)
   - Renderer + options
@@ -69,4 +70,3 @@
   - RTL mode (bidirectional text)
   - mark selection (with CSS class)
   - scrollPastEnd
-
