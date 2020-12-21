@@ -829,6 +829,10 @@ class MarkdownEditorBase {
    * to the Codemirror editor instance.
    */
   protected applyEditorKeyMappings() {
+    if (!this.options.shortcutsEnabled) {
+      return;
+    }
+
     const bindings: { [key in keyof MarkdownEditorShortcuts]: () => void } = {
       increaseHeadingLevel: () => this.increaseHeadingLevel(),
       decreaseHeadingLevel: () => this.decreaseHeadingLevel(),

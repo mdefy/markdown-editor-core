@@ -5,7 +5,7 @@ export interface MarkdownEditorOptionsComplete {
   lineNumbers: boolean;
   lineWrapping: boolean;
   markdownGuideUrl: string;
-  placeholder: string; // | Element;
+  placeholder: string;
   preferredTokens: {
     bold: '**' | '__';
     italic: '*' | '_';
@@ -21,6 +21,7 @@ export interface MarkdownEditorOptionsComplete {
   };
   richTextMode: boolean;
   shortcuts: MarkdownEditorShortcuts;
+  shortcutsEnabled: boolean;
   tabSize: number;
   theme: string; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
 }
@@ -100,6 +101,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
     importFromFile: 'Ctrl-Alt-I',
     formatContent: 'Alt-F',
   },
+  shortcutsEnabled: true,
   tabSize: 2,
   theme: 'default',
 };
