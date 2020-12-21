@@ -1,6 +1,6 @@
-import { resolve } from 'path';
+const path = require('path');
 
-export default ['source-map'].map((devTool) => ({
+module.exports = ['source-map'].map((devTool) => ({
   entry: './demo/demo.ts',
   module: {
     rules: [
@@ -16,7 +16,7 @@ export default ['source-map'].map((devTool) => ({
   },
   output: {
     filename: 'bundle.js',
-    path: resolve(__dirname, 'demo/dist'),
+    path: path.resolve(__dirname, 'demo/dist'),
     publicPath: '/demo/dist',
   },
   devtool: devTool,
