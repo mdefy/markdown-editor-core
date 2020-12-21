@@ -15,7 +15,7 @@
   },
   "private": true,
   "dependencies": {
-    "markdown-editor-core": "file:./build/markdown-editor-core-0.0.0.tgz"
+    "markdown-editor-core": "./build/markdown-editor-core-0.0.0.tgz"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
