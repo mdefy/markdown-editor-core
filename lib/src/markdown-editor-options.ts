@@ -104,7 +104,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
     formatContent: 'Alt-F',
   },
   shortcutsEnabled: true,
-  tabSize: 2,
+  tabSize: 4,
   theme: 'default',
 };
 
