@@ -583,7 +583,7 @@ class MarkdownEditorBase {
     if (currentMode === 'gfm') {
       this.cm.setOption('mode', '');
     } else {
-      this.cm.setOption('mode', 'gfm');
+      this.cm.setOption('mode', this.getGfmMode());
     }
   }
 
@@ -817,7 +817,7 @@ class MarkdownEditorBase {
     this.cm.setOption('autofocus', this.options.autofocus);
     this.cm.setOption('lineNumbers', this.options.lineNumbers);
     this.cm.setOption('lineWrapping', this.options.lineWrapping);
-    this.cm.setOption('mode', this.options.richTextMode ? 'gfm' : '');
+    this.cm.setOption('mode', this.options.richTextMode ? this.getGfmMode() : '');
     this.cm.setOption(
       'configureMouse' as keyof EditorConfiguration,
       this.options.multipleCursors ? undefined : () => ({ addNew: false })
@@ -873,6 +873,41 @@ class MarkdownEditorBase {
     }
 
     this.cm.setOption('extraKeys', extraKeys);
+  }
+
+  /***** Private methods *****/
+
+  /**
+   * Create the GFM mode object. It includes some adjustments for the default
+   * theme to use Codemirror's default markup styling while always providing
+   * expressive class names for the tokens.
+   */
+  private getGfmMode() {
+    const isDefaultTheme = this.options.theme === undefined || this.options.theme.includes('default');
+    return {
+      name: 'gfm',
+      tokenTypeOverrides: {
+        header: 'header',
+        code: 'code' + (isDefaultTheme ? ' comment' : ''),
+        quote: 'quote',
+        list1: 'list-level-1' + (isDefaultTheme ? ' variable-2' : ''),
+        list2: 'list-level-2' + (isDefaultTheme ? ' variable-3' : ''),
+        list3: 'list-level-gt-2' + (isDefaultTheme ? ' keyword' : ''),
+        hr: 'hr',
+        image: 'image',
+        imageAltText: 'image-alt-text',
+        imageMarker: 'image-marker',
+        formatting: 'formatting',
+        linkInline: 'link link-inline',
+        linkEmail: 'link link-email',
+        linkText: 'link-text' + (isDefaultTheme ? ' string' : ''),
+        linkHref: 'link link-href',
+        em: 'em',
+        strong: 'strong',
+        strikethrough: 'strikethrough',
+        emoji: 'emoji' + (isDefaultTheme ? ' builtin' : ''),
+      },
+    };
   }
 }
 
