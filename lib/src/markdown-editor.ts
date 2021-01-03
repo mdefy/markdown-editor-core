@@ -902,7 +902,7 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
    *
    * Shortcut for `Codemirror.EditorFromTextarea.save()`.
    */
-  public save(): void {
+  public syncTextarea(): void {
     this.cm.save();
   }
 
@@ -935,7 +935,7 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
     this.options = opts;
 
     if (this.saver === undefined && this.options.autoSync) {
-      this.saver = () => this.save();
+      this.saver = () => this.syncTextarea();
       this.cm.on('changes', this.saver);
     } else if (this.saver !== undefined && !this.options.autoSync) {
       this.cm.off('changes', this.saver);
