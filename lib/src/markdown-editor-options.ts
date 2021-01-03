@@ -112,7 +112,7 @@ export interface FromTextareaOptionsComplete extends MarkdownEditorOptionsComple
   autoSync: boolean;
 }
 
-export type FromTextareaOptions = DeepPartial<FromTextareaOptionsComplete>;
+export type MdeFromTextareaOptions = DeepPartial<FromTextareaOptionsComplete>;
 
 export const DEFAULT_FROM_TEXTAREA_OPTIONS: FromTextareaOptionsComplete = Object.assign(
   {

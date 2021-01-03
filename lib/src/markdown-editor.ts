@@ -8,7 +8,7 @@ import {
   MarkdownEditorOptionsComplete,
   MarkdownEditorOptions,
   FromTextareaOptionsComplete,
-  FromTextareaOptions,
+  MdeFromTextareaOptions,
   MarkdownEditorShortcuts,
   DEFAULT_OPTIONS,
   DEFAULT_FROM_TEXTAREA_OPTIONS,
@@ -898,7 +898,7 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
   protected options: FromTextareaOptionsComplete;
   protected saver?: (instance: CodeMirror.Editor) => void;
 
-  constructor(textarea: HTMLTextAreaElement, options?: FromTextareaOptions) {
+  constructor(textarea: HTMLTextAreaElement, options?: MdeFromTextareaOptions) {
     const opts = _.merge(DEFAULT_FROM_TEXTAREA_OPTIONS, options);
     const cm = CodeMirror.fromTextArea(textarea);
     super(cm, opts);
