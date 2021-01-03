@@ -882,15 +882,6 @@ export class MarkdownEditor extends MarkdownEditorBase {
     const cm = CodeMirror(element, opts);
     super(cm, opts);
   }
-
-  /**
-   * Create a editor instance and replace the specified textarea with it.
-   * @param textarea the textarea to be replaced with the editor
-   * @param options the editor options
-   */
-  static fromTextarea(textarea: HTMLTextAreaElement, options?: FromTextareaOptions): MarkdownEditorFromTextarea {
-    return new MarkdownEditorFromTextarea(textarea, options);
-  }
 }
 
 export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
