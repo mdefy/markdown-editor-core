@@ -598,7 +598,7 @@ class MarkdownEditorBase {
     const url = window.URL.createObjectURL(data);
     const a = document.createElement('a');
     a.setAttribute('href', url);
-    a.setAttribute('download', fileName || this.options.downloadFileNameGenerator()); // option
+    a.setAttribute('download', fileName || this.options.downloadFileNameGenerator());
     a.click();
   }
 
@@ -971,11 +971,3 @@ function escapeRegexChars(s: string) {
 function isMac(): boolean {
   return /Mac/.test(navigator.platform);
 }
-
-// Extend CodeMirror.EditorConfiguration with options from add ons:
-// declare module 'codemirror' {
-//   interface EditorConfiguration {
-//     // display/placeholder.js
-//     placeholder?: string | Element;
-//   }
-// }
