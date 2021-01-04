@@ -22,12 +22,19 @@ or
 yarn add markdown-editor-core
 ```
 
+Load Codemirror's stylesheet for default theme and other required stylings,
+e.g. by including it into your `index.html`:
+
+```html
+<link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css" />
+```
+
 ### How to use
 
 To instantiate Markdown Editor, you must specify a wrapper element and can pass an
 optional [configuration object](#configuration-options).
 
-```
+```typescript
 const wrapper = document.getElementById('my-wrapper-element') as HTMLElement; // required
 const options: MarkdownEditorOptions = { ... };                               // optional
 
@@ -36,7 +43,7 @@ const mde = new MarkdownEditor(wrapper, options);
 
 You can also replace an existing textarea with the Markdown Editor.
 
-```
+```typescript
 const textarea = document.getElementById('my-textarea') as HTMLTextareaElement; // required
 const options: MdeFromTextareaOptions = { ... };                                // optional
 
@@ -211,12 +218,91 @@ If you want to specify your own shortcuts via Codemirror, mind the correct order
 
 #### How to change the editor's styling
 
+The editor's view can be customized using [Codemirror themes](https://codemirror.net/doc/manual.html#option_theme). The default theme of Codemirror is "default" (results in the class `.cm-s-default`),
+which basically presents a blank editor and defines the default styles for the markup highlighting.
+
+To apply a customized theme with the name "example"
+
+- specify `theme: 'example'` in the Markdown Editor Options,
+- define the CSS class `.cm-s-example` in a CSS file, and
+- make sure to load the CSS file with your app.
+
+With such a theme you can customize Codemirror's visual appearance and behavior.
+For further details visit the [dedicated section](https://codemirror.net/doc/manual.html#styling)
+on Codemirror.
+
+If you only want to extend the default theme, you can either define new stylings for the class
+`.cm-s-default` and make sure that the "default" theme is applied or you can create you own additional
+theme and specify two themes in the Markdown Editor Options: `theme: 'default additional-theme'`.
+
 #### How to change the markup styling (e.g. heading, bold, ...)
+
+The markup stylings work with Codemirror classes as well and can (and should!) therefore be part of a Codemirror theme.
+If want to change for example the styling of the "bold" markup, then define a new style for `.cm-bold`. Again, this should
+preferably be done within a theme (also see ["How to use your own theme"](#how-to-change-the-editor's-styling)).
+
+The classes for markup styling are:
+
+| Markup type                     | Class                         |
+| ------------------------------- | ----------------------------- |
+| Heading                         | `.cm-header`                  |
+| Bold                            | `.cm-bold`                    |
+| Italic                          | `.cm-italic`                  |
+| Strikethrough                   | `.cm-strikethrough`           |
+| List level 1                    | `.cm-list-level-1`            |
+| List level 2                    | `.cm-list-level-2`            |
+| List level > 2                  | `.cm-list-level-gt-2`         |
+| Quote                           | `.cm-quote`                   |
+| Link (hyperlink in general)     | `.cm-link`                    |
+| Link text (part inside "[...]") | `.cm-link-text`               |
+| Link href (part inside "(...)") | `.cm-link-href`, `.cm-link`   |
+| Email link                      | `.cm-link-email`, `.cm-link`  |
+| Inline link ("<http://...>")    | `.cm-link-inline`, `.cm-link` |
+| Image                           | `.cm-image`                   |
+| Image alt text                  | `.cm-image-alt-text`          |
+| Image marker ("!")              | `.cm-image-marker`            |
+| Horizontal rule                 | `.cm-hr`                      |
+| Code                            | `.cm-code`                    |
+| Emoji                           | `.cm-emoji`                   |
+| Tokens                          | `.cm-token`                   |
+
+The last table row entry "tokens" refers to all markup tokens like \*\*, \_, [], (), etc. and only
+applies if `highlightTokens` is enabled in the Markdown Editor Options. If this is true, then
+all tokens have the class `.cm-token`. Additionally every token is given an individual class
+corresponding to the Markup type to which it belongs to and eventually a "token level class". This means, you can easily style all tokens in the same way or each token type individually.
+
+Examples:
+
+- The \*\* tokens for bold text have the classes `cm-strong cm-token cm-token-strong`
+- A > token for quotation in the second level (second token of >>) has the classes `cm-quote cm-quote-2 cm-token cm-token-quote cm-token-quote-2`.
+
+Here is a list of all Codemirror token classes:
+
+| Token type     | Class                                                                             |
+| -------------- | --------------------------------------------------------------------------------- |
+| Heading        | `.cm-token-header`, `.cm-token-header-[n]`                                        |
+| Bold           | `.cm-token-strong`                                                                |
+| Italic         | `.cm-token-em`                                                                    |
+| Strikethrough  | `.cm-token-strikethrough`                                                         |
+| Unordered list | `.cm-token-list`, `.cm-token-list-ul`                                             |
+| Ordered list   | `.cm-token-list`, `.cm-token-list-ol`                                             |
+| Checklist      | `.cm-token-list`, `.cm-token-list-ul` ("-" token); `.cm-token-task` ("[x]" token) |
+| Quote          | `.cm-token-quote`, `.cm-token-quote-[n]`                                          |
+| Link           | `.cm-token-link` ("[...]" token); `.cm-token-link-string` ("()" token)            |
+| Image          | `.cm-token-image` ("![...]" token); `.cm-token-link-string` ("()" token)          |
+| Inline Code    | `.cm-token-code`                                                                  |
+| Code block     | `.cm-token-code-block`                                                            |
 
 ### How to contribute
 
 #### Writing issues
 
 #### Making pull requests
+
+#### Project setup
+
+- Yarn
+- Commitlint
+- Prettier
 
 ### Note on tests
