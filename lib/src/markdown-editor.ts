@@ -29,6 +29,7 @@ class MarkdownEditorBase {
     this.options = options;
     this.applyCodemirrorOptions();
     this.applyEditorKeyMappings();
+    this.removeLinkClassFromImageTexts();
   }
 
   /***** Basic Editor API *****/
@@ -895,9 +896,9 @@ class MarkdownEditorBase {
         list3: 'list-level-gt-2' + (isDefaultTheme ? ' keyword' : ''),
         hr: 'hr',
         image: 'image',
-        imageAltText: 'image-alt-text',
+        imageAltText: 'image-alt-text' + (isDefaultTheme ? ' string' : ''),
         imageMarker: 'image-marker',
-        formatting: 'formatting',
+        formatting: 'token',
         linkInline: 'link link-inline',
         linkEmail: 'link link-email',
         linkText: 'link-text' + (isDefaultTheme ? ' string' : ''),
@@ -907,7 +908,23 @@ class MarkdownEditorBase {
         strikethrough: 'strikethrough',
         emoji: 'emoji' + (isDefaultTheme ? ' builtin' : ''),
       },
+      highlightFormatting: this.options.highlightTokens,
     };
+  }
+
+  /**
+   * Remove the `.cm-link` class from images' alt texts because text is not a link.
+   * This has been hardcoded to Codemirror's Markdown mode and thus cannot be changed
+   * without compiling Codemirror ourselves within this project, which is not the
+   * desired way so far.
+   */
+  private removeLinkClassFromImageTexts() {
+    if (!this.getGfmMode().tokenTypeOverrides.imageAltText.includes('link')) {
+      this.cm.on('changes', () => {
+        const codemirrorEl = document.querySelector('.CodeMirror') as HTMLElement;
+        codemirrorEl.querySelectorAll('.cm-image-alt-text').forEach((el) => el.classList.remove('cm-link'));
+      });
+    }
   }
 }
 
