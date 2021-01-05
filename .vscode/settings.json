@@ -3,5 +3,6 @@
   "cSpell.words": [
     "codemirror",
     "strikethrough"
-  ]
+  ],
+  "editor.formatOnSave": true
 }
