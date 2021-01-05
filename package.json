@@ -11,7 +11,8 @@
     "pack": "./scripts/pack.sh",
     "format:check": "prettier -c .",
     "format:write": "prettier -w .",
-    "deps:check": "ncu"
+    "deps:check": "ncu",
+    "commit": "cz"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +26,8 @@
     "@types/prettier": "^2.1.5",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
+    "commitizen": "^4.2.2",
+    "cz-conventional-changelog": "3.3.0",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-import": "^2.22.1",
@@ -36,5 +39,10 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
