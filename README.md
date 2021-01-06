@@ -11,7 +11,26 @@ This makes it easily extensible and customizable for your needs, while setting y
 
 _Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/lenardfunk/ngx-markdown-editor). Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
 
-### How to install
+## Table of Contents
+
+- Table of contents
+- How to install
+- How to use
+- Configuration options
+- Shortcuts
+- FAQs
+  - How to change the editor's styling
+  - How to change the markup styling (e.g. heading, bold, ...)
+- How to contribute
+  - Writing issues
+  - Making pull requests
+- Project setup
+  - Package manager
+  - Commit rules
+  - Coding style guidelines
+- A word on tests
+
+## How to install
 
 Run
 
@@ -32,7 +51,7 @@ e.g. by including it into your `index.html`:
 <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css" />
 ```
 
-### How to use
+## How to use
 
 To instantiate `MarkdownEditor`, you must specify a wrapper element and you can pass an
 optional [configuration object](#configuration-options).
@@ -62,7 +81,7 @@ textarea in two ways:
 You can also switch back to the textarea
 via `mde.toTextarea()` (this destroys the Markdown Editor instance).
 
-### Configuration options
+## Configuration options
 
 <table>
   <thead>
@@ -190,7 +209,7 @@ via `mde.toTextarea()` (this destroys the Markdown Editor instance).
   </tbody>
 </table>
 
-### Shortcuts
+## Shortcuts
 
 | Action                 | Shortcut         |
 | ---------------------- | ---------------- |
@@ -221,9 +240,9 @@ For shortcuts that come built-in with _CodeMirror_, see [_CodeMirror_ documentat
 
 If you want to specify your own shortcuts via _CodeMirror_, mind the correct order of special keys: **Shift-Cmd-Ctrl-Alt**. You can add new shortcuts using `mde.addShortcut(hotkeys, void)` or remove existing ones using `mde.removeShortcut(hotkeys)` .
 
-### FAQs
+## FAQs
 
-#### How to change the editor's styling
+### How to change the editor's styling
 
 The editor's view can be customized using [_CodeMirror_ themes](https://codemirror.net/doc/manual.html#option_theme). The default theme of _CodeMirror_ is "default" (results in the class `.cm-s-default`),
 which basically presents a blank editor and defines the default styles for the markup highlighting.
@@ -242,11 +261,11 @@ If you only want to extend the default theme, you can either define new stylings
 `.cm-s-default` and make sure that the "default" theme is applied or you can create you own additional
 theme and specify two themes in the Markdown Editor Options: `{ theme: 'default additional-theme' }`.
 
-#### How to change the markup styling (e.g. heading, bold, ...)
+### How to change the markup styling (e.g. heading, bold, ...)
 
 The markup stylings work with _CodeMirror_ classes as well and can (and should!) therefore be part of a _CodeMirror_ theme.
 If want to change for example the styling of "bold" markup, then define a new style for `.cm-bold`. Again, this should
-preferably be done within a theme (also see ["How to use your own theme"](#how-to-change-the-editor's-styling)).
+preferably be done within a theme (also see ["How to use your own theme"](#how-to-change-the-editors-styling)).
 
 The classes for markup styling are:
 
@@ -300,7 +319,7 @@ Here is a list of all _CodeMirror_ token classes:
 | Inline Code <code>\`</code>    | `.cm-token-code`                                                                  |
 | Code block <code>\`\`\`</code> | `.cm-token-code-block`                                                            |
 
-### How to contribute
+## How to contribute
 
 First of all, contributions in any way are very welcome! And a big thank you to all who decide to so!! :)
 
@@ -308,13 +327,13 @@ The code is neither perfect nor complete. If you have any suggestions, requireme
 comments, please let me know and I will do my best do incorporate them! The even better (and probably faster) way for code modifications, however, are pull requests. I am very happy about all code
 contributions as time is often rare around here... :)
 
-#### Writing issues
+### Writing issues
 
 When writing issues, please give a clear description of the current state and what you are unhappy
 about. Then, if possible, propose your solution or at least leave a short statement of your thoughts
 about it.
 
-#### Making pull requests
+### Making pull requests
 
 Recipe for making a pull request:
 
@@ -328,9 +347,9 @@ Recipe for making a pull request:
 8. Make a pull request to the _master_ branch of this repo. Please provide a meaningful title for
    the PR and give a concise description.
 
-### Project setup
+## Project setup
 
-#### Package manager
+### Package manager
 
 This project uses [_Yarn_](https://yarnpkg.com/) as package manager. So you must use this one to install dependencies when contributing code. The scripts in _package.json_ still work with `npm`,
 although it is recommended to always use `yarn` throughout the project.
@@ -340,14 +359,14 @@ move from _npm_ to _Yarn_ was, that _Yarn_ is able to execute shell scripts plat
 I.e. it also understands paths with forward slashes like `./path/to/script.sh` on windows and can execute it inside CMD.
 My claim is to provide a platform-independent project setup and the described issue comes into effect, for example, when running the `build` script in _package.json_.
 
-#### Commit rules
+### Commit rules
 
 We use [_Commitlint_](https://commitlint.js.org/#/) to guarantee structured commit messages. This means
 you must write commit messages that meet the rules of _Commitlint_. If you are not familiar with
 _Commitlint_, you can use the CLI tool [_Commitizen_](https://github.com/commitizen/cz-cli) by running `yarn run commit`, which assists you to
 write conventional messages. You can also install _Commitizen_ globally on your system, if you want to use the shorter cli commands `cz` or `git cz`.
 
-#### Coding style guidelines
+### Coding style guidelines
 
 There are not many strict guidelines to keep in mind, but please adapt to the project's code style
 when contributing. Only two more things shall be mentioned here:
@@ -368,7 +387,7 @@ when contributing. Only two more things shall be mentioned here:
    - **Markdown Editor Options**: methods for getting or setting `MarkdownEditorOptions`
    - **Private methods**: all private methods (all methods in previous sections should be `public` or `protected`)
 
-### A word on tests
+## A word on tests
 
 As you might have noticed, this project does not contain any tests. Well yes, I have noticed that, too... and I really hope to be able to add tests in the future some time. However, it has not been very easy to decide what to test and what not so far. Because it is a highly interactive application, it contains a lot of edge cases, far more than standard cases (of which most are directly visible to human's eye anyway). Especially the multiple-cursor mode of _CodeMirror_ increases the number of test branches tremendously. In addition, it is quite hard to draw a line between testing the Markdown Editor (which is the goal) and testing _CodeMirror_, which is already tested quite well.
 
