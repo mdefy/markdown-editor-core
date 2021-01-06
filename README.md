@@ -1,15 +1,15 @@
 # Markdown Editor Core
 
-Markdown Editor Core is a WYSIWYG markdown editor based on the JavaScript text editor [Codemirror](https://codemirror.net/index.html).
+_Markdown Editor Core_ is a WYSIWYG markdown editor based on the JavaScript text editor [_CodeMirror_](https://codemirror.net/index.html).
 
 The editor shipped with this library can be used standalone to write Markdown in an efficient way with nice highlighting.
 However, this library is **mainly intended to work as a universal core component for other Markdown Editors**, that are e.g. implemented for big JS-based frameworks or other JS systems.
-Therefore, Markdown Editor Core provides a simple and clear API for all common actions necessary when writing markdown and the editor is highly configurable.
+Therefore, _Markdown Editor Core_ provides a simple and clear API for all common actions necessary when writing markdown and the editor is highly configurable.
 
 The goal of this library is to provide a fully working text editor which can be controlled by its API, without establishing a specific view or adding further visual components like toolbar buttons as known from other fully-WYSIWYG editors.
 This makes it easily extensible and customizable for your needs, while setting you free from thinking about text manipulation.
 
-Markdown Editor Core was developed for and in parallel with [Ngx Markdown Editor](https://github.com/lenardfunk/ngx-markdown-editor). Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
+_Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/lenardfunk/ngx-markdown-editor). Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
 
 ### How to install
 
@@ -25,7 +25,7 @@ or
 yarn add markdown-editor-core
 ```
 
-Load Codemirror's stylesheet for its default theme and other required stylings;
+Load _CodeMirror_'s stylesheet for its default theme and other required stylings;
 e.g. by including it into your `index.html`:
 
 ```html
@@ -34,7 +34,7 @@ e.g. by including it into your `index.html`:
 
 ### How to use
 
-To instantiate Markdown Editor, you must specify a wrapper element and you can pass an
+To instantiate `MarkdownEditor`, you must specify a wrapper element and you can pass an
 optional [configuration object](#configuration-options).
 
 ```typescript
@@ -217,15 +217,15 @@ via `mde.toTextarea()` (this destroys the Markdown Editor instance).
 
 On Mac "Ctrl" is replaced with "Cmd".
 
-For shortcuts that come built-in with Codemirror, see [Codemirror documentation](https://codemirror.net/doc/manual.html#keymaps).
+For shortcuts that come built-in with _CodeMirror_, see [_CodeMirror_ documentation](https://codemirror.net/doc/manual.html#keymaps).
 
-If you want to specify your own shortcuts via Codemirror, mind the correct order of special keys: **Shift-Cmd-Ctrl-Alt**. You can add new shortcuts using `mde.addShortcut(hotkeys, void)` or remove existing ones using `mde.removeShortcut(hotkeys)` .
+If you want to specify your own shortcuts via _CodeMirror_, mind the correct order of special keys: **Shift-Cmd-Ctrl-Alt**. You can add new shortcuts using `mde.addShortcut(hotkeys, void)` or remove existing ones using `mde.removeShortcut(hotkeys)` .
 
 ### FAQs
 
 #### How to change the editor's styling
 
-The editor's view can be customized using [Codemirror themes](https://codemirror.net/doc/manual.html#option_theme). The default theme of Codemirror is "default" (results in the class `.cm-s-default`),
+The editor's view can be customized using [_CodeMirror_ themes](https://codemirror.net/doc/manual.html#option_theme). The default theme of _CodeMirror_ is "default" (results in the class `.cm-s-default`),
 which basically presents a blank editor and defines the default styles for the markup highlighting.
 
 To apply a customized theme with the name "example"
@@ -234,9 +234,9 @@ To apply a customized theme with the name "example"
 - define the CSS class `.cm-s-example` in a CSS file, and
 - make sure to load the CSS file with your app.
 
-With such a theme you can customize Codemirror's visual appearance and behavior.
+With such a theme you can customize _CodeMirror_'s visual appearance and behavior.
 For further details visit the [dedicated section](https://codemirror.net/doc/manual.html#styling)
-on Codemirror.
+on _CodeMirror_.
 
 If you only want to extend the default theme, you can either define new stylings for the class
 `.cm-s-default` and make sure that the "default" theme is applied or you can create you own additional
@@ -244,7 +244,7 @@ theme and specify two themes in the Markdown Editor Options: `{ theme: 'default 
 
 #### How to change the markup styling (e.g. heading, bold, ...)
 
-The markup stylings work with Codemirror classes as well and can (and should!) therefore be part of a Codemirror theme.
+The markup stylings work with _CodeMirror_ classes as well and can (and should!) therefore be part of a _CodeMirror_ theme.
 If want to change for example the styling of "bold" markup, then define a new style for `.cm-bold`. Again, this should
 preferably be done within a theme (also see ["How to use your own theme"](#how-to-change-the-editor's-styling)).
 
@@ -283,7 +283,7 @@ Examples:
 - The \*\* tokens for bold text have the classes `cm-strong cm-token cm-token-strong`
 - A > token for quotation in the second level (second token of >>) has the classes `cm-quote cm-quote-2 cm-token cm-token-quote cm-token-quote-2`.
 
-Here is a list of all Codemirror token classes:
+Here is a list of all _CodeMirror_ token classes:
 
 | Token type                     | Class                                                                             |
 | ------------------------------ | --------------------------------------------------------------------------------- |
@@ -319,7 +319,7 @@ about it.
 Recipe for making a pull request:
 
 1. Fork and checkout repo locally.
-2. Install [Yarn](https://yarnpkg.com/), if you do not have it yet. For example via `npm i yarn -g`.
+2. Install [_Yarn_](https://yarnpkg.com/), if you do not have it yet. For example via `npm i yarn -g`.
 3. Open a command line, move to the project directory and run `yarn` to install all dependencies.
 4. Make your code changes. (Please mind the [style guidelines](#coding-style-guidelines).)
 5. Use `yarn run start` to test your changes in the demo app.
@@ -332,40 +332,46 @@ Recipe for making a pull request:
 
 #### Package manager
 
-This project uses [Yarn](https://yarnpkg.com/) as package manager. So you must use this one to install dependencies when contributing code. The scripts in _package.json_ still work with npm,
-although it is recommended to always use _yarn_ throughout the project.
+This project uses [_Yarn_](https://yarnpkg.com/) as package manager. So you must use this one to install dependencies when contributing code. The scripts in _package.json_ still work with `npm`,
+although it is recommended to always use `yarn` throughout the project.
 
 FYI: The main reason to
-move from _npm_ to _yarn_ was, that yarn is able to execute shell scripts platform-independent in the native console. I.e. it also understands paths like `./path/to/script.sh` on windows and can execute
-it inside CMD. My claim is to provide a platform-independent project setup and the described issue
-comes into effect, for example, when running the `build` script in _package.json_.
+move from _npm_ to _Yarn_ was, that _Yarn_ is able to execute shell scripts platform-independent in the native console.
+I.e. it also understands paths with forward slashes like `./path/to/script.sh` on windows and can execute it inside CMD.
+My claim is to provide a platform-independent project setup and the described issue comes into effect, for example, when running the `build` script in _package.json_.
 
 #### Commit rules
 
-We use [Commitlint](https://commitlint.js.org/#/) to guarantee structured commit messages. This means
+We use [_Commitlint_](https://commitlint.js.org/#/) to guarantee structured commit messages. This means
 you must write commit messages that meet the rules of _Commitlint_. If you are not familiar with
-Commitlint, you can use the CLI tool [Commitizen]() by running `yarn run commit`, which assists you to
+_Commitlint_, you can use the CLI tool [_Commitizen_](https://github.com/commitizen/cz-cli) by running `yarn run commit`, which assists you to
 write conventional messages. You can also install _Commitizen_ globally on your system, if you want to use the shorter cli commands `cz` or `git cz`.
 
 #### Coding style guidelines
 
 There are not many strict guidelines to keep in mind, but please adapt to the project's code style
-when contributing. There are only two things to mention here:
+when contributing. Only two more things shall be mentioned here:
 
-1. We use [Prettier](https://prettier.io/) to ensure consistent formatting! Therefore, you should install a Prettier plugin for your IDE. Further it is highly recommended to enable "Format on save", which is also set as the project's default for VSCode.
+1. We use [_Prettier_](https://prettier.io/) to ensure consistent formatting! Therefore, you should install a _Prettier_ plugin for your IDE. Further it is highly recommended to enable "Format on save", which is also set as the project's default for VSCode.
 
-   There is a pre-commit git hook for prettier, which checks the formatting of all files. Occasionally
+   There is a pre-commit git hook for _Prettier_, which checks the formatting of all files. Occasionally
    it might happen that this hook fails although you have "Format on save" enabled. This is usually
    due to wrong line endings, e.g. caused by `yarn add ...` or some other file-writing script or tool.
-   In this case, run `yarn run format:write` to let prettier correct the wrong formatting. Unfortunately,
+   In this case, run `yarn run format:write` to let _Prettier_ correct the wrong formatting and then try to commit again. Unfortunately,
    the `format:write` command cannot be set as a pre-commit hook as it is not known in general, which
    files need to be staged afterwards.
 
 2. The methods in [`markdown-editor.ts`](./lib/src/markdown-editor.ts) are grouped into 5 sections as you can see when inspecting the file. Please put new methods at the end of the corresponding section:
-   - **Basic Editor API**: basic actions like _"toggle bold"_
-   - **Extended Editor API**: extended actions like `download as file`, usually do not change the content
+   - **Basic Editor API**: basic actions like `toggleBold`
+   - **Extended Editor API**: extended actions like `downloadAsFile`, usually do not change the content
    - **Developer API**: methods useful for developers using this library
-   - Markdown Editor Options: methods for getting or setting `MarkdownEditorOptions`
-   - Private methods: all private methods (all methods in previous sections should be `public` or `protected`)
+   - **Markdown Editor Options**: methods for getting or setting `MarkdownEditorOptions`
+   - **Private methods**: all private methods (all methods in previous sections should be `public` or `protected`)
 
 ### A word on tests
+
+As you might have noticed, this project does not contain any tests. Well yes, I have noticed that, too... and I really hope to be able to add tests in the future some time. However, it has not been very easy to decide what to test and what not so far. Because it is a highly interactive application, it contains a lot of edge cases, far more than standard cases (of which most are directly visible to human's eye anyway). Especially the multiple-cursor mode of _CodeMirror_ increases the number of test branches tremendously. In addition, it is quite hard to draw a line between testing the Markdown Editor (which is the goal) and testing _CodeMirror_, which is already tested quite well.
+
+Those issues are clearly not an excuse to omit tests totally, but they drove me to the decision to postpone writing tests a bit as I wanted to finally come to the point, where this project is ready for release. However, this is why it was even more important for me to provide a detailed documentation both in code files and in this Readme.
+
+Finally, due to the high number of edge cases, I would like to encourage you again to contribute - either by writing issues or by explicitly fixing things in code - whenever you discover bugs or odd behavior! I believe, helping each other out by quickly pointing those problems is a very good and also effective way, too, in order to improve an applications quality.
