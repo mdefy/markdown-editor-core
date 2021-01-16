@@ -136,7 +136,7 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
         <ul>
           <li><code>bold: '**' | '__'</code></li>
           <li><code>italic: '*' | '_'</code></li>
-          <li><code>horizontalLine: '---' | '***' | '___'</code></li>
+          <li><code>horizontalRule: '---' | '***' | '___'</code></li>
           <li><code>codeBlock: '```' | '~~~'</code></li>
           <li><code>unorderedList: '-' | '*'</code></li>
           <li><code>checkList: '-' | '*'</code></li>
@@ -147,7 +147,7 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
         <ul>
             <li><code>bold: '**'</code></li>
             <li><code>italic: '_'</code></li>
-            <li><code>horizontalLine: '---'</code></li>
+            <li><code>horizontalRule: '---'</code></li>
             <li><code>codeBlock: '```'</code></li>
             <li><code>unorderedList: '-'</code></li>
             <li><code>checkList: '-'</code></li>
@@ -223,7 +223,7 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
 | `insertLink`           | Ctrl-M           |
 | `insertImageLink`      | Shift-Ctrl-M     |
 | `insertTable`          | Ctrl-Alt-T       |
-| `insertHorizontalLine` | Shift-Ctrl--     |
+| `insertHorizontalRule` | Shift-Ctrl--     |
 | `toggleInlineCode`     | Ctrl-7           |
 | `insertCodeBlock`      | Shift-Ctrl-7     |
 | `openMarkdownGuide`    | F1               |

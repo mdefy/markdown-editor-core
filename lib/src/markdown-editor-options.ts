@@ -11,7 +11,7 @@ export interface MarkdownEditorOptionsComplete {
   preferredTokens: {
     bold: '**' | '__';
     italic: '*' | '_';
-    horizontalLine: '---' | '***' | '___';
+    horizontalRule: '---' | '***' | '___';
     codeBlock: '```' | '~~~';
     unorderedList: '-' | '*';
     checkList: '-' | '*'; // `- [x]`  OR  `* [x]`
@@ -44,7 +44,7 @@ export type MarkdownEditorAction =
   | 'insertLink'
   | 'insertImageLink'
   | 'insertTable'
-  | 'insertHorizontalLine'
+  | 'insertHorizontalRule'
   | 'toggleInlineCode'
   | 'insertCodeBlock'
   | 'openMarkdownGuide'
@@ -72,7 +72,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
   preferredTokens: {
     bold: '**',
     italic: '_',
-    horizontalLine: '---',
+    horizontalRule: '---',
     codeBlock: '```',
     unorderedList: '-',
     checkList: '-',
@@ -96,7 +96,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
     insertLink: 'Ctrl-M',
     insertImageLink: 'Shift-Ctrl-M',
     insertTable: 'Ctrl-Alt-T',
-    insertHorizontalLine: 'Shift-Ctrl--',
+    insertHorizontalRule: 'Shift-Ctrl--',
     toggleInlineCode: 'Ctrl-7',
     insertCodeBlock: 'Shift-Ctrl-7',
     openMarkdownGuide: 'F1',

@@ -472,10 +472,10 @@ class MarkdownEditorBase {
   }
 
   /**
-   * Insert a horizontal line in the subsequent line of each selection.
+   * Insert a horizontal rule in the subsequent line of each selection.
    */
-  public insertHorizontalLine() {
-    const preferred = this.options.preferredTokens.horizontalLine;
+  public insertHorizontalRule() {
+    const preferred = this.options.preferredTokens.horizontalRule;
     this.insertBlockTemplateBelow(`\n${preferred}\n\n`);
   }
 
@@ -547,7 +547,7 @@ class MarkdownEditorBase {
       currentShift += template.match(/\n/g)?.length || 0;
 
       // Insert template in the subsequent line of the selection
-      this.cm.replaceRange(template, toLineEnd, undefined, '+insertHorizontalLine');
+      this.cm.replaceRange(template, toLineEnd, undefined, '+insertHorizontalRule');
     }
 
     this.cm.focus();
@@ -851,7 +851,7 @@ class MarkdownEditorBase {
       insertLink: () => this.insertLink(),
       insertImageLink: () => this.insertImageLink(),
       insertTable: () => this.insertTable(),
-      insertHorizontalLine: () => this.insertHorizontalLine(),
+      insertHorizontalRule: () => this.insertHorizontalRule(),
       toggleInlineCode: () => this.toggleInlineCode(),
       insertCodeBlock: () => this.insertCodeBlock(),
       openMarkdownGuide: () => this.openMarkdownGuide(),

@@ -17,7 +17,7 @@
   - ✓ Insert link template
   - ✓ Insert image link template
   - ✓ Insert table template
-  - ✓ Insert horizontal line
+  - ✓ Insert horizontal rule
   - ✓ Toggle inline code fragment (for **selection**)
   - ✓ Insert (if possible toggle) code block (for **selection**)
   - ✓ Open Markdown Guide
