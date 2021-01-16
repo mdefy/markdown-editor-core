@@ -581,7 +581,7 @@ class MarkdownEditorBase {
    */
   public toggleRichTextMode() {
     const currentMode = this.cm.getOption('mode');
-    if (currentMode === 'gfm') {
+    if (currentMode === 'gfm' || currentMode.name === 'gfm') {
       this.cm.setOption('mode', '');
     } else {
       this.cm.setOption('mode', this.getGfmMode());
