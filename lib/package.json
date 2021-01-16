@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "codemirror": "^5.58.3",
-    "lodash": "^4.17.20",
+    "lodash-es": "^4.17.20",
     "prettier": "^2.2.1"
   }
 }

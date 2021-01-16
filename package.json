@@ -16,13 +16,13 @@
   },
   "private": true,
   "dependencies": {
-    "markdown-editor-core": "./build/markdown-editor-core-0.0.0.tgz"
+    "markdown-editor-core": "./build/markdown-editor-core-0.0.6.tgz"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@types/lodash-es": "^4.17.4",
     "@types/codemirror": "^0.0.102",
-    "@types/lodash": "^4.14.165",
     "@types/prettier": "^2.1.5",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
