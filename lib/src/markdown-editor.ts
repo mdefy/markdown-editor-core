@@ -15,9 +15,9 @@ import {
 } from './markdown-editor-options';
 
 class MarkdownEditorBase {
-  protected static readonly ORDERED_LIST_PATTERN = /^(\d)+\.(\t| )+/;
-  protected static readonly UNORDERED_LIST_PATTERN = /^(\*|-)(\t| )+/;
-  protected static readonly CHECK_LIST_PATTERN = /^(\*|-) \[(X|x| )\](\t| )+/;
+  protected static readonly ORDERED_LIST_PATTERN = /^( )*(\d)+\.(\t| )+/;
+  protected static readonly UNORDERED_LIST_PATTERN = /^( )*(\*|-)(\t| )+/;
+  protected static readonly CHECK_LIST_PATTERN = /^( )*(\*|-) \[(X|x| )\](\t| )+/;
   protected static readonly BOLD_TOKENS = ['**', '__'];
   protected static readonly ITALIC_TOKENS = ['*', '_'];
 
