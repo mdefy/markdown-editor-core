@@ -9,26 +9,28 @@ Therefore, _Markdown Editor Core_ provides a simple and clear API for all common
 The goal of this library is to provide a fully working text editor which can be controlled by its API, without establishing a specific view or adding further visual components like toolbar buttons as known from other fully-WYSIWYG editors.
 This makes it easily extensible and customizable for your needs, while setting you free from thinking about text manipulation.
 
-_Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/lenardfunk/ngx-markdown-editor). Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
+_Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/lenardfunk/ngx-markdown-editor).
+Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
 
 ## Table of Contents
 
-- Table of contents
-- How to install
-- How to use
-- Configuration options
-- Shortcuts
-- FAQs
-  - How to change the editor's styling
-  - How to change the markup styling (e.g. heading, bold, ...)
-- How to contribute
-  - Writing issues
-  - Making pull requests
-- Project setup
-  - Package manager
-  - Commit rules
-  - Coding style guidelines
-- A word on tests
+- [Markdown Editor Core](#markdown-editor-core)
+  - [Table of Contents](#table-of-contents)
+  - [How to install](#how-to-install)
+  - [How to use](#how-to-use)
+  - [Configuration options](#configuration-options)
+  - [Shortcuts](#shortcuts)
+  - [FAQs](#faqs)
+    - [How to change the editor's styling](#how-to-change-the-editors-styling)
+    - [How to change the markup styling (e.g. heading, bold, ...)](#how-to-change-the-markup-styling-eg-heading-bold-)
+  - [How to contribute](#how-to-contribute)
+    - [Writing issues](#writing-issues)
+    - [Making pull requests](#making-pull-requests)
+  - [Project setup](#project-setup)
+    - [Package manager](#package-manager)
+    - [Commit rules](#commit-rules)
+    - [Coding style guidelines](#coding-style-guidelines)
+  - [A word on tests](#a-word-on-tests)
 
 ## How to install
 
@@ -44,8 +46,7 @@ or
 yarn add markdown-editor-core
 ```
 
-Load _CodeMirror_'s stylesheet for its default theme and other required stylings;
-e.g. by including it into your `index.html`:
+Load _CodeMirror_'s stylesheet for its default theme and other required stylings; e.g. by including it into your `index.html`:
 
 ```html
 <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css" />
@@ -53,8 +54,7 @@ e.g. by including it into your `index.html`:
 
 ## How to use
 
-To instantiate `MarkdownEditor`, you must specify a wrapper element and you can pass an
-optional [configuration object](#configuration-options).
+To instantiate `MarkdownEditor`, you must specify a wrapper element and you can pass an optional [configuration object](#configuration-options).
 
 ```typescript
 const wrapper = document.getElementById('my-wrapper-element') as HTMLElement; // required
@@ -72,14 +72,12 @@ const options: MdeFromTextareaOptions = { ... };                                
 const mde = new MarkdownEditorFromTextarea(textarea, options);
 ```
 
-It is possible to synchronize the editor's content with the content of the
-textarea in two ways:
+It is possible to synchronize the editor's content with the content of the textarea in two ways:
 
 - either manually via `mde.syncTextarea()`
 - or automatically by setting the option `autoSync` to `true`.
 
-You can also switch back to the textarea
-via `mde.toTextarea()` (this destroys the Markdown Editor instance).
+You can also switch back to the textarea via `mde.toTextarea()` (this destroys the Markdown Editor instance).
 
 ## Configuration options
 
@@ -238,14 +236,15 @@ On Mac "Ctrl" is replaced with "Cmd".
 
 For shortcuts that come built-in with _CodeMirror_, see [_CodeMirror_ documentation](https://codemirror.net/doc/manual.html#keymaps).
 
-If you want to specify your own shortcuts via _CodeMirror_, mind the correct order of special keys: **Shift-Cmd-Ctrl-Alt**. You can add new shortcuts using `mde.addShortcut(hotkeys, void)` or remove existing ones using `mde.removeShortcut(hotkeys)` .
+If you want to specify your own shortcuts via _CodeMirror_, mind the correct order of special keys: **Shift-Cmd-Ctrl-Alt**.
+You can add new shortcuts using `mde.addShortcut(hotkeys, void)` or remove existing ones using `mde.removeShortcut(hotkeys)` .
 
 ## FAQs
 
 ### How to change the editor's styling
 
-The editor's view can be customized using [_CodeMirror_ themes](https://codemirror.net/doc/manual.html#option_theme). The default theme of _CodeMirror_ is "default" (results in the class `.cm-s-default`),
-which basically presents a blank editor and defines the default styles for the markup highlighting.
+The editor's view can be customized using [_CodeMirror_ themes](https://codemirror.net/doc/manual.html#option_theme).
+The default theme of _CodeMirror_ is "default" (results in the class `.cm-s-default`), which basically presents a blank editor and defines the default styles for the markup highlighting.
 
 To apply a customized theme with the name "example"
 
@@ -254,12 +253,9 @@ To apply a customized theme with the name "example"
 - make sure to load the CSS file with your app.
 
 With such a theme you can customize _CodeMirror_'s visual appearance and behavior.
-For further details visit the [dedicated section](https://codemirror.net/doc/manual.html#styling)
-on _CodeMirror_.
+For further details visit the [dedicated section](https://codemirror.net/doc/manual.html#styling) on _CodeMirror_.
 
-If you only want to extend the default theme, you can either define new stylings for the class
-`.cm-s-default` and make sure that the "default" theme is applied or you can create you own additional
-theme and specify two themes in the Markdown Editor Options: `{ theme: 'default additional-theme' }`.
+If you only want to extend the default theme, you can either define new stylings for the class `.cm-s-default` and make sure that the "default" theme is applied or you can create you own additional theme and specify two themes in the Markdown Editor Options: `{ theme: 'default additional-theme' }`.
 
 ### How to change the markup styling (e.g. heading, bold, ...)
 
@@ -269,28 +265,28 @@ preferably be done within a theme (also see ["How to use your own theme"](#how-t
 
 The classes for markup styling are:
 
-| Markup type                     | Class                         |
-| ------------------------------- | ----------------------------- |
-| Heading                         | `.cm-header`                  |
-| Bold                            | `.cm-bold`                    |
-| Italic                          | `.cm-italic`                  |
-| Strikethrough                   | `.cm-strikethrough`           |
-| List level 1                    | `.cm-list-level-1`            |
-| List level 2                    | `.cm-list-level-2`            |
-| List level > 2                  | `.cm-list-level-gt-2`         |
-| Quote                           | `.cm-quote`                   |
-| Link (hyperlink in general)     | `.cm-link`                    |
-| Link text (part inside "[...]") | `.cm-link-text`               |
-| Link href (part inside "(...)") | `.cm-link-href`, `.cm-link`   |
-| Email link                      | `.cm-link-email`, `.cm-link`  |
-| Inline link ("<http://...>")    | `.cm-link-inline`, `.cm-link` |
-| Image                           | `.cm-image`                   |
-| Image alt text                  | `.cm-image-alt-text`          |
-| Image marker ("!")              | `.cm-image-marker`            |
-| Horizontal rule                 | `.cm-hr`                      |
-| Code                            | `.cm-code`                    |
-| Emoji                           | `.cm-emoji`                   |
-| Tokens                          | `.cm-token`                   |
+| Markup type                     | Class                             |
+| ------------------------------- | --------------------------------- |
+| Heading                         | `.cm-header`                      |
+| Bold                            | `.cm-bold`                        |
+| Italic                          | `.cm-italic`                      |
+| Strikethrough                   | `.cm-strikethrough`               |
+| List level 1                    | `.cm-list-level-1`, `.cm-list`    |
+| List level 2                    | `.cm-list-level-2`, `.cm-list`    |
+| List level > 2                  | `.cm-list-level-gt-2`, `.cm-list` |
+| Quote                           | `.cm-quote`                       |
+| Link (hyperlink in general)     | `.cm-link`                        |
+| Link text (part inside "[...]") | `.cm-link-text`                   |
+| Link href (part inside "(...)") | `.cm-link-href`, `.cm-link`       |
+| Email link                      | `.cm-link-email`, `.cm-link`      |
+| Inline link ("<http\://...>")   | `.cm-link-inline`, `.cm-link`     |
+| Image                           | `.cm-image`                       |
+| Image alt text                  | `.cm-image-alt-text`              |
+| Image marker ("!")              | `.cm-image-marker`                |
+| Horizontal rule                 | `.cm-hr`                          |
+| Code                            | `.cm-code`                        |
+| Emoji                           | `.cm-emoji`                       |
+| Tokens                          | `.cm-token`                       |
 
 The last table row entry "tokens" refers to all markup tokens like \*\*, \_, [], (), etc. and only
 applies if `highlightTokens` is enabled in the Markdown Editor Options. If this is true, then
@@ -323,9 +319,7 @@ Here is a list of all _CodeMirror_ token classes:
 
 First of all, contributions in any way are very welcome! And a big thank you to all who decide to so!! :)
 
-The code is neither perfect nor complete. If you have any suggestions, requirements or even just
-comments, please let me know and I will do my best do incorporate them! The even better (and probably faster) way for code modifications, however, are pull requests. I am very happy about all code
-contributions as time is often rare around here... :)
+The code is neither perfect nor complete. If you have any suggestions, requirements or even just comments, please let me know and I will do my best do incorporate them! The even better (and probably faster) way for requesting code modifications, however, are pull requests. I am very happy about all code contributions as time is often rare around here... :)
 
 ### Writing issues
 
@@ -351,8 +345,7 @@ Recipe for making a pull request:
 
 ### Package manager
 
-This project uses [_Yarn_](https://yarnpkg.com/) as package manager. So you must use this one to install dependencies when contributing code. The scripts in _package.json_ still work with `npm`,
-although it is recommended to always use `yarn` throughout the project.
+This project uses [_Yarn_](https://yarnpkg.com/) as package manager. So you must use this one to install dependencies when contributing code. The scripts in _package.json_ still work with `npm`, although it is recommended to always use `yarn` throughout the project.
 
 FYI: The main reason to
 move from _npm_ to _Yarn_ was, that _Yarn_ is able to execute shell scripts platform-independent in the native console.
@@ -361,15 +354,15 @@ My claim is to provide a platform-independent project setup and the described is
 
 ### Commit rules
 
-We use [_Commitlint_](https://commitlint.js.org/#/) to guarantee structured commit messages. This means
-you must write commit messages that meet the rules of _Commitlint_. If you are not familiar with
-_Commitlint_, you can use the CLI tool [_Commitizen_](https://github.com/commitizen/cz-cli) by running `yarn run commit`, which assists you to
-write conventional messages. You can also install _Commitizen_ globally on your system, if you want to use the shorter cli commands `cz` or `git cz`.
+We use [_Commitlint_](https://commitlint.js.org/#/) to guarantee structured commit messages.
+This means you must write commit messages that meet the rules of _Commitlint_.
+If you are not familiar with _Commitlint_, you can use the CLI tool [_Commitizen_](https://github.com/commitizen/cz-cli) by running `yarn run commit`, which assists you to
+write conventional messages.
+You can also install _Commitizen_ globally on your system, if you want to use the shorter cli commands `cz` or `git cz`.
 
 ### Coding style guidelines
 
-There are not many strict guidelines to keep in mind, but please adapt to the project's code style
-when contributing. Only two more things shall be mentioned here:
+There are not many strict guidelines to keep in mind, but please adapt to the project's code style when contributing. Only two more things shall be mentioned here:
 
 1. We use [_Prettier_](https://prettier.io/) to ensure consistent formatting! Therefore, you should install a _Prettier_ plugin for your IDE. Further it is highly recommended to enable "Format on save", which is also set as the project's default for VSCode.
 
