@@ -1,7 +1,7 @@
 import CodeMirror, { EditorConfiguration } from 'codemirror';
 import 'codemirror/mode/gfm/gfm.js';
 import 'codemirror/addon/display/placeholder.js';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import prettier from 'prettier/standalone';
 import parserMarkdown from 'prettier/parser-markdown';
 import {
