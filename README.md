@@ -20,7 +20,7 @@ Thus, the latter is one example of how this library can be used. In the same way
   - [How to use](#how-to-use)
   - [Configuration options](#configuration-options)
   - [Shortcuts](#shortcuts)
-  - [FAQs](#faqs)
+  - [Theming](#theming)
     - [How to change the editor's styling](#how-to-change-the-editors-styling)
     - [How to change the markup styling (e.g. heading, bold, ...)](#how-to-change-the-markup-styling-eg-heading-bold-)
   - [How to contribute](#how-to-contribute)
@@ -93,7 +93,7 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
   <tbody>
     <tr>
       <td><code>autofocus: boolean</code></td>
-      <td>Specifies whether the editor has autofocus. (Applies if no other element has focus already.)</td>
+      <td>Specifies whether the editor has autofocus. (Applies if no other element holds focus already.)</td>
       <td><code>true</code></td>
     </tr>
     <tr>
@@ -128,7 +128,7 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
     </tr>
     <tr>
       <td><code>placeholder: string</code></td>
-      <td>The placeholder shown in the editor when its empty.</td>
+      <td>The placeholder shown in the editor when it is empty.</td>
       <td><code>''</code></td>
     </tr>
     <tr>
@@ -186,7 +186,7 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
     </tr>
     <tr>
       <td><code>shortcutsEnabled: boolean</code></td>
-      <td>Specifies whether using shortcuts for user actions is enabled. (E.g. useful if shortcuts shall be handled by another framework or listen to an HTML element wrapping the Markdown Editor.)</td>
+      <td>Specifies whether using shortcuts for user actions is enabled. Disabling might be useful for example, if shortcuts shall be handled by another framework or listen to an HTML element wrapping the Markdown Editor.)</td>
       <td><code>true</code></td>
     </tr>
     <tr>
@@ -208,6 +208,8 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
 </table>
 
 ## Shortcuts
+
+The default keymap is as follows (on Mac "Ctrl" is replaced with "Cmd"):
 
 | Action                 | Shortcut         |
 | ---------------------- | ---------------- |
@@ -232,14 +234,14 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
 | `importFromFile`       | Ctrl-Alt-I       |
 | `formatContent`        | Alt-F            |
 
-On Mac "Ctrl" is replaced with "Cmd".
+You can customize the individual shortcuts inside Markdown Editor Options via `options.shortcuts`.
 
-For shortcuts that come built-in with _CodeMirror_, see [_CodeMirror_ documentation](https://codemirror.net/doc/manual.html#keymaps).
+For shortcuts that come built-in with _CodeMirror_, see [_CodeMirror_ documentation](https://codemirror.net/doc/manual.html#commands).
 
-If you want to specify your own shortcuts via _CodeMirror_, mind the correct order of special keys: **Shift-Cmd-Ctrl-Alt**.
-You can add new shortcuts using `mde.addShortcut(hotkeys, void)` or remove existing ones using `mde.removeShortcut(hotkeys)` .
+If you want to specify your own shortcuts via _CodeMirror_, mind the correct order of special keys: **Shift-Cmd-Ctrl-Alt** (see [here](https://codemirror.net/doc/manual.html#keymaps)).
+You can add new shortcuts using `mde.addShortcut(hotkeys, void)` or remove existing ones using `mde.removeShortcut(hotkeys)`.
 
-## FAQs
+## Theming
 
 ### How to change the editor's styling
 
@@ -260,7 +262,7 @@ If you only want to extend the default theme, you can either define new stylings
 ### How to change the markup styling (e.g. heading, bold, ...)
 
 The markup stylings work with _CodeMirror_ classes as well and can (and should!) therefore be part of a _CodeMirror_ theme.
-If want to change for example the styling of "bold" markup, then define a new style for `.cm-bold`. Again, this should
+If you want to change the styling of "bold" markup for example, then define a new style for `.cm-bold`. Again, this should
 preferably be done within a theme (also see ["How to use your own theme"](#how-to-change-the-editors-styling)).
 
 The classes for markup styling are:
