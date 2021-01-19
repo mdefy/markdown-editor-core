@@ -841,11 +841,12 @@ class MarkdownEditorBase {
    * to the Codemirror editor instance.
    */
   protected applyEditorKeyMappings() {
-    if (!this.options.shortcutsEnabled) {
+    if (this.options.shortcutsEnabled === 'none') {
+      this.cm.setOption('extraKeys', {});
       return;
     }
 
-    const bindings: { [key in keyof MarkdownEditorShortcuts]: () => void } = {
+    const bindings: { [key in keyof Required<MarkdownEditorShortcuts>]: () => void } = {
       increaseHeadingLevel: () => this.increaseHeadingLevel(),
       decreaseHeadingLevel: () => this.decreaseHeadingLevel(),
       toggleBold: () => this.toggleBold(),
@@ -871,15 +872,33 @@ class MarkdownEditorBase {
     const shortcuts = this.options.shortcuts;
     const extraKeys = {} as CodeMirror.KeyMap;
     for (const [key, value] of Object.entries(shortcuts)) {
-      let shortcut: string;
-      if (isMac()) {
-        shortcut = value.replace('Ctrl', 'Cmd');
-      } else {
-        shortcut = value.replace('Cmd', 'Ctrl');
+      if (value) {
+        let shortcut: string;
+        if (isMac()) {
+          shortcut = value.replace('Ctrl', 'Cmd');
+        } else {
+          shortcut = value.replace('Cmd', 'Ctrl');
+        }
+        if (extraKeys[shortcut]) {
+          console.warn(
+            `Caution: Duplicate keybinding! Shortcut '${shortcut}' was already ` +
+              `bound to action '${extraKeys[shortcut].toString().slice(27, -5)}' ` +
+              `and is now overridden with action '${key}'.`
+          );
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } else if ((CodeMirror as any).keyMap.default[shortcut]) {
+          console.warn(
+            `Caution: Duplicate keybinding! Shortcut '${shortcut}' was already ` +
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              `bound to native CodeMirror action '${(CodeMirror as any).keyMap.default[shortcut]}' ` +
+              `and is now overridden with action '${key}'.`
+          );
+        }
+        extraKeys[shortcut] = bindings[key as keyof MarkdownEditorShortcuts];
       }
-      extraKeys[shortcut] = bindings[key as keyof MarkdownEditorShortcuts];
     }
 
+    // if (!(_.matches(this.cm.getOption('extraKeys'))(extraKeys)))
     this.cm.setOption('extraKeys', extraKeys);
   }
 
@@ -938,6 +957,9 @@ class MarkdownEditorBase {
 export class MarkdownEditor extends MarkdownEditorBase {
   constructor(element: HTMLElement, options?: MarkdownEditorOptions) {
     const opts = _.merge(DEFAULT_OPTIONS, options);
+    if (opts.shortcutsEnabled === 'customOnly') {
+      opts.shortcuts = options?.shortcuts || {};
+    }
     const cm = CodeMirror(element, opts);
     super(cm, opts);
   }
@@ -950,6 +972,9 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
 
   constructor(textarea: HTMLTextAreaElement, options?: MdeFromTextareaOptions) {
     const opts = _.merge(DEFAULT_FROM_TEXTAREA_OPTIONS, options);
+    if (opts.shortcutsEnabled === 'customOnly') {
+      opts.shortcuts = options?.shortcuts || {};
+    }
     const cm = CodeMirror.fromTextArea(textarea);
     super(cm, opts);
     this.cm = cm;

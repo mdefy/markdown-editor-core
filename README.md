@@ -12,10 +12,10 @@ This makes it easily extensible and customizable for your needs, while setting y
 _Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/lenardfunk/ngx-markdown-editor).
 Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
 
-## Table of Contents
+## Table of contents
 
 - [Markdown Editor Core](#markdown-editor-core)
-  - [Table of Contents](#table-of-contents)
+  - [Table of contents](#table-of-contents)
   - [How to install](#how-to-install)
   - [How to use](#how-to-use)
   - [Configuration options](#configuration-options)
@@ -185,8 +185,16 @@ You can also switch back to the textarea via `mde.toTextarea()` (this destroys t
       <td>See <a href="#shortcuts">Shortcuts</a>.</td>
     </tr>
     <tr>
-      <td><code>shortcutsEnabled: boolean</code></td>
-      <td>Specifies whether using shortcuts for user actions is enabled. Disabling might be useful for example, if shortcuts shall be handled by another framework or listen to an HTML element wrapping the Markdown Editor.)</td>
+      <td><code>shortcutsEnabled: 'all' | 'customOnly' | 'none'</code></td>
+      <td>
+        Specifies which shortcuts for user actions are enabled.
+        <ul>
+          <li><code>all</code>: Custom and default keybindings are applied.
+          <li><code>customOnly</code>: Only explicitly specified keybindings in <code>options.shortcuts</code> are applied.
+          <li><code>none</code>: No keybindings are applied at all.
+        </ul>
+        The option <code>none</code> might be useful for example, if shortcuts shall be handled by another framework or listen to an HTML element wrapping the Markdown Editor.
+        </td>
       <td><code>true</code></td>
     </tr>
     <tr>
@@ -257,7 +265,7 @@ To apply a customized theme with the name "example"
 With such a theme you can customize _CodeMirror_'s visual appearance and behavior.
 For further details visit the [dedicated section](https://codemirror.net/doc/manual.html#styling) on _CodeMirror_.
 
-If you only want to extend the default theme, you can either define new stylings for the class `.cm-s-default` and make sure that the "default" theme is applied or you can create you own additional theme and specify two themes in the Markdown Editor Options: `{ theme: 'default additional-theme' }`.
+If you only want to extend the default theme, you can either define new stylings for the class `.cm-s-default` and make sure that the "default" theme is applied or you can create your own additional theme and specify two themes in the Markdown Editor Options: `{ theme: 'default additional-theme' }`.
 
 ### How to change the markup styling (e.g. heading, bold, ...)
 

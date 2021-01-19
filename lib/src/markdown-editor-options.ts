@@ -89,9 +89,12 @@ export interface MarkdownEditorOptionsComplete {
   shortcuts: MarkdownEditorShortcuts;
 
   /**
-   * Specifies whether shortcuts are applied at all.
+   * Specifies whether default shortcuts are applied or any shortcuts are applied at all.
+   * - `all`: custom and default keybindings are applied
+   * - `customOnly`: only explicitly specified keybindings in `options.shortcuts` are applied,
+   * - `none`: no keybindings are applied at all
    */
-  shortcutsEnabled: boolean;
+  shortcutsEnabled: 'all' | 'customOnly' | 'none';
 
   /**
    * The width of a tab character (in number of "normal" characters, e.g. spaces).
@@ -140,7 +143,7 @@ export type MarkdownEditorAction =
 /**
  * Keyboard shortcut definition for built-in action.
  */
-export type MarkdownEditorShortcuts = Record<Exclude<MarkdownEditorAction, 'setHeadingLevel'>, string>;
+export type MarkdownEditorShortcuts = Partial<Record<Exclude<MarkdownEditorAction, 'setHeadingLevel'>, string>>;
 
 /**
  * Default configuration for `MarkdownEditor`.
@@ -195,7 +198,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
     importFromFile: 'Ctrl-Alt-I',
     formatContent: 'Alt-F',
   },
-  shortcutsEnabled: true,
+  shortcutsEnabled: 'all',
   tabSize: 4,
   theme: 'default',
 };
