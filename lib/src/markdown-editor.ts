@@ -816,17 +816,24 @@ class MarkdownEditorBase {
    */
   protected applyCodemirrorOptions() {
     this.cm.setOption('autofocus', this.options.autofocus);
-    this.cm.setOption('lineNumbers', this.options.lineNumbers);
-    this.cm.setOption('lineWrapping', this.options.lineWrapping);
-    this.cm.setOption('mode', this.options.richTextMode ? this.getGfmMode() : '');
     this.cm.setOption(
       'configureMouse' as keyof EditorConfiguration,
       this.options.multipleCursors ? undefined : () => ({ addNew: false })
     );
+    this.cm.setOption('lineNumbers', this.options.lineNumbers);
+    this.cm.setOption('lineWrapping', this.options.lineWrapping);
     this.cm.setOption('placeholder', this.options.placeholder);
     this.cm.setOption('readOnly', this.options.disabled);
     this.cm.setOption('tabSize', this.options.tabSize);
     this.cm.setOption('theme', this.options.theme);
+
+    if (this.options.richTextMode) {
+      if (this.cm.getOption('mode')?.name !== 'gfm') {
+        this.cm.setOption('mode', this.getGfmMode());
+      }
+    } else {
+      this.cm.setOption('mode', '');
+    }
   }
 
   /**
