@@ -242,7 +242,7 @@ The default keymap is as follows (on Mac "Ctrl" is replaced with "Cmd"):
 | `importFromFile`       | Ctrl-Alt-I       |
 | `formatContent`        | Alt-F            |
 
-You can customize the individual shortcuts inside Markdown Editor Options via `options.shortcuts`.
+You can customize the individual shortcuts inside `MarkdownEditorOptions` via `options.shortcuts`.
 
 For shortcuts that come built-in with _CodeMirror_, see [_CodeMirror_ documentation](https://codemirror.net/doc/manual.html#commands).
 
@@ -258,14 +258,14 @@ The default theme of _CodeMirror_ is "default" (results in the class `.cm-s-defa
 
 To apply a customized theme with the name "example"
 
-- specify `{ theme: 'example' }` in the Markdown Editor Options,
+- specify `{ theme: 'example' }` in the `MarkdownEditorOptions`,
 - define the CSS class `.cm-s-example` in a CSS file, and
 - make sure to load the CSS file with your app.
 
 With such a theme you can customize _CodeMirror_'s visual appearance and behavior.
 For further details visit the [dedicated section](https://codemirror.net/doc/manual.html#styling) on _CodeMirror_.
 
-If you only want to extend the default theme, you can either define new stylings for the class `.cm-s-default` and make sure that the "default" theme is applied or you can create your own additional theme and specify two themes in the Markdown Editor Options: `{ theme: 'default additional-theme' }`.
+If you only want to extend the default theme, you can either define new stylings for the class `.cm-s-default` and make sure that the "default" theme is applied or you can create your own additional theme and specify two themes in the `MarkdownEditorOptions`: `{ theme: 'default additional-theme' }`.
 
 ### How to change the markup styling (e.g. heading, bold, ...)
 
@@ -299,7 +299,7 @@ The classes for markup styling are:
 | Tokens                          | `.cm-token`                       |
 
 The last table row entry "tokens" refers to all markup tokens like \*\*, \_, [], (), etc. and only
-applies if `highlightTokens` is enabled in the Markdown Editor Options. If this is true, then
+applies if `highlightTokens` is enabled in the `MarkdownEditorOptions`. If this is true, then
 all tokens have the class `.cm-token`. Additionally every token is given an individual class
 corresponding to the markup type to which it belongs to and eventually a "token level class". This means, you can easily style all tokens in the same way or each token type individually.
 
