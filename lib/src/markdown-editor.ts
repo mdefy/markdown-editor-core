@@ -956,7 +956,7 @@ class MarkdownEditorBase {
 
 export class MarkdownEditor extends MarkdownEditorBase {
   constructor(element: HTMLElement, options?: MarkdownEditorOptions) {
-    const opts = _.merge(DEFAULT_OPTIONS, options);
+    const opts = _.merge(_.cloneDeep(DEFAULT_OPTIONS), options);
     if (opts.shortcutsEnabled === 'customOnly') {
       opts.shortcuts = options?.shortcuts || {};
     }
@@ -971,7 +971,7 @@ export class MarkdownEditorFromTextarea extends MarkdownEditorBase {
   protected saver?: (instance: CodeMirror.Editor) => void;
 
   constructor(textarea: HTMLTextAreaElement, options?: MdeFromTextareaOptions) {
-    const opts = _.merge(DEFAULT_FROM_TEXTAREA_OPTIONS, options);
+    const opts = _.merge(_.cloneDeep(DEFAULT_FROM_TEXTAREA_OPTIONS), options);
     if (opts.shortcutsEnabled === 'customOnly') {
       opts.shortcuts = options?.shortcuts || {};
     }
