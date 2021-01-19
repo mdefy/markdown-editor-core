@@ -825,7 +825,7 @@ class MarkdownEditorBase {
     this.cm.setOption('placeholder', this.options.placeholder);
     this.cm.setOption('readOnly', this.options.disabled);
     this.cm.setOption('tabSize', this.options.tabSize);
-    this.cm.setOption('theme', this.options.theme);
+    this.cm.setOption('theme', this.options.themes.join(' '));
 
     if (this.options.richTextMode) {
       if (this.cm.getOption('mode')?.name !== 'gfm') {
@@ -910,7 +910,7 @@ class MarkdownEditorBase {
    * expressive class names for the tokens.
    */
   private getGfmMode() {
-    const isDefaultTheme = this.options.theme === undefined || this.options.theme.includes('default');
+    const isDefaultTheme = this.options.themes === undefined || this.options.themes.includes('default');
     return {
       name: 'gfm',
       tokenTypeOverrides: {

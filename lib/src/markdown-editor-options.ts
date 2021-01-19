@@ -106,7 +106,7 @@ export interface MarkdownEditorOptionsComplete {
    *
    * @see Our [README section](https://github.com/lenardfunk/markdown-editor-core/#theming) for more details.
    */
-  theme: string; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
+  themes: string[]; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
 }
 
 /**
@@ -200,7 +200,7 @@ export const DEFAULT_OPTIONS: MarkdownEditorOptionsComplete = {
   },
   shortcutsEnabled: 'all',
   tabSize: 4,
-  theme: 'default',
+  themes: ['default'],
 };
 
 /**
