@@ -1,7 +1,12 @@
 {
   "name": "markdown-editor-core",
   "version": "1.0.0",
-  "description": "Markdown Editor Core - a JS Markdown editor with no fancy UI but an awesome API",
+  "description": "A JS Markdown editor with no fancy UI but an awesome API",
+  "author": {
+    "name": "Lenard Funk",
+    "url": "https://github.com/lenardfunk",
+    "email": "lenard.funk@gmail.com"
+  },
   "license": "MIT",
   "keywords": [
     "markdown",
@@ -10,6 +15,10 @@
     "typescript",
     "wysiwyg"
   ],
+  "bugs": {
+    "url": "https://github.com/lenardfunk/markdown-editor-core/issues"
+  },
+  "homepage": "https://github.com/lenardfunk/markdown-editor-core",
   "main": "demo/demo.html",
   "repository": {
     "type": "git",
