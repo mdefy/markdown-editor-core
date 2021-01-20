@@ -16,7 +16,6 @@
     "type": "git",
     "url": "https://github.com/lenardfunk/markdown-editor-core"
   },
-  "private": true,
   "dependencies": {
     "codemirror": "^5.59.1",
     "lodash-es": "^4.17.20",
