@@ -1,11 +1,10 @@
 {
-  "name": "markdown-editor-core",
+  "name": "@mdefy/markdown-editor-core",
   "version": "1.0.0",
   "description": "A JS Markdown editor with no fancy UI but an awesome API",
   "author": {
-    "name": "Lenard Funk",
-    "url": "https://github.com/lenardfunk",
-    "email": "lenard.funk@gmail.com"
+    "name": "mdefy",
+    "url": "https://github.com/mdefy"
   },
   "license": "MIT",
   "keywords": [
@@ -13,16 +12,17 @@
     "editor",
     "javascript",
     "typescript",
-    "wysiwyg"
+    "wysiwyg",
+    "codemirror"
   ],
   "bugs": {
-    "url": "https://github.com/lenardfunk/markdown-editor-core/issues"
+    "url": "https://github.com/mdefy/markdown-editor-core/issues"
   },
-  "homepage": "https://github.com/lenardfunk/markdown-editor-core",
+  "homepage": "https://github.com/mdefy/markdown-editor-core",
   "main": "demo/demo.html",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lenardfunk/markdown-editor-core.git"
+    "url": "https://github.com/mdefy/markdown-editor-core.git"
   },
   "scripts": {
     "start": "webpack-dev-server",

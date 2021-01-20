@@ -1,21 +1,30 @@
 {
-  "name": "markdown-editor-core",
+  "name": "@mdefy/markdown-editor-core",
   "version": "1.0.0",
-  "description": "Markdown Editor Core - a JS Markdown editor with no fancy UI but an awesome API",
+  "description": "A JS Markdown editor with no fancy UI but an awesome API",
+  "author": {
+    "name": "mdefy",
+    "url": "https://github.com/mdefy"
+  },
   "license": "MIT",
   "keywords": [
     "markdown",
     "editor",
     "javascript",
     "typescript",
-    "wysiwyg"
+    "wysiwyg",
+    "codemirror"
   ],
-  "main": "index.js",
-  "types": "./",
+  "bugs": {
+    "url": "https://github.com/mdefy/markdown-editor-core/issues"
+  },
+  "homepage": "https://github.com/mdefy/markdown-editor-core",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lenardfunk/markdown-editor-core"
+    "url": "https://github.com/mdefy/markdown-editor-core.git"
   },
+  "main": "index.js",
+  "types": "./",
   "dependencies": {
     "codemirror": "^5.59.1",
     "lodash-es": "^4.17.20",
