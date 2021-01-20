@@ -1,7 +1,15 @@
 {
   "name": "markdown-editor-core",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Markdown Editor Core - a JS Markdown editor with no fancy UI but an awesome API",
   "license": "MIT",
+  "keywords": [
+    "markdown",
+    "editor",
+    "javascript",
+    "typescript",
+    "wysiwyg"
+  ],
   "main": "index.js",
   "types": "./",
   "repository": {

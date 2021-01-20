@@ -1,9 +1,19 @@
 {
+  "name": "markdown-editor-core",
+  "version": "1.0.0",
+  "description": "Markdown Editor Core - a JS Markdown editor with no fancy UI but an awesome API",
   "license": "MIT",
+  "keywords": [
+    "markdown",
+    "editor",
+    "javascript",
+    "typescript",
+    "wysiwyg"
+  ],
   "main": "demo/demo.html",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lenardfunk/markdown-editor-core"
+    "url": "https://github.com/lenardfunk/markdown-editor-core.git"
   },
   "scripts": {
     "start": "webpack-dev-server",
@@ -16,7 +26,7 @@
   },
   "private": true,
   "dependencies": {
-    "markdown-editor-core": "./build/markdown-editor-core-0.0.6.tgz"
+    "markdown-editor-core": "./build/markdown-editor-core-0.0.9.tgz"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
@@ -44,6 +54,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "version": "0.0.0"
+  }
 }
