@@ -9,7 +9,7 @@ Therefore, _Markdown Editor Core_ provides a simple and clear API for all common
 The goal of this library is to provide a fully working text editor which can be controlled by its API, without establishing a specific view or adding further visual components like toolbar buttons as known from other fully-WYSIWYG editors.
 This makes it easily extensible and customizable for your needs, while setting you free from thinking about text manipulation.
 
-_Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/lenardfunk/ngx-markdown-editor).
+_Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/mdefy/ngx-markdown-editor).
 Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
 
 ## Table of contents
