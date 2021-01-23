@@ -1,0 +1,8 @@
+# Source code
+node_modules
+/dist
+/lib/dist
+build
+
+# Editors and Plugins 
+.history

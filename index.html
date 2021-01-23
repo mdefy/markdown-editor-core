@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Markdown Editor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css" />
+
+    <style>
+      th {
+        text-align: left;
+        font-weight: bold;
+      }
+      th,
+      td {
+        padding: 0 10px;
+      }
+
+      .CodeMirror {
+        box-sizing: border-box;
+        height: auto;
+        border: 1px solid #ddd;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        padding: 10px;
+        font: inherit;
+        z-index: 0;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Markdown Editor</h1>
+    <div id="editor"></div>
+    <br />
+    <h3>Keyboard shortcuts</h3>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Shortcut</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>toggle bold:</td>
+          <td>Ctrl-B</td>
+        </tr>
+        <tr>
+          <td>toggle italic:</td>
+          <td>Ctrl-I</td>
+        </tr>
+        <tr>
+          <td>toggle strikethrough:</td>
+          <td>Ctrl-K</td>
+        </tr>
+        <tr>
+          <td>toggle unorderedList:</td>
+          <td>Ctrl-L</td>
+        </tr>
+        <tr>
+          <td>toggle orderedList:</td>
+          <td>Shift-Ctrl-L</td>
+        </tr>
+        <tr>
+          <td>toggle checkList:</td>
+          <td>Shift-Ctrl-Alt-L</td>
+        </tr>
+        <tr>
+          <td>toggle quote:</td>
+          <td>Ctrl-Q</td>
+        </tr>
+        <tr>
+          <td>insert link:</td>
+          <td>Ctrl-M</td>
+        </tr>
+        <tr>
+          <td>insert imageLink:</td>
+          <td>Shift-Ctrl-M</td>
+        </tr>
+        <tr>
+          <td>insert table:</td>
+          <td>Ctrl-Alt-T</td>
+        </tr>
+        <tr>
+          <td>insert horizontal rule:</td>
+          <td>Shift-Ctrl--</td>
+        </tr>
+        <tr>
+          <td>toggle inline code:</td>
+          <td>Ctrl-7</td>
+        </tr>
+        <tr>
+          <td>insert code block:</td>
+          <td>Shift-Ctrl-7</td>
+        </tr>
+        <tr>
+          <td>open markdown guide:</td>
+          <td>F1</td>
+        </tr>
+        <tr>
+          <td>toggle rich-text mode:</td>
+          <td>Alt-R</td>
+        </tr>
+        <tr>
+          <td>download as file:</td>
+          <td>Shift-Ctrl-S</td>
+        </tr>
+        <tr>
+          <td>import from file:</td>
+          <td>Ctrl-Alt-I</td>
+        </tr>
+        <tr>
+          <td>format content:</td>
+          <td>Alt-F</td>
+        </tr>
+      </table>
+    </div>
+
+    <script src="./demo/dist/bundle.js"></script>
+  </body>
+</html>
