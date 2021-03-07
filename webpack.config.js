@@ -23,4 +23,5 @@ module.exports = ['source-map'].map((devTool) => ({
   optimization: {
     minimize: true,
   },
+  mode: 'development',
 }));
