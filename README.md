@@ -14,23 +14,21 @@ Thus, the latter is one example of how this library can be used. In the same way
 
 ## Table of contents
 
-- [Markdown Editor Core](#markdown-editor-core)
-  - [Table of contents](#table-of-contents)
-  - [How to install](#how-to-install)
-  - [How to use](#how-to-use)
-  - [Configuration options](#configuration-options)
-  - [Shortcuts](#shortcuts)
-  - [Theming](#theming)
-    - [How to change the editor's styling](#how-to-change-the-editors-styling)
-    - [How to change the markup styling (e.g. heading, bold, ...)](#how-to-change-the-markup-styling-eg-heading-bold-)
-  - [How to contribute](#how-to-contribute)
-    - [Writing issues](#writing-issues)
-    - [Making pull requests](#making-pull-requests)
-  - [Project setup](#project-setup)
-    - [Package manager](#package-manager)
-    - [Commit rules](#commit-rules)
-    - [Coding style guidelines](#coding-style-guidelines)
-  - [A word on tests](#a-word-on-tests)
+- [How to install](#how-to-install)
+- [How to use](#how-to-use)
+- [Configuration options](#configuration-options)
+- [Shortcuts](#shortcuts)
+- [Theming](#theming)
+  - [How to change the editor's styling](#how-to-change-the-editors-styling)
+  - [How to change the markup styling (e.g. heading, bold, ...)](#how-to-change-the-markup-styling-eg-heading-bold-)
+- [How to contribute](#how-to-contribute)
+  - [Writing issues](#writing-issues)
+  - [Making pull requests](#making-pull-requests)
+- [Project setup](#project-setup)
+  - [Package manager](#package-manager)
+  - [Commit rules](#commit-rules)
+  - [Coding style guidelines](#coding-style-guidelines)
+- [A word on tests](#a-word-on-tests)
 
 ## How to install
 
