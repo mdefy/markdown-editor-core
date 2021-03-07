@@ -23,7 +23,7 @@ export interface MarkdownEditorOptionsComplete {
   /**
    * Specifies whether markup tokens like `-`, `[]`, etc. get `token` classes, to enable highlighting.
    *
-   * @see Our [README section](https://github.com/lenardfunk/markdown-editor-core/#how-to-change-the-markup-styling-eg-heading-bold-) for more details.
+   * @see Our [README section](https://github.com/mdefy/markdown-editor-core/#how-to-change-the-markup-styling-eg-heading-bold-) for more details.
    */
   highlightTokens: boolean;
 
@@ -84,7 +84,7 @@ export interface MarkdownEditorOptionsComplete {
   /**
    * Keyboard shortcuts for built-in actions.
    *
-   * @see Our [README section](https://github.com/lenardfunk/markdown-editor-core/#shortcuts) for more details.
+   * @see Our [README section](https://github.com/mdefy/markdown-editor-core/#shortcuts) for more details.
    */
   shortcuts: MarkdownEditorShortcuts;
 
@@ -104,7 +104,7 @@ export interface MarkdownEditorOptionsComplete {
   /**
    * Names of CSS themes to style the editor. Results in `.cm-s-[theme-name]` applied to `<div class="CodeMirror">`.
    *
-   * @see Our [README section](https://github.com/lenardfunk/markdown-editor-core/#theming) for more details.
+   * @see Our [README section](https://github.com/mdefy/markdown-editor-core/#theming) for more details.
    */
   themes: string[]; // "example-theme" results in ".cm-s-example-theme"; "foo bar" in ".cm-s-foo .cm-s-bar"
 }
