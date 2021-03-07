@@ -1,4 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
 
-yarn run format:write && git add . && git reset
+yarn run format:write
+git add .
+git reset

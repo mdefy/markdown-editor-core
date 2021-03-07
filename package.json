@@ -32,7 +32,8 @@
     "format:write": "prettier -w .",
     "deps:check": "ncu",
     "commit": "cz",
-    "webpack": "webpack"
+    "webpack": "webpack",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
