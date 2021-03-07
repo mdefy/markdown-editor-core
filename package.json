@@ -1,6 +1,6 @@
 {
   "name": "@mdefy/markdown-editor-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A JS Markdown editor with no fancy UI but an awesome API",
   "author": {
     "name": "mdefy",
