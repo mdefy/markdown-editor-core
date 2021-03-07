@@ -12,6 +12,8 @@ This makes it easily extensible and customizable for your needs, while setting y
 _Markdown Editor Core_ was developed for and in parallel with [Ngx Markdown Editor](https://github.com/mdefy/ngx-markdown-editor).
 Thus, the latter is one example of how this library can be used. In the same way, components could be implemented for React or Vue or your custom JS app.
 
+A basic **demo** is available at https://mdefy.github.io/markdown-editor-core/.
+
 ## Table of contents
 
 - [How to install](#how-to-install)
