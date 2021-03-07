@@ -6,6 +6,7 @@
 - Default Renderer?
 - ✓ Default short cuts
 - Auto-save in local storage
+- ! Fenced Syntax highlighting (at least docs, maybe integration in options possible?)
 - ✓ API for basic editor functionality:
   - ✓ Toggle Bold (for **selection**)
   - ✓ Toggle Italic (for **selection**)
