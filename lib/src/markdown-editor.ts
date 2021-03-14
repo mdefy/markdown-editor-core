@@ -239,7 +239,7 @@ class MarkdownEditorBase {
    * to the list of the selected line.
    */
   public toggleOrderedList() {
-    this.replaceTokenAtLineStart((oldLineContent, lineNumber) => {
+    this.replaceTokenAtLineStart((oldLineContent, lineNumber, indentationLevel) => {
       // Has selected line an enumeration token?
       if (oldLineContent.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) === -1) {
         const prevLine = this.cm.getLine(lineNumber - 1);
@@ -253,7 +253,7 @@ class MarkdownEditorBase {
           const lineOffset = prevLine.search(MarkdownEditorBase.INDENTATION_OFFSET_PATTERN);
           listNumber = +prevLine.substring(lineOffset, dotPos) + 1;
         }
-        this.processNextLinesOfOrderedList(lineNumber, listNumber);
+        this.processNextLinesOfOrderedList(lineNumber, listNumber, indentationLevel);
         const numberToken = listNumber + '. ';
 
         // Has selected line a check list token?
@@ -266,7 +266,7 @@ class MarkdownEditorBase {
         }
         return numberToken + oldLineContent;
       } else {
-        this.processNextLinesOfOrderedList(lineNumber, 0);
+        this.processNextLinesOfOrderedList(lineNumber, 0, indentationLevel);
         return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, '');
       }
     });
@@ -277,20 +277,30 @@ class MarkdownEditorBase {
    * @param baseLineNumber the selected line which is toggled
    * @param baseListNumber the list number of the selected line (should be 0, if list starts after selected line)
    */
-  protected processNextLinesOfOrderedList(baseLineNumber: number, baseListNumber: number) {
+  protected processNextLinesOfOrderedList(
+    baseLineNumber: number,
+    baseListNumber: number,
+    baseIndentationLevel: number
+  ) {
     let listNumber = baseListNumber;
     let nextLineNumber = baseLineNumber + 1;
     let nextLine = this.cm.getLine(nextLineNumber);
     while (nextLine && nextLine.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) !== -1) {
-      const listNumberString = `${++listNumber}`;
-      const firstNonWS = nextLine.search(MarkdownEditorBase.INDENTATION_OFFSET_PATTERN);
-      const dotPos = nextLine.search(/\./);
-      this.cm.replaceRange(
-        listNumberString,
-        { line: nextLineNumber, ch: firstNonWS },
-        { line: nextLineNumber, ch: dotPos },
-        '+replaceTokenAtLineStart'
-      );
+      const firstNonWS = nextLine.search(MarkdownEditor.INDENTATION_OFFSET_PATTERN);
+      const indentation = nextLine.substring(0, firstNonWS);
+      const indentationLevel = this.getIndentationLevelOfLine(indentation);
+      if (indentationLevel === baseIndentationLevel) {
+        const listNumberString = `${++listNumber}`;
+        const dotPos = nextLine.search(/\./);
+        this.cm.replaceRange(
+          listNumberString,
+          { line: nextLineNumber, ch: firstNonWS },
+          { line: nextLineNumber, ch: dotPos },
+          '+replaceTokenAtLineStart'
+        );
+      } else if (indentationLevel < baseIndentationLevel) {
+        break;
+      }
       nextLine = this.cm.getLine(++nextLineNumber);
     }
   }
@@ -319,12 +329,20 @@ class MarkdownEditorBase {
     });
   }
 
+  private getIndentationLevelOfLine(indentation: string) {
+    const tabSize = this.cm.getOption('tabSize') || this.options.tabSize;
+    const normalizedIndentation = indentation.replace(/\t/gi, ' '.repeat(tabSize));
+    return Math.floor(normalizedIndentation.length / tabSize);
+  }
+
   /**
    * Replace each selected line with the result of the callback function `replaceFn`.
    * Additionally adjusts the selection boundaries to the originally selected boundaries.
    * @param replaceFn callback function to the calculate the line replacements
    */
-  protected replaceTokenAtLineStart(replaceFn: (oldLineContent: string, lineNumber: number) => string) {
+  protected replaceTokenAtLineStart(
+    replaceFn: (oldLineContent: string, lineNumber: number, indentationLevel: number) => string
+  ) {
     const newSelections: CodeMirror.Range[] = [];
     for (const sel of this.cm.listSelections()) {
       const selection = _.cloneDeep(sel);
@@ -335,7 +353,10 @@ class MarkdownEditorBase {
         const firstNonWS = oldLineContent.search(MarkdownEditor.INDENTATION_OFFSET_PATTERN);
         const indentation = oldLineContent.substring(0, firstNonWS);
 
-        const newLineContent = indentation + replaceFn(oldLineContent.substring(firstNonWS), lineNumber);
+        const indentationLevel = this.getIndentationLevelOfLine(indentation);
+
+        const newLineContent =
+          indentation + replaceFn(oldLineContent.substring(firstNonWS), lineNumber, indentationLevel);
         this.cm.replaceRange(
           newLineContent,
           { line: lineNumber, ch: 0 },
