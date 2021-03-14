@@ -242,19 +242,9 @@ class MarkdownEditorBase {
     this.replaceTokenAtLineStart((oldLineContent, lineNumber, indentationLevel) => {
       // Has selected line an enumeration token?
       if (oldLineContent.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) === -1) {
-        const prevLine = this.cm.getLine(lineNumber - 1);
-        let listNumber: number;
-
-        // Is previous line already enumerated list? -> Determine enumeration token for selected line
-        if (!prevLine || prevLine.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) === -1) {
-          listNumber = 1;
-        } else {
-          const dotPos = prevLine.search(/\./);
-          const lineOffset = prevLine.search(MarkdownEditorBase.INDENTATION_OFFSET_PATTERN);
-          listNumber = +prevLine.substring(lineOffset, dotPos) + 1;
-        }
-        this.processNextLinesOfOrderedList(lineNumber, listNumber, indentationLevel);
-        const numberToken = listNumber + '. ';
+        const newListNumber = this.getPreviousListNumberOfLevel(lineNumber, indentationLevel) + 1;
+        this.processNextLinesOfOrderedList(lineNumber, newListNumber, indentationLevel);
+        const numberToken = newListNumber + '. ';
 
         // Has selected line a check list token?
         if (oldLineContent.search(MarkdownEditorBase.CHECK_LIST_PATTERN) !== -1) {
@@ -270,6 +260,38 @@ class MarkdownEditorBase {
         return oldLineContent.replace(MarkdownEditorBase.ORDERED_LIST_PATTERN, '');
       }
     });
+  }
+
+  /**
+   * Determines the list number of the previous line with the specified `indentationLevel`
+   * within the same ordered list starting at the specified `baseLineNumber`.
+   *
+   * @param baseLineNumber the selected line which is toggled
+   * @param indentationLevel the level of indentation to search for
+   * @returns
+   * - 0, if no line is found meeting the criteria
+   * - the list number of the found line, otherwise
+   */
+  protected getPreviousListNumberOfLevel(baseLineNumber: number, indentationLevel: number): number {
+    let prevLineNumber = baseLineNumber - 1;
+    let prevLine = this.cm.getLine(prevLineNumber);
+
+    while (prevLine && prevLine.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) !== -1) {
+      const dotPos = prevLine.search(/\./);
+      const lineOffset = prevLine.search(MarkdownEditorBase.INDENTATION_OFFSET_PATTERN);
+      const prevLineIndentation = prevLine.substring(0, lineOffset);
+      const prevLineIndentationLevel = this.getIndentationLevel(prevLineIndentation);
+
+      if (indentationLevel === prevLineIndentationLevel) {
+        return +prevLine.substring(lineOffset, dotPos);
+      } else if (indentationLevel > prevLineIndentationLevel) {
+        return 0;
+      }
+
+      prevLine = this.cm.getLine(--baseLineNumber - 1);
+    }
+
+    return 0;
   }
 
   /**
