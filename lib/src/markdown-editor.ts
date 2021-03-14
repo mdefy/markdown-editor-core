@@ -15,9 +15,10 @@ import {
 } from './markdown-editor-options';
 
 class MarkdownEditorBase {
-  protected static readonly ORDERED_LIST_PATTERN = /^( )*(\d)+\.(\t| )+/;
-  protected static readonly UNORDERED_LIST_PATTERN = /^( )*(\*|-)(\t| )+/;
-  protected static readonly CHECK_LIST_PATTERN = /^( )*(\*|-) \[(X|x| )\](\t| )+/;
+  protected static readonly ORDERED_LIST_PATTERN = /^(\t| )*(\d)+\.(\t| )+/;
+  protected static readonly UNORDERED_LIST_PATTERN = /^(\t| )*(\*|-)(\t| )+/;
+  protected static readonly CHECK_LIST_PATTERN = /^(\t| )*(\*|-) \[(X|x| )\](\t| )+/;
+  protected static readonly INDENTATION_OFFSET_PATTERN = /(?<=(^(\s)+))(\S|$)/;
   protected static readonly BOLD_TOKENS = ['**', '__'];
   protected static readonly ITALIC_TOKENS = ['*', '_'];
 
@@ -249,7 +250,8 @@ class MarkdownEditorBase {
           listNumber = 1;
         } else {
           const dotPos = prevLine.search(/\./);
-          listNumber = +prevLine.substring(0, dotPos) + 1;
+          const lineOffset = prevLine.search(MarkdownEditorBase.INDENTATION_OFFSET_PATTERN);
+          listNumber = +prevLine.substring(lineOffset, dotPos) + 1;
         }
         this.processNextLinesOfOrderedList(lineNumber, listNumber);
         const numberToken = listNumber + '. ';
@@ -281,10 +283,11 @@ class MarkdownEditorBase {
     let nextLine = this.cm.getLine(nextLineNumber);
     while (nextLine && nextLine.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) !== -1) {
       const listNumberString = `${++listNumber}`;
+      const firstNonWS = nextLine.search(MarkdownEditorBase.INDENTATION_OFFSET_PATTERN);
       const dotPos = nextLine.search(/\./);
       this.cm.replaceRange(
         listNumberString,
-        { line: nextLineNumber, ch: 0 },
+        { line: nextLineNumber, ch: firstNonWS },
         { line: nextLineNumber, ch: dotPos },
         '+replaceTokenAtLineStart'
       );
@@ -329,7 +332,10 @@ class MarkdownEditorBase {
       let shiftTo = 0;
       for (let lineNumber = selection.from().line; lineNumber <= selection.to().line; lineNumber++) {
         const oldLineContent = this.cm.getLine(lineNumber);
-        const newLineContent = replaceFn(oldLineContent, lineNumber);
+        const firstNonWS = oldLineContent.search(MarkdownEditor.INDENTATION_OFFSET_PATTERN);
+        const indentation = oldLineContent.substring(0, firstNonWS);
+
+        const newLineContent = indentation + replaceFn(oldLineContent.substring(firstNonWS), lineNumber);
         this.cm.replaceRange(
           newLineContent,
           { line: lineNumber, ch: 0 },
@@ -338,10 +344,10 @@ class MarkdownEditorBase {
         );
 
         // Set shifts for selection start and end
-        if (lineNumber === selection.from().line) {
+        if (lineNumber === selection.from().line && selection.from().ch > firstNonWS) {
           shiftFrom = newLineContent.length - oldLineContent.length;
         }
-        if (lineNumber === selection.to().line) {
+        if (lineNumber === selection.to().line && selection.to().ch > firstNonWS) {
           shiftTo = newLineContent.length - oldLineContent.length;
         }
       }
