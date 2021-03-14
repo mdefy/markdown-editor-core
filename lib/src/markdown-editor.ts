@@ -288,7 +288,7 @@ class MarkdownEditorBase {
     while (nextLine && nextLine.search(MarkdownEditorBase.ORDERED_LIST_PATTERN) !== -1) {
       const firstNonWS = nextLine.search(MarkdownEditor.INDENTATION_OFFSET_PATTERN);
       const indentation = nextLine.substring(0, firstNonWS);
-      const indentationLevel = this.getIndentationLevelOfLine(indentation);
+      const indentationLevel = this.getIndentationLevel(indentation);
       if (indentationLevel === baseIndentationLevel) {
         const listNumberString = `${++listNumber}`;
         const dotPos = nextLine.search(/\./);
@@ -329,12 +329,6 @@ class MarkdownEditorBase {
     });
   }
 
-  private getIndentationLevelOfLine(indentation: string) {
-    const tabSize = this.cm.getOption('tabSize') || this.options.tabSize;
-    const normalizedIndentation = indentation.replace(/\t/gi, ' '.repeat(tabSize));
-    return Math.floor(normalizedIndentation.length / tabSize);
-  }
-
   /**
    * Replace each selected line with the result of the callback function `replaceFn`.
    * Additionally adjusts the selection boundaries to the originally selected boundaries.
@@ -353,10 +347,10 @@ class MarkdownEditorBase {
         const firstNonWS = oldLineContent.search(MarkdownEditor.INDENTATION_OFFSET_PATTERN);
         const indentation = oldLineContent.substring(0, firstNonWS);
 
-        const indentationLevel = this.getIndentationLevelOfLine(indentation);
+        const indentationLevel = this.getIndentationLevel(indentation);
+        const stripedOldLineContent = oldLineContent.substring(firstNonWS);
 
-        const newLineContent =
-          indentation + replaceFn(oldLineContent.substring(firstNonWS), lineNumber, indentationLevel);
+        const newLineContent = indentation + replaceFn(stripedOldLineContent, lineNumber, indentationLevel);
         this.cm.replaceRange(
           newLineContent,
           { line: lineNumber, ch: 0 },
@@ -365,10 +359,10 @@ class MarkdownEditorBase {
         );
 
         // Set shifts for selection start and end
-        if (lineNumber === selection.from().line && selection.from().ch > firstNonWS) {
+        if (lineNumber === selection.from().line && selection.from().ch >= firstNonWS) {
           shiftFrom = newLineContent.length - oldLineContent.length;
         }
-        if (lineNumber === selection.to().line && selection.to().ch > firstNonWS) {
+        if (lineNumber === selection.to().line && selection.to().ch >= firstNonWS) {
           shiftTo = newLineContent.length - oldLineContent.length;
         }
       }
@@ -385,6 +379,16 @@ class MarkdownEditorBase {
 
     this.cm.setSelections(newSelections, undefined, { origin: 'replaceTokenAtLineStart' });
     this.cm.focus();
+  }
+
+  /**
+   * Returns the level of indentation of the specified string of `whitespaces` based on
+   * the current tab size configuration and the length of the specified string.
+   */
+  protected getIndentationLevel(whitespaces: string): number {
+    const tabSize = this.cm.getOption('tabSize') || this.options.tabSize;
+    const normalizedWhiteSpaces = whitespaces.replace(/\t/gi, ' '.repeat(tabSize));
+    return Math.floor(normalizedWhiteSpaces.length / tabSize);
   }
 
   /**
