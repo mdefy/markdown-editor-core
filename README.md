@@ -37,13 +37,13 @@ A basic **demo** is available at https://mdefy.github.io/markdown-editor-core/.
 Run
 
 ```
-npm i markdown-editor-core
+npm i @mdefy/markdown-editor-core
 ```
 
 or
 
 ```
-yarn add markdown-editor-core
+yarn add @mdefy/markdown-editor-core
 ```
 
 Load _CodeMirror_'s stylesheet for its default theme and other required stylings; e.g. by including it into your `index.html`:
