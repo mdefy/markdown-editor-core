@@ -37,7 +37,7 @@
   },
   "private": true,
   "dependencies": {
-    "markdown-editor-core": "./build/markdown-editor-core-0.0.9.tgz"
+    "@mdefy/markdown-editor-core": "^1.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.0.1",
