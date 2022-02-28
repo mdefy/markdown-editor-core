@@ -634,7 +634,7 @@ class MarkdownEditorBase {
    */
   public toggleRichTextMode() {
     const currentMode = this.cm.getOption('mode');
-    if (currentMode === 'gfm' || currentMode.name === 'gfm') {
+    if (currentMode === 'gfm' || (typeof currentMode !== 'string' && currentMode?.name === 'gfm')) {
       this.cm.setOption('mode', '');
     } else {
       this.cm.setOption('mode', this.getGfmMode());
@@ -875,13 +875,15 @@ class MarkdownEditorBase {
     );
     this.cm.setOption('lineNumbers', this.options.lineNumbers);
     this.cm.setOption('lineWrapping', this.options.lineWrapping);
-    this.cm.setOption('placeholder', this.options.placeholder);
+    // IDE fails to recognize addon types since they are declared for module '../../' instead of 'codemirror'
+    this.cm.setOption('placeholder' as any, this.options.placeholder);
     this.cm.setOption('readOnly', this.options.disabled);
     this.cm.setOption('tabSize', this.options.tabSize);
     this.cm.setOption('theme', this.options.themes.join(' '));
 
+    const mode = this.cm.getOption('mode');
     if (this.options.richTextMode) {
-      if (this.cm.getOption('mode')?.name !== 'gfm') {
+      if (typeof mode !== 'string' && mode?.name !== 'gfm') {
         this.cm.setOption('mode', this.getGfmMode());
       }
     } else {

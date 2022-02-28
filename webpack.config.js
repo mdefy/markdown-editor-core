@@ -1,9 +1,14 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-module.exports = ['source-map'].map((devTool) => ({
+module.exports = {
   entry: './demo/demo.ts',
   module: {
     rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
       {
         test: /\.ts$/,
         use: 'ts-loader',
@@ -17,11 +22,15 @@ module.exports = ['source-map'].map((devTool) => ({
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'demo/dist'),
-    publicPath: '/demo/dist',
   },
-  devtool: devTool,
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.html'),
+    }),
+  ],
+  devtool: 'source-map',
   optimization: {
     minimize: true,
   },
   mode: 'development',
-}));
+};
