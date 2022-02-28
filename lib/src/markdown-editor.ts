@@ -31,6 +31,29 @@ class MarkdownEditorBase {
     this.applyCodemirrorOptions();
     this.applyEditorKeyMappings();
     this.removeLinkClassFromImageTexts();
+
+    this.cm.on('keyHandled', (cm, name, e) => {
+      const event = e as KeyboardEvent;
+      console.log(event.key);
+      if (event.key === 'Enter') {
+        // Not perfect, as content is always replaced and getPreviousListNumberOfLevel has overhead for this case, too
+        this.replaceTokenAtLineStart((oldLineContent, lineNumber, indentationLevel) => {
+          const prevListNumber = this.getPreviousListNumberOfLevel(lineNumber, indentationLevel);
+          if (prevListNumber > 0) {
+            const newListNumber = prevListNumber + 1;
+            this.processNextLinesOfOrderedList(lineNumber, newListNumber, indentationLevel);
+            return newListNumber + '. ' + oldLineContent;
+          } else {
+            return oldLineContent;
+          }
+        });
+      } else if (event.key === 'Tab') {
+        // Prototype - do not keep this!
+        // Allow this functionality when TAB is pressed at any position of string "     1. " -> /^(\s)*(\d)+\.(\s)+/ -> i.e. at any position before item text starts
+        this.toggleOrderedList();
+        this.toggleOrderedList();
+      }
+    });
   }
 
   /***** Basic Editor API *****/
